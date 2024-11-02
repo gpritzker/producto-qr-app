@@ -1,0 +1,13 @@
+<h1><%= @product.name %></h1>
+<p><strong>Descripción:</strong> <%= @product.description %></p>
+<p><strong>Precio:</strong> <%= number_to_currency(@product.price) %></p>
+
+<div class="qr-container">
+  <% if @product.persisted? %>
+    <%= raw(@svg) %>
+  <% end %>
+
+  <div class="back-link">
+    <%= link_to 'Volver', products_path, class: "btn btn-primary" %>
+  </div>
+</div>  
