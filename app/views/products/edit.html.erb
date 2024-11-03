@@ -1,35 +1,36 @@
-<h1>Editar Producto</h1>
+<h1 class="text-center mb-4">Editar Producto</h1>
 
-<%= form_with model: @product, local: true do |form| %>
-  <% if @product.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
-      <ul>
-        <% @product.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="container">
+  <%= form_with model: @product, local: true do |form| %>
+    <% if @product.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@product.errors.count, "error") %> impidió que el producto fuera guardado:</h4>
+        <ul>
+          <% @product.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :name, class: "form-label" %>
+      <%= form.text_field :name, placeholder: "Ingrese el nombre del producto", class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, class: "form-label" %>
+      <%= form.text_area :description, placeholder: "Ingrese una descripción", class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :price, class: "form-label" %>
+      <%= form.number_field :price, placeholder: "Ingrese el precio", class: "form-control" %>
+    </div>
+
+    <div class="d-flex gap-2">
+      <%= form.submit "Guardar cambios", class: "btn btn-primary" %>
+      <%= link_to 'Volver', products_path, class: 'btn btn-secondary' %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :price %>
-    <%= form.number_field :price %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Guardar cambios" %>
-  </div>
-<% end %>
-
-<%= link_to 'Volver', products_path, class: 'btn btn-secondary' %>
+</div>

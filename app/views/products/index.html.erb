@@ -1,34 +1,45 @@
-<h1>Listado de Productos</h1>
+<div class="container mt-5">
+  <!-- Encabezado con título, botón de crear producto y cerrar sesión -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-5">Listado de Productos</h1>
+    <div>
+      <%# Botón de crear producto y cerrar sesión solo si el usuario está autenticado %>
+      <%= link_to "Crear nuevo producto", new_product_path, class: "btn btn-primary me-2" %>
+      <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "btn btn-danger" %>
+    </div>
+  </div>
 
-<%= link_to "Crear nuevo producto", new_product_path, class: "btn btn-primary" %>
-
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Precio</th>
-      <th>QR Code</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @products.each do |product| %>
+  <!-- Tabla de productos con estilos Bootstrap -->
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
       <tr>
-        <td><%= product.name %></td>
-        <td><%= product.description %></td>
-        <td><%= number_to_currency(product.price) %></td>
-        <td>
-          <% if product.persisted? %>
-          <%= raw(@svg) %>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to "Ver", product_path(product), class: "btn btn-secondary" %>
-          <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning" %>
-          <%= link_to "Eliminar", product_path(product), method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
-        </td>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>QR Code</th>
+        <th>Acciones</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= product.description %></td>
+          <td><%= number_to_currency(product.price) %></td>
+          <td class="text-center">
+            <% if product.persisted? %>
+              <%= raw(@svg) %> <!-- Suponiendo que @svg contiene el SVG del QR -->
+            <% else %>
+              No disponible
+            <% end %>
+          </td>
+          <td class="text-center">
+            <%= link_to "Ver", product_path(product), class: "btn btn-sm btn-info mx-1" %>
+            <%= link_to "Editar", edit_product_path(product), class: "btn btn-sm btn-warning mx-1" %>
+            <%= link_to "Eliminar", product_path(product), method: :delete, data: { confirm: "¿Estás seguro?" }, class: "btn btn-sm btn-danger mx-1" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
