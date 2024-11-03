@@ -1,14 +1,17 @@
 require 'rqrcode'
 
 class ProductsController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user! # Solo permite acceso a usuarios autenticados
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user!, only: [:edit, :update, :destroy] # Solo el dueño o admin puede editar/eliminar
 
   def index
-    @products = Product.all
+    # Si el usuario es admin, ve todos los productos; si no, solo los suyos
+    @products = current_user.admin? ? Product.all : current_user.products
   end
 
   def show
+    authorize_user! # Asegura que el usuario pueda ver solo sus propios productos
     generate_qr_code
   end
 
@@ -17,7 +20,8 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params)
+    # Asocia el producto al usuario actual al crearlo
+    @product = current_user.products.build(product_params)
     if @product.save
       redirect_to products_path, notice: "Producto creado exitosamente."
     else
@@ -26,7 +30,7 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    # Carga del producto realizada en el before_action
+    # Autorización realizada en el `authorize_user!`
   end
 
   def update
@@ -46,6 +50,13 @@ class ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def authorize_user!
+    # Solo permite acceso si el usuario es el dueño del producto o un administrador
+    unless current_user.admin? || @product.user == current_user
+      redirect_to products_path, alert: "No tienes permiso para acceder a este producto."
+    end
   end
 
   def product_params

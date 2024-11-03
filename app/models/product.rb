@@ -1,4 +1,9 @@
 class Product < ApplicationRecord
+  belongs_to :user # Relación con usuario
+  validates :name, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
+
   def generate_qr_code
     qrcode = RQRCode::QRCode.new(Rails.application.routes.url_helpers.product_url(self, host: "localhost:3000"))
     qrcode.as_svg(

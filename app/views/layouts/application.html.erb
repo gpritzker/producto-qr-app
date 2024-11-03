@@ -11,15 +11,40 @@
 
   <!-- Mensajes de notificación y alerta -->
   <% if notice %>
-    <p class="notice"><%= notice %></p>
+    <p class="alert alert-success"><%= notice %></p>
   <% end %>
 
   <% if alert %>
-    <p class="alert"><%= alert %></p>
+    <p class="alert alert-danger"><%= alert %></p>
   <% end %>
 
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <a class="navbar-brand" href="<%= authenticated_root_path %>">ProductQRApp</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <% if user_signed_in? %>
+          <% if current_user.admin? %>
+            <li class="nav-item">
+              <%= link_to 'Gestión de Usuarios', admin_users_path, class: 'nav-link btn btn-secondary text-white mr-2' %>
+            </li>
+          <% end %>
+          <li class="nav-item">
+            <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'nav-link btn btn-danger text-white' %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to 'Iniciar sesión', new_user_session_path, class: 'nav-link' %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </nav>
+
   <!-- Contenido principal -->
-  <%= yield %>
+  <div class="container">
+    <%= yield %>
+  </div>
 
 </body>
 </html>
