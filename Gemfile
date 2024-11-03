@@ -16,7 +16,7 @@ gem 'devise'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+#gem 'turbolinks'
 
 gem 'pg', '>= 1.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -46,7 +46,8 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 4.0'
-
-  gem 'dotenv-rails', groups: [:development, :test]
 end
 
+gem 'dotenv-rails', groups: [:development, :test, :production]
+
+gem 'sassc-rails', '>= 2.1.0'

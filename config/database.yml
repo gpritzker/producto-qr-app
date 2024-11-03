@@ -1,30 +1,21 @@
-# default: &default
-#   adapter: mysql2
-#   encoding: utf8
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#   username: <%= ENV.fetch("MYSQL_USERNAME") %>
-#   password: <%= ENV.fetch("MYSQL_PASSWORD") %>
-#   host: <%= ENV.fetch("MYSQL_HOST") %>
-#   port: <%= ENV.fetch("MYSQL_PORT") %>
-
 
 default: &default
   adapter: postgresql
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV.fetch("MYSQL_USERNAME") %>
-  password: <%= ENV.fetch("MYSQL_PASSWORD") %>
-  host: <%= ENV.fetch("MYSQL_HOST") %>
-  port: <%= ENV.fetch("MYSQL_PORT") %>
+  username: <%= ENV.fetch("PG_USERNAME") %>
+  password: <%= ENV.fetch("PG_PASSWORD") %>
+  host: <%= ENV.fetch("PG_HOST") %>
+  port: <%= ENV.fetch("PG_PORT") %>
 
 development:
   <<: *default
-  database: <%= ENV.fetch("MYSQL_DATABASE") %>_development
+  database: <%= ENV.fetch("PG_DATABASE") %>_development
 
 test:
   <<: *default
-  database: <%= ENV.fetch("MYSQL_DATABASE") %>_test
+  database: <%= ENV.fetch("PG_DATABASE") %>_test
 
 production:
   <<: *default
-  database: <%= ENV.fetch("MYSQL_DATABASE") %>_production
+  database: <%= ENV.fetch("PG_DATABASE") %>_production'
