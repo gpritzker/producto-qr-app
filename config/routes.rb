@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     root "products#index", as: :authenticated_root
   end
 
-  unauthenticated do
-    root "devise/sessions#new", as: :unauthenticated_root
+  devise_scope :user do
+    unauthenticated do
+      root "devise/sessions#new", as: :unauthenticated_root
+    end
   end
 end
