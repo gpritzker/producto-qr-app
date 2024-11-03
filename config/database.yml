@@ -18,4 +18,4 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV.fetch("PG_DATABASE") %>_production'
+  database: <%= ENV.fetch("DATABASE_URL") %>_production'
