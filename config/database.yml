@@ -1,5 +1,15 @@
+# default: &default
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   username: <%= ENV.fetch("MYSQL_USERNAME") %>
+#   password: <%= ENV.fetch("MYSQL_PASSWORD") %>
+#   host: <%= ENV.fetch("MYSQL_HOST") %>
+#   port: <%= ENV.fetch("MYSQL_PORT") %>
+
+
 default: &default
-  adapter: mysql2
+  adapter: postgresql
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: <%= ENV.fetch("MYSQL_USERNAME") %>
