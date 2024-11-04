@@ -1,28 +1,41 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Producto QR App
 
-Things you may want to cover:
+Aplicación de gestión de productos con generación de códigos QR para cada producto. Permite a los usuarios registrados ver y gestionar sus propios productos, y a los administradores gestionar usuarios.
 
-* Ruby version
+## Requisitos previos
 
-* System dependencies
+Para ejecutar este proyecto localmente, asegúrate de tener instalados:
 
-* Configuration
+- Ruby (versión 3.1.2)
+- Rails (versión 7.0.8.6)
+- PostgreSQL (configurado para aceptar conexiones locales)
 
-* Database creation
+## Clonación del proyecto
 
-* Database initialization
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/gpritzker/producto-qr-app.git
+   cd producto-qr-app
+## Configuración de base de datos
 
-* How to run the test suite
+1. Crea el archivo `.env` en la raíz del proyecto para almacenar las variables de entorno:
 
-* Services (job queues, cache servers, search engines, etc.)
+   ```env
+   PG_USERNAME=tu_usuario_postgres
+   PG_PASSWORD=tu_password_postgres
+   PG_HOST=localhost
+   PG_PORT=5432
+   PG_DATABASE=producto_qr_app
 
-* Deployment instructions
+## Despliegue en Heroku
 
-* ...
+Este proyecto está configurado para realizar despliegues automáticos en Heroku cada vez que se hace push a la rama `main` en GitHub. No es necesario realizar un `git push heroku main` manualmente.
 
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+### Verificación de despliegue
+1. Realiza tus cambios localmente y envíalos al repositorio de GitHub:
+   ```bash
+   git add .
+   git commit -m "Descripción de los cambios"
+   git push origin main
