@@ -23,11 +23,38 @@
   <div class="card mx-auto" style="max-width: 400px;">
     <div class="card-body">
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form" }) do |f| %>
+        
+        <!-- Nuevo campo: Nombre Completo -->
+        <div class="form-group">
+          <%= f.label :nombre_completo, "Nombre Completo" %>
+          <%= f.text_field :nombre_completo, class: "form-control", placeholder: "Nombre Completo" %>
+        </div>
+        
+        <!-- Nuevo campo: Empresa -->
+        <div class="form-group">
+          <%= f.label :empresa, "Empresa" %>
+          <%= f.text_field :empresa, class: "form-control", placeholder: "Empresa" %>
+        </div>
+
+        <!-- Nuevo campo: Cargo -->
+        <div class="form-group">
+          <%= f.label :cargo, "Cargo" %>
+          <%= f.text_field :cargo, class: "form-control", placeholder: "Cargo" %>
+        </div>
+
+        <!-- Nuevo campo: Teléfono -->
+        <div class="form-group">
+          <%= f.label :telefono, "Teléfono" %>
+          <%= f.telephone_field :telefono, class: "form-control", placeholder: "Teléfono" %>
+        </div>
+
+        <!-- Campo de Correo Electrónico -->
         <div class="form-group">
           <%= f.label :email, "Correo Electrónico" %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "correo@ejemplo.com" %>
         </div>
 
+        <!-- Campo de Contraseña -->
         <div class="form-group">
           <%= f.label :password, "Contraseña" %>
           <% if @minimum_password_length %>
@@ -36,6 +63,7 @@
           <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: "Contraseña" %>
         </div>
 
+        <!-- Campo de Confirmación de Contraseña -->
         <div class="form-group">
           <%= f.label :password_confirmation, "Confirmación de Contraseña" %>
           <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder: "Confirmar Contraseña" %>

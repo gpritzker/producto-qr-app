@@ -47,11 +47,22 @@
     <%= form.text_field :apoderado_cargo, class: "form-control", placeholder: "Ingrese el cargo del apoderado" %>
   </div>
 
+  <h3>Datos de Contacto</h3>
+
   <div class="mb-3">
     <%= form.label :apoderado_contacto, "Contacto del Apoderado", class: "form-label" %>
     <%= form.text_field :apoderado_contacto, class: "form-control", placeholder: "Ingrese el contacto del apoderado" %>
   </div>
+  div class="mb-3">
+    <%= form.label :contact_phone, "Teléfono del Contacto", class: "form-label" %>
+    <%= form.telephone_field :contact_phone, class: "form-control", placeholder: "Ingrese el teléfono del contacto" %>
+  </div>
 
+  <div class="mb-3">
+    <%= form.label :contact_email, "Correo Electrónico del Contacto", class: "form-label" %>
+    <%= form.email_field :contact_email, class: "form-control", placeholder: "Ingrese el correo electrónico del contacto" %>
+  </div>
+  
   <div class="mt-4">
     <%= form.submit "Guardar Empresa", class: "btn btn-primary" %>
     <%= link_to "Cancelar", empresas_path, class: "btn btn-secondary ms-2" %>

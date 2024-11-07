@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_06_213045) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_07_205038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_06_213045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "admin_user_id"
+    t.string "contact_phone"
+    t.string "contact_email"
     t.index ["CUIT"], name: "index_empresas_on_CUIT", unique: true
     t.index ["admin_user_id"], name: "index_empresas_on_admin_user_id"
   end
@@ -104,6 +106,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_06_213045) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.boolean "admin", default: false
+    t.string "nombre_completo"
+    t.string "empresa"
+    t.string "cargo"
+    t.string "telefono"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
