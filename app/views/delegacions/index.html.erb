@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Delegacions</h1>
+
+<div id="delegacions">
+  <% @delegacions.each do |delegacion| %>
+    <%= render delegacion %>
+    <p>
+      <%= link_to "Show this delegacion", delegacion %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New delegacion", new_delegacion_path %>

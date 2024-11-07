@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @qr %>
+
+<div>
+  <%= link_to "Edit this qr", edit_qr_path(@qr) %> |
+  <%= link_to "Back to qrs", qrs_path %>
+
+  <%= button_to "Destroy this qr", @qr, method: :delete %>
+</div>

@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Qrs</h1>
+
+<div id="qrs">
+  <% @qrs.each do |qr| %>
+    <%= render qr %>
+    <p>
+      <%= link_to "Show this qr", qr %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New qr", new_qr_path %>

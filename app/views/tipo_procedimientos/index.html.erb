@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Tipo procedimientos</h1>
+
+<div id="tipo_procedimientos">
+  <% @tipo_procedimientos.each do |tipo_procedimiento| %>
+    <%= render tipo_procedimiento %>
+    <p>
+      <%= link_to "Show this tipo procedimiento", tipo_procedimiento %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New tipo procedimiento", new_tipo_procedimiento_path %>

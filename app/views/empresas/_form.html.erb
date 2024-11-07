@@ -1,0 +1,66 @@
+<%= form_with(model: empresa, local: true, class: "form-container") do |form| %>
+  <% if empresa.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(empresa.errors.count, "error") %> impidió que se guardara la empresa:</h4>
+      <ul>
+        <% empresa.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :razon_social, "Razón Social", class: "form-label" %>
+    <%= form.text_field :razon_social, class: "form-control", placeholder: "Ingrese la razón social" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :CUIT, "CUIT", class: "form-label" %>
+    <%= form.text_field :CUIT, class: "form-control", placeholder: "Ingrese el CUIT de la empresa" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :domicilio_legal, "Domicilio Legal", class: "form-label" %>
+    <%= form.text_field :domicilio_legal, class: "form-control", placeholder: "Ingrese el domicilio legal" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :estado, "Estado", class: "form-label" %>
+    <%= form.select :estado, [['Activo', 1], ['Suspendido', 0]], {}, class: "form-select" %>
+  </div>
+
+  <h4 class="my-4">Información del Apoderado</h4>
+
+  <div class="mb-3">
+    <%= form.label :apoderado_nombre, "Nombre del Apoderado", class: "form-label" %>
+    <%= form.text_field :apoderado_nombre, class: "form-control", placeholder: "Ingrese el nombre del apoderado" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :apoderado_CUIL, "CUIL del Apoderado", class: "form-label" %>
+    <%= form.text_field :apoderado_CUIL, class: "form-control", placeholder: "Ingrese el CUIL del apoderado" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :apoderado_cargo, "Cargo del Apoderado", class: "form-label" %>
+    <%= form.text_field :apoderado_cargo, class: "form-control", placeholder: "Ingrese el cargo del apoderado" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :apoderado_contacto, "Contacto del Apoderado", class: "form-label" %>
+    <%= form.text_field :apoderado_contacto, class: "form-control", placeholder: "Ingrese el contacto del apoderado" %>
+  </div>
+
+  <div class="mt-4">
+    <%= form.submit "Guardar Empresa", class: "btn btn-primary" %>
+    <%= link_to "Cancelar", empresas_path, class: "btn btn-secondary ms-2" %>
+  </div>
+<% end %>
+
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: auto;
+  }
+</style>

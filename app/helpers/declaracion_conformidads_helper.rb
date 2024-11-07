@@ -1,0 +1,2 @@
+module DeclaracionConformidadsHelper
+end

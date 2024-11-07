@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Reglamento tecnicos</h1>
+
+<div id="reglamento_tecnicos">
+  <% @reglamento_tecnicos.each do |reglamento_tecnico| %>
+    <%= render reglamento_tecnico %>
+    <p>
+      <%= link_to "Show this reglamento tecnico", reglamento_tecnico %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New reglamento tecnico", new_reglamento_tecnico_path %>

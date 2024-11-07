@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @reglamento_tecnico %>
+
+<div>
+  <%= link_to "Edit this reglamento tecnico", edit_reglamento_tecnico_path(@reglamento_tecnico) %> |
+  <%= link_to "Back to reglamento tecnicos", reglamento_tecnicos_path %>
+
+  <%= button_to "Destroy this reglamento tecnico", @reglamento_tecnico, method: :delete %>
+</div>

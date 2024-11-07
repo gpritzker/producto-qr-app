@@ -60,7 +60,7 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :description, :price)
+    params.require(:product).permit(:name, :description, :price, :empresa_id)
   end
 
   def generate_qr_code

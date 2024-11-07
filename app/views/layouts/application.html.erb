@@ -1,50 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ProductQRApp</title>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <title>QAR</title>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   <%= csrf_meta_tags %>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-
-  <!-- Mensajes de notificación y alerta -->
-  <% if notice %>
-    <p class="alert alert-success"><%= notice %></p>
-  <% end %>
-
-  <% if alert %>
-    <p class="alert alert-danger"><%= alert %></p>
-  <% end %>
-
-  <!-- Barra de navegación -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-    <a class="navbar-brand" href="<%= authenticated_root_path %>">ProductQRApp</a>
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav ml-auto">
-        <% if user_signed_in? %>
+  <% if user_signed_in? %>
+    <div class="wrapper">
+      <nav class="sidebar">
+        <h2>QAR</h2>
+        <ul class="list-unstyled components">
+          <li><%= link_to 'Productos', products_path %></li>
+          <li><%= link_to 'Declaraciones de Conformidad', declaracion_conformidads_path %></li>
+          <li><%= link_to 'Empresas', empresas_path %></li>
+          <li><%= link_to 'QRs', qrs_path %></li>
           <% if current_user.admin? %>
-            <li class="nav-item">
-              <%= link_to 'Gestión de Usuarios', admin_users_path, class: 'nav-link btn btn-secondary text-white mr-2' %>
-            </li>
+            <li><%= link_to 'Gestión de Usuarios', admin_users_path %></li>
+            <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path %></li>
+            <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path %></li>
           <% end %>
-          <li class="nav-item">
-            <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'nav-link btn btn-danger text-white' %>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to 'Iniciar sesión', new_user_session_path, class: 'nav-link' %>
-          </li>
-        <% end %>
-      </ul>
+        </ul>
+        <div class="sidebar-footer">
+          <p>Bienvenido, <%= current_user.email %></p>
+          <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'btn btn-danger' %>
+        </div>
+      </nav>
     </div>
-  </nav>
-
-  <!-- Contenido principal -->
-  <div class="container">
+  <% end %>
+  
+  <div class="content">
     <%= yield %>
   </div>
-
 </body>
 </html>

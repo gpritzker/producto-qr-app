@@ -30,6 +30,15 @@
               <%= form.label :price, "Precio", class: "form-label" %>
               <%= form.number_field :price, step: "0.01", class: "form-control", placeholder: "Ingrese el precio" %>
             </div>
+            
+             <div class="form-group">
+                <%= form.label :empresa_id, "Empresa" %>
+                <%= form.collection_select :empresa_id, current_user.empresas + current_user.empresas_autorizadas, :id, :razon_social, { prompt: "Seleccione una empresa" }, class: "form-control" %>
+              </div>
+
+              <div class="form-group mt-4">
+                <%= form.submit "Crear Producto", class: "btn btn-primary" %>
+              </div>
 
             <div class="d-flex justify-content-end">
               <%= form.submit "Crear Producto", class: "btn btn-primary" %>

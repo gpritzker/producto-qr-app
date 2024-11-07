@@ -1,5 +1,7 @@
 class Product < ApplicationRecord
   belongs_to :user # Relación con usuario
+  belongs_to :empresa
+  has_many :declaraciones_conformidad
   validates :name, presence: true
   validates :description, presence: true
   validates :price, presence: true

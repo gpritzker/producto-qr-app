@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  empresa: one
+  usuario_origen_id: 1
+  usuario_destino_id: 1
+  permisos_delegacion: false
+
+two:
+  empresa: two
+  usuario_origen_id: 1
+  usuario_destino_id: 1
+  permisos_delegacion: false

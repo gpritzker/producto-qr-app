@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  razon_social: MyString
+  CUIT: MyString
+  domicilio_legal: MyString
+  estado: 1
+  apoderado_nombre: MyString
+  apoderado_CUIL: MyString
+  apoderado_cargo: MyString
+  apoderado_contacto: MyString
+
+two:
+  razon_social: MyString
+  CUIT: MyString
+  domicilio_legal: MyString
+  estado: 1
+  apoderado_nombre: MyString
+  apoderado_CUIL: MyString
+  apoderado_cargo: MyString
+  apoderado_contacto: MyString

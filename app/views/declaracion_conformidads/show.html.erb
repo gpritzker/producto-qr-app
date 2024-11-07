@@ -1,0 +1,37 @@
+<h1 class="my-4">Detalles de la Declaración de Conformidad</h1>
+
+<div class="card p-4 mb-4 shadow-sm">
+  <h3>Información del Producto</h3>
+  <p><strong>Producto:</strong> <%= @declaracion_conformidad.product.name %></p>
+  <p><strong>Descripción del Producto:</strong> <%= @declaracion_conformidad.product.description %></p>
+  <p><strong>Origen del Producto:</strong> <%= @declaracion_conformidad.origen %></p>
+  <p><strong>Empresa:</strong> <%= @declaracion_conformidad.empresa&.razon_social %></p>
+</div>
+
+<div class="card p-4 mb-4 shadow-sm">
+  <h3>Detalles de la Declaración</h3>
+  <p><strong>Reglamento Técnico:</strong> <%= @declaracion_conformidad.reglamento_tecnico.nombre %></p>
+  <p><strong>Tipo de Procedimiento:</strong> <%= @declaracion_conformidad.tipo_procedimiento.nombre %></p>
+  <p><strong>Número de Reporte:</strong> <%= @declaracion_conformidad.numero_reporte %></p>
+  <p><strong>Emisor del Reporte:</strong> <%= @declaracion_conformidad.emisor_reporte %></p>
+  <p><strong>Fecha de Emisión:</strong> <%= @declaracion_conformidad.fecha_emision.strftime('%d/%m/%Y') %></p>
+  <p><strong>Estado:</strong> <%= @declaracion_conformidad.estado.capitalize %></p>
+</div>
+
+<div class="card p-4 mb-4 shadow-sm text-center">
+  <h3>Código QR</h3>
+  <% if @qr_code_svg %>
+    <div class="qr-code mx-auto mb-3" style="width: 200px;">
+      <%= raw(@qr_code_svg) %>
+    </div>
+    <p>Escanea este código QR para obtener más información sobre esta declaración de conformidad.</p>
+  <% else %>
+    <p style="color: red;">No se ha generado un código QR para esta declaración.</p>
+  <% end %>
+</div>
+
+<div class="actions mt-4">
+  <%= link_to "Editar esta declaración", edit_declaracion_conformidad_path(@declaracion_conformidad), class: "btn btn-primary" %>
+  <%= link_to "Volver a las declaraciones", declaracion_conformidads_path, class: "btn btn-secondary" %>
+  <%= button_to "Eliminar esta declaración", @declaracion_conformidad, method: :delete, class: "btn btn-danger", data: { confirm: "¿Estás seguro de que deseas eliminar esta declaración?" } %>
+</div>

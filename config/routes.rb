@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :delegacions
+  resources :tipo_procedimientos
+  resources :reglamento_tecnicos
+  resources :qrs
+  resources :declaracion_conformidads
+  resources :empresas
   devise_for :users
 
   # Rutas para productos, accesibles por todos los usuarios autenticados
@@ -11,7 +17,7 @@ Rails.application.routes.draw do
 
   # Redirigir la raíz al inicio de sesión
   authenticated :user do
-    root "products#index", as: :authenticated_root
+    root "empresas#index", as: :authenticated_root
   end
 
   # Configuración de raíz para usuarios no autenticados
