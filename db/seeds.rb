@@ -1,5 +1,12 @@
 # db/seeds.rb
 
+User.create(
+  email: "admin@admin.com",
+  name: "ADMINISTRADOR",
+  password: '12345678',
+  admin: true
+)
+
 reglamentos_tecnicos = [
   "Acero para la construcción",
   "Ascensores y sus componentes de seguridad",

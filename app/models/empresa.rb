@@ -7,5 +7,16 @@ class Empresa < ApplicationRecord
   has_many :delegated_users, through: :delegaciones, source: :user
 
   # Validaciones
-  validates :razon_social, :CUIT, :domicilio_legal, presence: true
+  validates :razon_social, :domicilio_legal, presence: true
+  validates :CUIT, format: { with: /\A\d{2}-\d{8}-\d{1}\z/, message: "El CUIT debe tener el formato XX-XXXXXXXX-X" }
+
+  before_validation :normalize_attributes
+
+  private
+
+  def normalize_attributes
+    self.razon_social = razon_social.stip
+    self.domicilio_legal = domicilio_legal.strip
+    
+  end
 end

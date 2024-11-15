@@ -111,7 +111,6 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    mysql2 (0.5.6)
     net-imap (0.5.0)
       date
       net-protocol
@@ -126,6 +125,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
+    normalize_rails (0.1.0)
     orm_adapter (0.5.0)
     pg (1.5.9)
     puma (6.4.3)
@@ -216,7 +216,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   json (>= 2.0)
-  mysql2 (>= 0.3.13, < 0.6.0)
+  normalize_rails
   pg (>= 1.1)
   puma
   rails (~> 7.0.6)
