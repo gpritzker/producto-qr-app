@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @delegate_company %>
+
+<div>
+  <%= link_to "Edit this delegate company", edit_delegate_company_path(@delegate_company) %> |
+  <%= link_to "Back to delegate companies", delegate_companies_path %>
+
+  <%= button_to "Destroy this delegate company", @delegate_company, method: :delete %>
+</div>

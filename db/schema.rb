@@ -10,76 +10,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_07_205038) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_15_231144) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
-  create_table "declaracion_conformidads", force: :cascade do |t|
-    t.bigint "reglamento_tecnico_id"
-    t.bigint "tipo_procedimiento_id"
-    t.string "numero_reporte"
-    t.string "emisor_reporte"
-    t.date "fecha_emision"
-    t.integer "estado", default: 0
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "product_id", null: false
-    t.bigint "empresa_id"
-    t.text "descripcion_producto"
-    t.string "origen"
-    t.index ["empresa_id"], name: "index_declaracion_conformidads_on_empresa_id"
-    t.index ["product_id"], name: "index_declaracion_conformidads_on_product_id"
-    t.index ["reglamento_tecnico_id"], name: "index_declaracion_conformidads_on_reglamento_tecnico_id"
-    t.index ["tipo_procedimiento_id"], name: "index_declaracion_conformidads_on_tipo_procedimiento_id"
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "delegacions", force: :cascade do |t|
-    t.bigint "empresa_id"
-    t.integer "usuario_origen_id"
-    t.integer "usuario_destino_id"
-    t.boolean "permisos_delegacion"
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["empresa_id"], name: "index_delegacions_on_empresa_id"
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "empresas", force: :cascade do |t|
-    t.string "razon_social"
-    t.string "CUIT"
-    t.string "domicilio_legal"
-    t.integer "estado"
-    t.string "apoderado_nombre"
-    t.string "apoderado_CUIL"
-    t.string "apoderado_cargo"
-    t.string "apoderado_contacto"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "admin_user_id"
-    t.string "contact_phone"
-    t.string "contact_email"
-    t.index ["CUIT"], name: "index_empresas_on_CUIT", unique: true
-    t.index ["admin_user_id"], name: "index_empresas_on_admin_user_id"
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "products", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.decimal "price"
+  create_table "companies", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.string "cuit", limit: 20, null: false
+    t.string "address", null: false
+    t.string "contact_name", limit: 50, null: false
+    t.string "contact_phone", limit: 50, null: false
+    t.string "contact_email", null: false
+    t.boolean "verified", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "empresa_id"
-    t.index ["empresa_id"], name: "index_products_on_empresa_id"
-    t.index ["user_id"], name: "index_products_on_user_id"
-  end
-
-  create_table "qrs", force: :cascade do |t|
-    t.string "url_destino"
-    t.integer "estado"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "declaracion_conformidad_id"
-    t.index ["declaracion_conformidad_id"], name: "index_qrs_on_declaracion_conformidad_id"
+    t.bigint "creator_id", null: false
+    t.index ["creator_id"], name: "index_companies_on_creator_id"
   end
 
   create_table "reglamento_tecnicos", force: :cascade do |t|
@@ -97,27 +72,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_205038) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "email", default: "", null: false
+    t.string "name", limit: 50, null: false
+    t.string "bussiness", null: false
+    t.string "position", null: false
+    t.string "phone", limit: 50, null: false
+    t.string "cuil", limit: 20
+    t.string "dni_file"
+    t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.boolean "admin", default: false
-    t.string "nombre_completo"
-    t.string "empresa"
-    t.string "cargo"
-    t.string "telefono"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "declaracion_conformidads", "empresas"
-  add_foreign_key "declaracion_conformidads", "products"
-  add_foreign_key "declaracion_conformidads", "reglamento_tecnicos"
-  add_foreign_key "declaracion_conformidads", "tipo_procedimientos"
-  add_foreign_key "delegacions", "empresas"
-  add_foreign_key "qrs", "declaracion_conformidads"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "companies", "users", column: "creator_id"
 end

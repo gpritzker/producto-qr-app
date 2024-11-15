@@ -13,14 +13,15 @@
       <nav class="sidebar">
         <h2>QAR</h2>
         <ul class="list-unstyled components">
-          <li><%= link_to 'Productos', products_path %></li>
+          <li><%= link_to 'Empresas', companies_path %></li>
           <li><%= link_to 'Declaraciones de Conformidad', declaracion_conformidads_path %></li>
-          <li><%= link_to 'Empresas', empresas_path %></li>
           <li><%= link_to 'QRs', qrs_path %></li>
           <% if current_user.admin? %>
             <li><%= link_to 'Gestión de Usuarios', admin_users_path %></li>
             <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path %></li>
             <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path %></li>
+          <% else %>
+            <li><%= link_to 'Mis datos', tipo_procedimientos_path %></li>
           <% end %>
         </ul>
         <div class="sidebar-footer">

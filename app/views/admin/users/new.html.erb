@@ -33,18 +33,18 @@
   </div>
 
   <div class="form-group mt-3">
-    <%= form.label :empresa_id, "Empresa" %>
-    <%= form.collection_select :empresa_id, Empresa.all, :id, :razon_social, { prompt: "Seleccione una empresa" }, class: "form-control" %>
+    <%= form.label :bussiness, "Empresa" %>
+    <%= form.text_field :bussiness, class: "form-control", placeholder: "Ingrese el nombre de la empresa a la que pertenece" %>
   </div>
 
   <div class="form-group mt-3">
-    <%= form.label :cargo, "Cargo" %>
-    <%= form.text_field :cargo, class: "form-control", placeholder: "Ingrese el cargo del usuario" %>
+    <%= form.label :position, "Cargo" %>
+    <%= form.text_field :position, class: "form-control", placeholder: "Ingrese el cargo del usuario" %>
   </div>
 
   <div class="form-group mt-3">
-    <%= form.label :telefono, "Teléfono" %>
-    <%= form.telephone_field :telefono, class: "form-control", placeholder: "Ingrese el teléfono del usuario" %>
+    <%= form.label :phone, "Teléfono" %>
+    <%= form.telephone_field :phone, class: "form-control", placeholder: "Ingrese el teléfono del usuario" %>
   </div>
 
   <div class="form-check mt-4">

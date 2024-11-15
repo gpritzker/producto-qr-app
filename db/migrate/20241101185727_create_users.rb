@@ -2,13 +2,15 @@ class CreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
       t.string :name, :limit => 50, :null => false
-      t.string :bussiness, :null => true, default: null
-      t.string :position, :null => true, default: null
-      t.string :phone, limit: 50, :null => true, default: null
+      t.string :bussiness, :null => false
+      t.string :position, :null => false
+      t.string :phone, limit: 50, :null => false
+      t.string :cuil, limit: 20, :null => true
+      t.string :dni_file, :null => true # uuid
 
       # Campos para devise
-      t.string :email,              null: false
-      t.string :encrypted_password, null: false, default: ""
+      t.string :email, null: false
+      t.string :encrypted_password, null: false, :default => ""
       t.string :reset_password_token
       t.datetime :reset_password_sent_at
       t.datetime :remember_created_at

@@ -1,0 +1,27 @@
+<h1>Detalles de la Empresa</h1>
+
+<p>
+  <strong>Name:</strong> <%= @company.name %> <br>
+  <strong>CUIT:</strong> <%= @company.cuit %> <br>
+  <strong>Contact Email:</strong> <%= @company.contact_email %> <br>
+  <strong>Contact Name:</strong> <%= @company.contact_name %> <br>
+  <strong>Contact Phone:</strong> <%= @company.contact_phone %> <br>
+  <strong>Created by:</strong> <%= @company.creator.try(:name) %> <br>
+  <strong>Estatuto:</strong>
+  <% if @company.estatuto_file.attached? %>
+    <a href="<%= url_for(@company.estatuto_file) %>" target="_blank"><%= @company.estatuto_file.filename.to_s %></a>
+  <% else %>
+    No se ha cargado el estatuto aún
+  <% end %>
+  <br>
+  <strong>Verificada:</strong> 
+  <% if @company.verified %>
+    SI
+  <% else %>
+    NO
+  <% end %>
+</p>
+<div class="actions mt-4">
+  <%= link_to "Editar", edit_company_path(@company), class: "btn btn-warning" %>
+  <%= link_to "Volver", companies_path, class: "btn btn-secondary" %>
+</div>

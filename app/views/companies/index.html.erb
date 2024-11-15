@@ -1,0 +1,44 @@
+<h1>Gestión de Empresas</h1>
+<%= link_to "Nueva Empresa", new_company_path, class: "btn btn-success" %>
+
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>CUIT</th>
+      <th>Dirección</th>
+      <th>Contact Email</th>
+      <th>Contact Name</th>
+      <th>Contact Phone</th>
+      <th>Created by</th>
+      <th>Estatuto</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @companies.each do |company| %>
+      <tr>
+        <td><%= company.name %></td>
+        <td><%= company.cuit %></td>
+        <td><%= company.address %></td>
+        <td><%= company.contact_email %></td>
+        <td><%= company.contact_name %></td>
+        <td><%= company.contact_phone %></td>
+        <td><%= company.creator.try(:name) %></td>
+        <td>
+          <%= 
+            if company.estatuto_file.attached?  
+              "SI"
+            else
+              "NO"
+            end
+          %></td>
+        <td>
+          <%= link_to "Ver", company_path(company), class: "btn btn-primary" %>
+          <%= link_to "Editar", edit_company_path(company), class: "btn btn-warning" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 7.0.6'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
-# Use mysql as the database for Active Record
-#gem 'mysql2', '>= 0.3.13', '< 0.6.0'
 # Use SCSS for stylesheets
 #gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

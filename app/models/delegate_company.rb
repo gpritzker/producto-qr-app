@@ -1,0 +1,2 @@
+class DelegateCompany < ApplicationRecord
+end

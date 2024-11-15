@@ -9,7 +9,8 @@
       <th>Empresa</th>
       <th>Cargo</th>
       <th>Teléfono</th>
-      <th>Administrador</th>
+      <th>Admin</th>
+      <th>Cuil</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -18,10 +19,11 @@
       <tr>
         <td><%= user.email %></td>
         <td><%= user.name %></td>
-        <td><%= user.empresa&.razon_social %></td> <!-- Muestra la empresa si existe -->
-        <td><%= user.cargo %></td>
-        <td><%= user.telefono %></td>
+        <td><%= user.bussiness %></td> <!-- Muestra la empresa si existe -->
+        <td><%= user.position %></td>
+        <td><%= user.phone %></td>
         <td><%= user.admin? ? 'Sí' : 'No' %></td>
+        <td><%= user.cuil %></td>
         <td>
           <%= link_to 'Editar', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
           <%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
