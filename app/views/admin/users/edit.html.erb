@@ -1,4 +1,6 @@
-<h1><%= @user.new_record? ? 'Crear Usuario' : 'Editar Usuario' %></h1>
+<h1 class="my-4 text-center">
+  <%= @user.new_record? ? 'Crear Usuario' : 'Editar Usuario' %>
+</h1>
 
 <%= form_with model: [:admin, @user], local: true do |form| %>
   <% if @user.errors.any? %>
@@ -12,28 +14,58 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= form.label :email %>
-    <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+  <div class="row">
+    <!-- Correo Electrónico -->
+    <div class="col-md-6 mb-3">
+      <%= form.label :email, "Correo Electrónico", class: "form-label" %>
+      <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="col-md-6 mb-3">
+      <%= form.label :password, "Contraseña", class: "form-label" %>
+      <%= form.password_field :password, class: "form-control", placeholder: "Ingrese una contraseña" %>
+    </div>
   </div>
 
-  <div class="form-group">
-    <%= form.label :password %>
-    <%= form.password_field :password, class: "form-control", placeholder: "Ingrese una contraseña" %>
+  <div class="row">
+    <!-- Confirmación de Contraseña -->
+    <div class="col-md-6 mb-3">
+      <%= form.label :password_confirmation, "Confirmación de Contraseña", class: "form-label" %>
+      <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Confirme la contraseña" %>
+    </div>
+
+    <!-- CUIL -->
+    <div class="col-md-6 mb-3">
+      <%= form.label :cuil, "CUIL", class: "form-label" %>
+      <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL del usuario" %>
+    </div>
   </div>
 
-  <div class="form-group">
-    <%= form.label :password_confirmation, "Confirmación de Contraseña" %>
-    <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Confirme la contraseña" %>
+  <% if @user.admin %>
+    <div class="form-check mt-4">
+      <%= form.check_box :admin, class: "form-check-input" %>
+      <%= form.label :admin, "Administrador", class: "form-check-label" %>
+    </div>
+  <% end %>
+
+  <!-- DNI -->
+  <div class="form-group mt-4">
+    <%= form.label :dni_files, "DNI", class: "form-label" %>
+    <%= form.file_field :dni_files, multiple: true, accept: 'image/png, image/jpeg', class: 'form-control' %>
+    <small class="form-text text-muted">Cargue imagen PNG o JPG del frente y reverso de su DNI</small>
   </div>
 
-  <div class="form-group form-check">
-    <%= form.check_box :admin, class: "form-check-input" %>
-    <%= form.label :admin, "Administrador", class: "form-check-label" %>
+  <!-- Firma -->
+  <div class="form-group mt-4">
+    <%= form.label :signature_file, "Firma", class: "form-label" %>
+    <%= form.file_field :signature_file, accept: 'image/png', class: 'form-control' %>
+    <small class="form-text text-muted">Cargue imagen PNG de su firma con fondo transparente</small>
   </div>
 
-  <div class="actions">
-    <%= form.submit @user.new_record? ? "Crear Usuario" : "Guardar Cambios", class: "btn btn-primary" %>
-    <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary' %>
+  <!-- Botones de Acción -->
+  <div class="actions mt-4">
+    <%= form.submit @user.new_record? ? "Crear Usuario" : "Guardar Cambios", class: "btn btn-primary btn-lg" %>
+    <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary btn-lg ml-3' %>
   </div>
 <% end %>

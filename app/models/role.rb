@@ -1,5 +1,11 @@
 class Role < ApplicationRecord
-  ROLES = %w[supervisor apoderado].freeze
+  belongs_to :company
+  belongs_to :user
 
-  attr_accessor :user_id, :role, :company_id
+  ROL_SUPERVISOR = 0
+  ROL_APODERADO = 1
+  enum role: { supervisor: self::ROL_SUPERVISOR, apoderado: self::ROL_APODERADO }
+
+  scope :supervisor, ->(role) { where(role: :supervisor) }
+  scope :apoderado, ->(role) { where(role: :apoderado) }
 end

@@ -1,3 +1,15 @@
 local:
   service: Disk
   root: <%= Rails.root.join("public/storage") %>
+estatutos:
+  service: Disk
+  root: <%= Rails.root.join("public/storage/estatutos") %>
+dnis:
+  service: Disk
+  root: <%= Rails.root.join("public/storage/dnis") %>
+signatures:
+  service: Disk
+  root: <%= Rails.root.join("public/storage/signatures") %>
+authorizations:
+  service: Disk
+  root: <%= Rails.root.join("public/storage/authorizations") %>

@@ -1,9 +1,21 @@
 class Admin::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :admin_only # Solo administradores pueden acceder
+  before_action :admin_only, only: [:new, :create] # Solo administradores pueden acceder
 
   def index
-    @users = User.all
+    if current_user.admin?
+      @users = User.all
+    else
+      @users = [current_user]
+    end
+  end
+
+  def show
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
   end
 
   def new
@@ -20,13 +32,27 @@ class Admin::UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
   end
 
   def update
-    @user = User.find(params[:id])
-    if @user.update(user_params)
-      redirect_to admin_users_path, notice: "Usuario actualizado exitosamente."
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
+    
+    filtered_params = user_params
+    if filtered_params[:password].blank?
+      filtered_params = filtered_params.except(:password, :password_confirmation)
+    end
+    
+    if @user.update(filtered_params)
+      redirect_to admin_user_url(@user), notice: "Usuario actualizado exitosamente."
     else
       render :edit, alert: "Error al actualizar el usuario."
     end
@@ -39,6 +65,10 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :admin, :name, :empresa_id, :cargo, :telefono)
+    params.require(:user).permit(
+      :email, :password, :password_confirmation, :admin, 
+      :name, :bussiness, :position, :phone, :cuil, :signature_file,
+      dni_files: []      
+    )
   end
 end

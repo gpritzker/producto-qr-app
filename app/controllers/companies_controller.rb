@@ -1,6 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!  # Asegura que el usuario esté autenticado
-  before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_action :set_company, only: [:show, :edit, :update, :destroy, :delegate, :delegate_user]
 
   # GET /companies or /companies.json
   def index
@@ -49,6 +49,26 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def delegate
+    debugger
+    @is_owner = @company.creator_id == current_user.id ? true : false
+  end
+
+  def delegate_user
+    delegate = Delegation.new
+    delegate.company = @company
+    delegate.role =  (@company.creator_id == current_user.id)? Role::ROL_APODERADO : Role::ROL_SUPERVISOR
+    delegate.email = company_params.dig(:delegation, :email)
+    respond_to do |format|
+      if delegate.save
+        format.html { redirect_to @company, notice: 'La empresa fué delegada exitosamente' }
+        format.json { render :index, status: :created, location: @company }
+      else
+        format.html { redirect_to :delegate_company }
+      end
+    end
+  end
+
   # DELETE /companies/:id or /companies/:id.json
   # def destroy
   #   @company.destroy
@@ -66,6 +86,9 @@ class CompaniesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def company_params
-    params.require(:company).permit(:name, :cuit, :address, :contact_name, :contact_phone, :contact_email, :estatuto_file)
+    params.require(:company).permit(
+      :name, :cuit, :address, :contact_name, :contact_phone, :contact_email, :estatuto_file,
+      delegation: [:email]
+    )
   end
 end

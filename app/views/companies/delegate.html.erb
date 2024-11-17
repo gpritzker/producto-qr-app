@@ -1,0 +1,36 @@
+<h1>Nueva Delegación</h1>
+
+<%= form_with(model: @company, method: 'POST', url: delegate_user_company_path, local: true, class: "form-container") do |f| %>
+  <% if @company.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@company.errors.count, "error") %> impidió que se guardara la delegacion:</h4>
+      <ul>
+        <% @company.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <span>
+      Ingrese el email de la persona a la cual quiere delegarle la compañia <%= @company.name %>
+      como <%= @is_owner ? "APODERADO" : "SUPERVISOR" %>
+    </span><br>
+    
+    <%= f.fields_for :delegation do |delegation_form| %>
+      <%= delegation_form.label :email, class: "form-label" %>
+      <%= delegation_form.text_field :email, class: "form-control", required: true %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <% if @is_owner %>
+      <%= f.submit 'Delegar apoderado', class: "btn btn-primary" %>
+    <% else %>
+      <%= f.submit 'Delegar supervisor', class: "btn btn-primary" %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= link_to "Volver", companies_path, class: "btn btn-secondary" %> 

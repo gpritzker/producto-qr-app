@@ -1,27 +1,43 @@
-<h1>Detalles de la Empresa</h1>
+<h1 class="my-4">Detalles de la Empresa</h1>
 
-<p>
-  <strong>Name:</strong> <%= @company.name %> <br>
-  <strong>CUIT:</strong> <%= @company.cuit %> <br>
-  <strong>Contact Email:</strong> <%= @company.contact_email %> <br>
-  <strong>Contact Name:</strong> <%= @company.contact_name %> <br>
-  <strong>Contact Phone:</strong> <%= @company.contact_phone %> <br>
-  <strong>Created by:</strong> <%= @company.creator.try(:name) %> <br>
-  <strong>Estatuto:</strong>
-  <% if @company.estatuto_file.attached? %>
-    <a href="<%= url_for(@company.estatuto_file) %>" target="_blank"><%= @company.estatuto_file.filename.to_s %></a>
-  <% else %>
-    No se ha cargado el estatuto aún
-  <% end %>
-  <br>
-  <strong>Verificada:</strong> 
-  <% if @company.verified %>
-    SI
-  <% else %>
-    NO
-  <% end %>
-</p>
-<div class="actions mt-4">
-  <%= link_to "Editar", edit_company_path(@company), class: "btn btn-warning" %>
-  <%= link_to "Volver", companies_path, class: "btn btn-secondary" %>
+<div class="card">
+  <div class="card-body">
+    <!-- Información general de la empresa -->
+    <h5 class="card-title">Información General</h5>
+    <p><strong>Nombre:</strong> <%= @company.name %></p>
+    <p><strong>CUIT:</strong> <%= @company.cuit %></p>
+    <p><strong>Correo de Contacto:</strong> <%= @company.contact_email %></p>
+    <p><strong>Nombre del Contacto:</strong> <%= @company.contact_name %></p>
+    <p><strong>Teléfono de Contacto:</strong> <%= @company.contact_phone %></p>
+    <p><strong>Creado por:</strong> <%= @company.creator.try(:name) %></p>
+
+    <!-- Estatuto -->
+    <p><strong>Estatuto:</strong> 
+      <% if @company.estatuto_file.attached? %>
+        <a href="<%= url_for(@company.estatuto_file) %>" target="_blank" class="btn btn-link"><%= @company.estatuto_file.filename.to_s %></a>
+      <% else %>
+        No se ha cargado el estatuto aún.
+      <% end %>
+    </p>
+
+    <!-- Verificación -->
+    <p><strong>Verificada:</strong>
+      <% if @company.verified %>
+        <span class="text-success">Sí</span>
+      <% else %>
+        <span class="text-danger">No</span>
+      <% end %>
+    </p>
+
+    <!-- Delegaciones -->
+    <h5 class="mt-4">Delegaciones</h5>
+    <p><strong>Apoderados:</strong> <%= @company.delegations.as_apoderado.count %></p>
+    <p><strong>Supervisores:</strong> <%= @company.delegations.as_supervisor.count %></p>
+  </div>
+</div>
+
+<!-- Botones de acción -->
+<div class="mt-4">
+  <%= link_to "Editar", edit_company_path(@company), class: "btn btn-warning btn-sm me-2" %>
+  <%= link_to "Volver", companies_path, class: "btn btn-secondary btn-sm" %>
 </div>

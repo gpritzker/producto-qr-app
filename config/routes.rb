@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-  resources :delegate_companies
   resources :companies, except: [:destroy] do
     member do
       get :delegate
-      put :restore
+      post :delegate_user
     end
   end
-  resources :delegacions
+  resources :delegations, only: [:index]
   resources :tipo_procedimientos
   resources :reglamento_tecnicos
   resources :qrs
@@ -15,7 +14,7 @@ Rails.application.routes.draw do
 
   # Namespace para administración de usuarios, accesible solo por administradores
   namespace :admin do
-    resources :users, only: [:index, :new, :create, :edit, :update]
+    resources :users, only: [:index, :new, :create, :edit, :update, :show]
   end
 
   # Redirigir la raíz al inicio de sesión

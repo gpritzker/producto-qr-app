@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_15_231144) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_17_141316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -43,6 +43,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_231144) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "authorizations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_authorizations_on_company_id"
+    t.index ["user_id"], name: "index_authorizations_on_user_id"
+  end
+
   create_table "companies", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "cuit", limit: 20, null: false
@@ -57,11 +66,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_231144) do
     t.index ["creator_id"], name: "index_companies_on_creator_id"
   end
 
+  create_table "delegations", force: :cascade do |t|
+    t.bigint "company_id"
+    t.string "email", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_delegations_on_company_id"
+  end
+
   create_table "reglamento_tecnicos", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["nombre"], name: "index_reglamento_tecnicos_on_nombre", unique: true
+  end
+
+  create_table "roles", force: :cascade do |t|
   end
 
   create_table "tipo_procedimientos", force: :cascade do |t|
@@ -77,7 +99,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_231144) do
     t.string "position", null: false
     t.string "phone", limit: 50, null: false
     t.string "cuil", limit: 20
-    t.string "dni_file"
     t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

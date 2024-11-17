@@ -1,3 +1,4 @@
+
 <%= form_with(model: company, local: true, class: "form-container") do |f| %>
   <% if company.errors.any? %>
     <div class="alert alert-danger">
@@ -10,42 +11,53 @@
     </div>
   <% end %>
 
-  <div class="form-group">
+  <!-- Nombre de la empresa -->
+  <div class="mb-3">
     <%= f.label :name, class: "form-label" %>
-    <%= f.text_field :name, class: "form-control", required: true %>
+    <%= f.text_field :name, class: "form-control", required: true, placeholder: "Ingrese el nombre de la empresa" %>
   </div>
 
-  <div class="form-group">
+  <!-- Dirección -->
+  <div class="mb-3">
     <%= f.label :address, class: "form-label" %>
-    <%= f.text_field :address, class: "form-control", required: true %>
+    <%= f.text_field :address, class: "form-control", required: true, placeholder: "Ingrese la dirección de la empresa" %>
   </div>
 
-  <div class="form-group">
+  <!-- CUIT -->
+  <div class="mb-3">
     <%= f.label :cuit, class: "form-label" %>
-    <%= f.text_field :cuit, class: "form-control", required: false %>
+    <%= f.text_field :cuit, class: "form-control", required: false, placeholder: "Ingrese el CUIT de la empresa" %>
   </div>
 
-  <div class="form-group">
+  <!-- Correo electrónico de contacto -->
+  <div class="mb-3">
     <%= f.label :contact_email, class: "form-label" %>
-    <%= f.email_field :contact_email, class: "form-control", required: true %>
+    <%= f.email_field :contact_email, class: "form-control", required: true, placeholder: "Ingrese el correo electrónico de contacto" %>
   </div>
 
-  <div class="form-group">
+  <!-- Nombre del contacto -->
+  <div class="mb-3">
     <%= f.label :contact_name, class: "form-label" %>
-    <%= f.text_field :contact_name, class: "form-control", required: true %>
+    <%= f.text_field :contact_name, class: "form-control", required: true, placeholder: "Ingrese el nombre del contacto" %>
   </div>
 
-  <div class="form-group">
+  <!-- Teléfono de contacto -->
+  <div class="mb-3">
     <%= f.label :contact_phone, class: "form-label" %>
-    <%= f.text_field :contact_phone, class: "form-control", required: true %>
+    <%= f.text_field :contact_phone, class: "form-control", required: true, placeholder: "Ingrese el teléfono de contacto" %>
   </div>
 
-  <div class="form-group">
-    <%= f.label 'Estatuto de la Compañia', class: "form-label" %>
-    <%= f.file_field :estatuto_file %>
+  <!-- Estatuto de la compañía -->
+  <div class="mb-3">
+    <%= f.label 'Estatuto de la Compañía', class: "form-label" %>
+    <%= f.file_field :estatuto_file, accept: 'application/pdf', class: "form-control" %>
+    <small class="form-text text-muted">Cargue archivo PDF con el estatuto de la empresa.</small>
   </div>
 
-  <div class="actions">
-    <%= f.button :submit, class: "btn btn-primary" %>
+  <!-- Botón de acción -->
+  <div class="mb-3">
+    <%= f.button :submit, class: "btn btn-primary w-100" do %>
+      <%= company.new_record? ? 'Crear Empresa' : 'Editar Empresa' %>
+    <% end %>
   </div>
 <% end %>

@@ -1,0 +1,25 @@
+<h1>Nueva Delegación</h1>
+
+<%= form_with(model: delegate, local: true, class: "form-container") do |f| %>
+  <% if delegate.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(delegate.errors.count, "error") %> impidió que se guardara la delegacion:</h4>
+      <ul>
+        <% delegate.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :email, class: "form-label" %>
+    <%= f.text_field :email, class: "form-control", required: true %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit, class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "Volver", companies_path, class: "btn btn-secondary" %> 

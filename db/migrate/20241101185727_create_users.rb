@@ -6,7 +6,6 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :position, :null => false
       t.string :phone, limit: 50, :null => false
       t.string :cuil, limit: 20, :null => true
-      t.string :dni_file, :null => true # uuid
 
       # Campos para devise
       t.string :email, null: false

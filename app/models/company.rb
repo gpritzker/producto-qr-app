@@ -1,5 +1,5 @@
 class Company < ApplicationRecord
-  has_one_attached :estatuto_file
+  has_one_attached :estatuto_file, service: :estatutos
 
   validates :cuit, 
             presence: true,
@@ -16,9 +16,17 @@ class Company < ApplicationRecord
   validates :contact_phone,
             presence: true,
             format: { with: /\A\d{8,50}\z/, message: "El número de teléfono debe tener mas de 7 dígitos" }
-  #validates :estatuto_file, content_type: ['application/pdf'], size: { less_than: 5.megabytes }
+  validates :estatuto_file, 
+            content_type: ['application/pdf'], 
+            size: { less_than: 5.megabytes }, 
+            if: -> { estatuto_file.present? }
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
+  has_many :delegations
+  has_many :roles
+  has_many :authorizations
+
+  accepts_nested_attributes_for :delegations
 
   # Normalizaciones
   before_validation :normalize_attributes
@@ -26,8 +34,11 @@ class Company < ApplicationRecord
   private
 
   def normalize_attributes
-    self.name = name.upcase.strip
-    self.contact_email = contact_email.strip
-    self.contact_name = contact_name.upcase.strip
+    self.name = name.upcase.strip unless name.nil?
+    self.contact_email = contact_email.downcase.strip unless contact_email.nil?
+    self.contact_name = contact_name.upcase.strip unless contact_name.nil?
+    self.contact_phone = contact_phone.strip unless contact_phone.nil?
+    self.address = address.strip unless address.nil?
+    self.cuit = cuit.strip unless cuit.nil?
   end
 end
