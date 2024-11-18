@@ -1,6 +1,6 @@
 class ReglamentoTecnicosController < ApplicationController
   before_action :authenticate_user!
-  before_action :admin_only, except: [:index, :show]# Solo usuarios con rol admin pueden acceder
+  before_action :admin_only, except: [:index, :show] # Solo usuarios con rol admin pueden acceder
   before_action :set_reglamento_tecnico, only: %i[ show edit update destroy ]
 
   # GET /reglamento_tecnicos or /reglamento_tecnicos.json
@@ -60,13 +60,17 @@ class ReglamentoTecnicosController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_reglamento_tecnico
-      @reglamento_tecnico = ReglamentoTecnico.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_reglamento_tecnico
+    @reglamento_tecnico = ReglamentoTecnico.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def reglamento_tecnico_params
-      params.require(:reglamento_tecnico).permit(:nombre)
-    end
+  def admin_only
+    redirect_to reglamento_tecnicos_path, alert: "No tienes permisos para acceder a esta sección." unless current_user.admin?
+  end
+
+  # Only allow a list of trusted parameters through.
+  def reglamento_tecnico_params
+    params.require(:reglamento_tecnico).permit(:nombre)
+  end
 end

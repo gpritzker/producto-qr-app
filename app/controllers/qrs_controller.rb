@@ -50,13 +50,12 @@ class QrsController < ApplicationController
 
   # PATCH/PUT /qrs/1
   def update
-    authorize_user!
-    respond_to do |format|
+    if @qr.user_id != current_user.id
+      redirect_to @qr, alert: "No puede actualizar este QR"
+    else
       if @qr.update(qr_params)
-        format.html { redirect_to @qr, notice: "QR actualizado exitosamente." }
-        format.json { render :show, status: :ok, location: @qr }
+        redirect_to qrs_url, notice: "QR actualizado exitosamente."
       else
-        load_supporting_data
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @qr.errors, status: :unprocessable_entity }
       end
@@ -65,7 +64,6 @@ class QrsController < ApplicationController
 
   # DELETE /qrs/1
   def destroy
-    authorize_user!
     @qr.destroy
     respond_to do |format|
       format.html { redirect_to qrs_path, status: :see_other, notice: "QR eliminado exitosamente." }
@@ -82,12 +80,6 @@ class QrsController < ApplicationController
 
   def set_qr
     @qr = Qr.find(params[:id])
-  end
-
-  def authorize_user!
-    unless current_user.admin?
-      redirect_to qrs_url, alert: "No tienes permiso para realizar esta acción."
-    end
   end
 
   def qr_params
