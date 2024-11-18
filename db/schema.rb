@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_17_221100) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -78,6 +78,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_221100) do
     t.bigint "creator_id", null: false
     t.index ["company_id"], name: "index_delegations_on_company_id"
     t.index ["creator_id"], name: "index_delegations_on_creator_id"
+  end
+
+  create_table "qrs", force: :cascade do |t|
+    t.bigint "company_id"
+    t.bigint "user_id"
+    t.string "code", null: false
+    t.string "description", null: false
+    t.string "alias", null: false
+    t.string "origin", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_qrs_on_company_id"
+    t.index ["user_id"], name: "index_qrs_on_user_id"
   end
 
   create_table "reglamento_tecnicos", force: :cascade do |t|

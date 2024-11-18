@@ -1,10 +1,11 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @qr %>
-
-<div>
-  <%= link_to "Edit this qr", edit_qr_path(@qr) %> |
-  <%= link_to "Back to qrs", qrs_path %>
-
-  <%= button_to "Destroy this qr", @qr, method: :delete %>
+<div class="card p-4 mb-4 shadow-sm text-center">
+  <h3>Código QR</h3>
+  <% if @qr_code_svg %>
+    <div class="qr-code mx-auto mb-3" style="width: 200px;">
+      <%= raw(@qr_code_svg) %>
+    </div>
+    <p>Escanea este código QR para obtener más información sobre esta declaración de conformidad.</p>
+  <% else %>
+    <p style="color: red;">No se ha generado un código QR para esta declaración.</p>
+  <% end %>
 </div>

@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :roles
   has_many :authorizations
   has_many :delegations, foreign_key: :creator_id, dependent: :destroy
-  # has_many :products, dependent: :destroy
+  has_many :qrs, dependent: :destroy
   # has_many :empresas, foreign_key: :admin_user_id, dependent: :destroy
   # has_many :delegaciones_enviadas, class_name: "Delegacion", foreign_key: "usuario_origen_id", dependent: :destroy
   # has_many :delegaciones_recibidas, class_name: "Delegacion", foreign_key: "usuario_destino_id", dependent: :destroy

@@ -1,48 +1,47 @@
 class QrsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_qr, only: %i[show edit update destroy]
-  before_action :authorize_user!, only: %i[edit update destroy] # Solo administradores o dueños del QR
 
   # GET /qrs
   def index
     if current_user.admin?
       @qrs = Qr.all
     else
-      # Empresas donde el usuario tiene permisos (creadas + autorizadas)
-      empresa_ids = (current_user.empresas.pluck(:id) + current_user.empresas_autorizadas.pluck(:id)).uniq
-      @qrs = Qr.joins(:declaracion_conformidad).where(declaracion_conformidad: { empresa_id: empresa_ids })
+      @qrs = current_user.qrs
     end
   end
 
   # GET /qrs/1
   def show
-    # Solo mostrar si el usuario tiene acceso
-    authorize_user!
+    if @qr.present?
+      @qr_code_svg = RQRCode::QRCode.new("http://localhost:3000/d/#{@qr.code}").as_svg(
+        offset: 0,
+        color: '000',
+        shape_rendering: 'crispEdges',
+        module_size: 6
+      )
+    else
+      redirect_to qrs_url, alert: "QR inexistente"
+    end
   end
 
   # GET /qrs/new
   def new
     @qr = Qr.new
-    load_supporting_data
   end
 
   # GET /qrs/1/edit
   def edit
-    authorize_user!
-    load_supporting_data
   end
 
   # POST /qrs
   def create
     @qr = Qr.new(qr_params)
-    @qr.estado = :activo # Asigna el estado por defecto
-
+    @qr.user = current_user
     respond_to do |format|
       if @qr.save
-        format.html { redirect_to @qr, notice: "QR creado exitosamente." }
-        format.json { render :show, status: :created, location: @qr }
+        format.html { redirect_to qrs_url, notice: "QR creado exitosamente." }
       else
-        load_supporting_data
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @qr.errors, status: :unprocessable_entity }
       end
@@ -74,23 +73,24 @@ class QrsController < ApplicationController
     end
   end
 
+  def details
+    @qr = Qr.find_by_code(params[:id])
+    render layout: nil
+  end 
+
   private
 
   def set_qr
     @qr = Qr.find(params[:id])
   end
 
-  def load_supporting_data
-    @declaraciones_conformidad = current_user.admin? ? DeclaracionConformidad.all : DeclaracionConformidad.where(empresa_id: current_user.empresa_id)
-  end
-
   def authorize_user!
-    unless current_user.admin? || @qr.declaracion_conformidad.empresa_id == current_user.empresa_id
-      redirect_to root_path, alert: "No tienes permiso para realizar esta acción."
+    unless current_user.admin?
+      redirect_to qrs_url, alert: "No tienes permiso para realizar esta acción."
     end
   end
 
   def qr_params
-    params.require(:qr).permit(:declaracion_conformidad_id, :estado)
+    params.require(:qr).permit(:company_id, :origin, :description, :alias)
   end
 end

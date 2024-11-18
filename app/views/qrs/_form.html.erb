@@ -12,16 +12,26 @@
   <% end %>
 
   <div>
-    <%= form.label :url_destino, style: "display: block" %>
-    <%= form.text_field :url_destino %>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description, require: true %>
   </div>
 
   <div>
-    <%= form.label :estado, style: "display: block" %>
-    <%= form.number_field :estado %>
+    <%= form.label :alias, style: "display: block" %>
+    <%= form.text_field :alias, require: true %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.label :origin, style: "display: block" %>
+    <%= form.text_field :origin, require: true %>
+  </div>
+
+  <%= form.label :company %>
+  <%= form.collection_select :company_id, current_user.companies, :id, :name, { prompt: "Selecciona una empresa" } %>
+
+  <!-- Acciones -->
+  <div class="actions mt-4">
+    <%= form.submit qr.new_record? ? "Crear QR" : "Guardar Cambios", class: "btn btn-primary btn-lg" %>
+    <%= link_to 'Cancelar', qrs_path, class: 'btn btn-secondary btn-lg ml-3' %>
   </div>
 <% end %>

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :tipo_procedimientos
   resources :reglamento_tecnicos
   resources :qrs
+  get "/d/:id", to: "qrs#details"
   resources :declaracion_conformidads
   devise_for :users
 
