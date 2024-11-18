@@ -7,9 +7,9 @@ class User < ApplicationRecord
 
   # Relaciones
   has_many :companies, foreign_key: :creator_id, dependent: :destroy
-  has_many :delegations, primary_key: :email, foreign_key: :email
   has_many :roles
   has_many :authorizations
+  has_many :delegations, foreign_key: :creator_id, dependent: :destroy
   # has_many :products, dependent: :destroy
   # has_many :empresas, foreign_key: :admin_user_id, dependent: :destroy
   # has_many :delegaciones_enviadas, class_name: "Delegacion", foreign_key: "usuario_origen_id", dependent: :destroy

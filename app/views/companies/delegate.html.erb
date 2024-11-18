@@ -1,9 +1,10 @@
-<h1>Nueva Delegación</h1>
+<h1 class="my-4">Nueva Delegación</h1>
 
 <%= form_with(model: @company, method: 'POST', url: delegate_user_company_path, local: true, class: "form-container") do |f| %>
+  <!-- Errores -->
   <% if @company.errors.any? %>
     <div class="alert alert-danger">
-      <h4><%= pluralize(@company.errors.count, "error") %> impidió que se guardara la delegacion:</h4>
+      <h4><%= pluralize(@company.errors.count, "error") %> impidió que se guardara la delegación:</h4>
       <ul>
         <% @company.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -12,25 +13,34 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <span>
-      Ingrese el email de la persona a la cual quiere delegarle la compañia <%= @company.name %>
-      como <%= @is_owner ? "APODERADO" : "SUPERVISOR" %>
-    </span><br>
-    
+  <!-- Explicación de la delegación -->
+  <div class="mb-3">
+    <span class="text-muted">
+      Ingrese el email de la persona a la cual desea delegar la compañía <strong><%= @company.name %></strong>
+      como <strong><%= @is_owner ? "APODERADO" : "SUPERVISOR" %></strong>.
+    </span>
+  </div>
+
+  <!-- Formulario de Delegación -->
+  <div class="form-group mb-3">
     <%= f.fields_for :delegation do |delegation_form| %>
       <%= delegation_form.label :email, class: "form-label" %>
-      <%= delegation_form.text_field :email, class: "form-control", required: true %>
+      <%= delegation_form.email_field :email, class: "form-control", required: true, placeholder: "Ingrese el email" %>
     <% end %>
   </div>
 
-  <div class="actions">
+  <!-- Botón de Acción -->
+  <div class="actions mb-4">
     <% if @is_owner %>
-      <%= f.submit 'Delegar apoderado', class: "btn btn-primary" %>
+      <%= f.submit 'Delegar como Apoderado', class: "btn btn-primary w-100" %>
     <% else %>
-      <%= f.submit 'Delegar supervisor', class: "btn btn-primary" %>
+      <%= f.submit 'Delegar como Supervisor', class: "btn btn-primary w-100" %>
     <% end %>
   </div>
+
 <% end %>
 
-<%= link_to "Volver", companies_path, class: "btn btn-secondary" %> 
+<!-- Botón de Volver -->
+<div class="text-center">
+  <%= link_to "Volver", companies_path, class: "btn btn-secondary" %>
+</div>

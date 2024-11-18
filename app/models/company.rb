@@ -31,6 +31,10 @@ class Company < ApplicationRecord
   # Normalizaciones
   before_validation :normalize_attributes
 
+  def verificable?
+    estatuto_file.attached?
+  end
+
   private
 
   def normalize_attributes

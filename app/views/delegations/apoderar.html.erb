@@ -1,0 +1,32 @@
+<h1 class="my-4 text-center">
+  Aceptar apoderamiento
+</h1>
+
+<%= form_with model: @delegation, method: 'POST', url: apoderar_delegation_path, local: true do |form| %>
+  <% if @delegation.errors.any? %>
+    <div class="alert alert-danger" id="error_explanation">
+      <ul>
+        <% @delegation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Firma -->
+  <div class="form-group mt-4">
+    <%= form.label :authorization_file, class: "form-label" do %>
+      Cargue el poder otorgado por la empresa <%=@delegation.company.try(:name)%>
+    <% end %>
+    <%= form.file_field :authorization_file, accept: 'application/pdf', class: 'form-control', required: true %>
+    <small class="form-text text-muted">Cargue el archivo pdf con el poder dado por la empresa</small>
+  </div>
+
+  <!-- Acciones -->
+  <div class="actions mt-4">
+    <%= form.button :submit, class: "btn btn-primary btn-lg" do %>
+      Aceptar
+    <% end %>
+    <%= link_to 'Volver', delegations_path, class: 'btn btn-secondary btn-lg ml-3' %>
+  </div>
+<% end %>

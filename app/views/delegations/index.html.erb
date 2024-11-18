@@ -26,7 +26,7 @@
           <th>Estado</th>
           <th>Rol</th>
           <th>Fecha de Creación</th>
-          <th>Fecha de Actualización</th>
+          <th>Delegado por</th>
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
@@ -47,13 +47,19 @@
                       '<span class="badge bg-info">Apoderado</span>'.html_safe %>
               </td>
               <td><%= delegation.created_at.strftime("%d-%m-%Y %H:%M") %></td>
-              <td><%= delegation.updated_at.strftime("%d-%m-%Y %H:%M") %></td>
+              <td><%= delegation.creator.try(:name) %></td>
               <td class="text-center">
-                <button type="button" class="btn btn-sm btn-success me-2">
-                  <i class="bi bi-check-circle"></i> Aceptar
-                </button>
+                <% if delegation.role == Role::ROL_APODERADO %>
+                  <%= link_to apoderar_delegation_path(delegation), class: "btn btn-success btn-sm me-1 #{'disabled' unless current_user.can_by_apoderado?}" do %>
+                    <i class="bi bi-check-circle"></i> 
+                  <% end %>
+                <% else %>
+                  <%= link_to supervisar_delegation_path(delegation), class: "btn btn-success btn-sm me-1 #{'disabled' unless current_user.can_by_supervisor?}" do %>
+                    <i class="bi bi-check-circle"></i> 
+                  <% end %>
+                <% end %>
                 <button type="button" class="btn btn-sm btn-danger">
-                  <i class="bi bi-x-circle"></i> Rechazar
+                  <i class="bi bi-x-circle"></i> 
                 </button>
               </td>
             </tr>

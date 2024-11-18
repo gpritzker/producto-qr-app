@@ -6,8 +6,12 @@ class CompaniesController < ApplicationController
   def index
     if current_user.admin?
       @companies = Company.all
+      @apoderado_companies = nil
+      @supervisor_companies = nil
     else
       @companies = current_user.companies
+      @apoderado_companies = Company.find(current_user.authorizations.order(id: :desc).limit(20).pluck(:company_id)) 
+      @supervisor_companies = Company.find(Delegation.with_email(current_user.email).as_supervisor.accepted.order(id: :desc).limit(20).pluck(:company_id))
     end
   end
 
@@ -50,13 +54,13 @@ class CompaniesController < ApplicationController
   end
 
   def delegate
-    debugger
     @is_owner = @company.creator_id == current_user.id ? true : false
   end
 
   def delegate_user
     delegate = Delegation.new
     delegate.company = @company
+    delegate.creator = current_user
     delegate.role =  (@company.creator_id == current_user.id)? Role::ROL_APODERADO : Role::ROL_SUPERVISOR
     delegate.email = company_params.dig(:delegation, :email)
     respond_to do |format|

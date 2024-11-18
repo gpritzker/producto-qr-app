@@ -5,7 +5,13 @@ Rails.application.routes.draw do
       post :delegate_user
     end
   end
-  resources :delegations, only: [:index]
+  resources :delegations, only: [:index] do
+    member do
+      get :apoderar
+      get :supervisar
+      post :apoderar, to: "delegations#completar_apoderar"
+    end
+  end
   resources :tipo_procedimientos
   resources :reglamento_tecnicos
   resources :qrs

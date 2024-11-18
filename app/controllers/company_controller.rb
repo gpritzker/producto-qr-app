@@ -4,10 +4,14 @@ class CompaniesController < ApplicationController
 
   # GET /companies or /companies.json
   def index
+    debugger
     if current_user.admin?
       @companies = Company.all
+      @apoderado_companies = nil
     else
       @companies = current_user.companies
+      @apoderado_companies = Company.find(current_user.authorizations.order(id: :desc).limit(20).pluck(:company_id)) 
+      debugger
     end
   end
 

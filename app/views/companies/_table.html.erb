@@ -1,0 +1,77 @@
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>CUIT</th>
+          <th>Dirección</th>
+          <th>Contacto</th>
+          <th>Asociación</th>
+          <th>Estatuto</th>
+          <th>Verificada</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if companies.size > 0 %>
+          <% companies.each do |company| %>
+            <tr>
+              <td><%= company.name %></td>
+              <td><%= company.cuit %></td>
+              <td><%= company.address %></td>
+              <td>
+                <div>
+                  <small><strong>Email:</strong> <%= company.contact_email %></small><br>
+                  <small><strong>Nombre:</strong> <%= company.contact_name %></small><br>
+                  <small><strong>Teléfono:</strong> <%= company.contact_phone %></small>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-info"><%= relacion %></span>
+              </td>
+              <td class="text-center">
+                <% if company.estatuto_file.attached? %>
+                  <a href="<%= url_for(company.estatuto_file) %>" 
+                    target="_blank" 
+                    class="btn btn-primary btn-sm d-inline-flex align-items-center">
+                    <i class="bi bi-file-earmark-text me-1"></i> Ver Estatuto
+                  </a>
+                <% else %>
+                  <span class="badge bg-danger">NO</span>
+                <% end %>
+              </td>
+              <td class="text-center">
+                <% if company.verified %>
+                  <span class="badge bg-success">SI</span>
+                <% else %>
+                  <span class="badge bg-danger">NO</span>
+                <% end %>
+              </td>
+              <td class="text-center">
+                <%= link_to company_path(company), class: "btn btn-success btn-sm me-1" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <% if relacion.downcase == "apoderador" || relacion.downcase == "supervisor" %>
+                  <%= link_to company_path(company), class: "btn btn-outline-primary btn-sm me-1 #{'disabled' unless company.verificable?}" do %>
+                    <i class="bi bi-check-circle-fill"></i>
+                  <% end %>
+                <% end %>
+                <%= link_to edit_company_path(company), class: 'btn btn-warning btn-sm me-1' do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+                <%= link_to delegate_company_path(company), class: "btn btn-info btn-sm" do %>
+                  <i class="bi bi-person-plus"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="8" class="text-center text-muted">
+              Aún no hay empresas.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
