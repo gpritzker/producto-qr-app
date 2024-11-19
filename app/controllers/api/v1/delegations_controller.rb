@@ -7,14 +7,17 @@ module Api
         begin
           company = Company.find(delegations_params[:company_id])
           raise "No se puede delegar" unless company.present?
-          role = current_user.roles.where(company_id: company.id)&.first
-          raise "No tiene permisos para delegar sobre esta compañia" if role.nil?
-          
-          if delegations_params[:role].to_i != Role::ROL_APODERADO
-            # Si es delegado no puede delegar a un supervisor
-            raise "No puede realizar la delegación" if role.role < delegations_params[:role]
-          end
 
+          unless current_user.admin?
+            role = current_user.roles.where(company_id: company.id)&.first
+            raise "No tiene permisos para delegar sobre esta compañia" if role.nil?
+          
+            if delegations_params[:role].to_i != Role::ROL_APODERADO
+              # Si es delegado no puede delegar a un supervisor
+              raise "No puede realizar la delegación" if role.role < delegations_params[:role]
+            end
+          end
+          
           # Si el email ingresado es de un usuario existente, verifico que 
           # ya no tenga un rol de mayor jerarquia para la compañia
           # La jerarquia va de APODERADO -> SUPERVISOR -> DELEGADO

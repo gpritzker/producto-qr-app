@@ -19,14 +19,21 @@ class User < ApplicationRecord
   }
 
   # Validaciones
-  validates :email, presence: true, uniqueness: true
-  validates :name, presence: true, length: {minimum:5}
+  validates :email, 
+            presence: { message: "El email es obligatorio" },
+            uniqueness: { message: "Este email ya está registrado" }
+  validates :name, 
+            presence: { message: "El nombre es obligatorio" },
+            length: { minimum: 5, message: "El nombre debe tener al menos 5 caracteres" }
   validates :phone, 
-            presence: true,
-            format: { with: /\A\d{8,50}\z/, 
-            message: "El número de teléfono debe tener mas de 7 dígitos" }
-  validates :bussiness, presence: true, length: {minimum:5}
-  validates :position, presence: true, length: {minimum:5}
+            presence: { message: "El teléfono es obligatorio" },
+            format: { with: /\A\d{8,50}\z/, message: "El número de teléfono debe tener más de 7 dígitos" }
+  validates :bussiness, 
+            presence: { message: "La empresa es obligatorio" },
+            length: { minimum: 2, message: "La empresa debe tener al menos 2 caracteres" }
+  validates :position, 
+            presence: { message: "El puesto es obligatorio" },
+            length: { minimum: 2, message: "El puesto debe tener al menos 2 caracteres" }
   validates :cuil, 
             format: { with: /\A\d{2}-\d{8}-\d{1}\z/, message: "El CUIL debe tener el formato XX-XXXXXXXX-X" },
             if: -> { cuil.present? }
