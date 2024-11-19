@@ -9,7 +9,13 @@
     <p><strong>Correo de Contacto:</strong> <%= @company.contact_email %></p>
     <p><strong>Nombre del Contacto:</strong> <%= @company.contact_name %></p>
     <p><strong>Teléfono de Contacto:</strong> <%= @company.contact_phone %></p>
-    <p><strong>Rol:</strong> <%= current_user.roles.where(company_id: @company.id).first.role.upcase || 'ADMINISTRADOR' %></p>
+    <p><strong>Rol:</strong> 
+      <% if current_user.admin? %>
+        ADMINISTRADOR
+      <% else %>
+        <%= current_user.roles.where(company_id: @company.id).first.role.upcase %>
+      <% end %>
+    </p>
 
     <!-- Estatuto -->
     <p><strong>Estatuto:</strong> 

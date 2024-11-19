@@ -13,7 +13,7 @@
         <td><%= rol.user.name %></td>
         <td><span class="badge bg-info"><%= rol.role %></span></td>
         <td>
-          <% if (user_rol.apoderado? && !rol.apoderado?) || user_rol.supervisor? && rol.delegado? %>
+          <% if current_user.admin? || (user_rol.apoderado? && !rol.apoderado?) || user_rol.supervisor? && rol.delegado? %>
             <button type="button" class="btn btn-sm btn-danger" onclick="borrar('<%= api_v1_role_path(rol) %>', <%= rol.id %>)">
               <i class="bi bi-trash"></i> 
             </button>
