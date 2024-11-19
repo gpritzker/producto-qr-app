@@ -1,0 +1,55 @@
+<h1 class="my-4 text-center">Detalles del Usuario</h1>
+
+<div class="container">
+  <!-- Detalles del Usuario -->
+  <div class="row">
+    <div class="col-md-6">
+      <p><strong>Nombre:</strong> <%= @user.name %></p>
+      <p><strong>Email:</strong> <%= @user.email %></p>
+      <p><strong>Teléfono:</strong> <%= @user.phone %></p>
+      <p><strong>CUIL:</strong> <%= @user.cuil.present? ? @user.cuil : "No especificado" %></p>
+      <p><strong>Negocio:</strong> <%= @user.bussiness %></p>
+      <p><strong>Posición:</strong> <%= @user.position %></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Archivos Adjuntos -->
+  <h2 class="my-4">Archivos Adjuntos</h2>
+
+  <div class="attachments">
+    <!-- Archivos del DNI -->
+    <h3>Archivos del DNI</h3>
+    <% if @user.dni_files.attached? %>
+      <div class="row">
+        <% @user.dni_files.each do |file| %>
+          <div class="col-md-4 mb-3">
+            <%= image_tag file, alt: "DNI", class: "img-fluid rounded" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>No se han subido archivos del DNI.</p>
+    <% end %>
+
+    <!-- Firma Digital -->
+    <h3>Firma Digital</h3>
+    <% if @user.signature_file.attached? %>
+      <div>
+        <%= image_tag @user.signature_file, alt: "Firma Digital", class: "img-fluid rounded" %>
+      </div>
+    <% else %>
+      <p>No se ha subido una firma digital.</p>
+    <% end %>
+  </div>
+
+  <hr>
+
+  <!-- Acciones -->
+  <h2 class="my-4">Acciones</h2>
+  <div class="actions">
+    <%= link_to 'Editar Usuario', edit_admin_user_path(@user), class: "btn btn-primary btn-lg me-2" %>
+    <%= link_to 'Volver', admin_users_path, class: "btn btn-secondary btn-lg" %>
+  </div>
+</div>

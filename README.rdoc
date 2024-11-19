@@ -35,7 +35,13 @@ Este proyecto está configurado para realizar despliegues automáticos en Heroku
 
 ### Verificación de despliegue
 1. Realiza tus cambios localmente y envíalos al repositorio de GitHub:
-   ```bash
-   git add .
-   git commit -m "Descripción de los cambios"
-   git push origin main
+  ```bash
+  git add .
+  git commit -m "Descripción de los cambios"
+  git push origin main
+  ```
+
+## Instalacion de Active Storage
+  ```bash
+  rails active_storage:install
+  ```

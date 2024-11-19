@@ -26,26 +26,26 @@
         
         <!-- Nuevo campo: Nombre Completo -->
         <div class="form-group">
-          <%= f.label :nombre_completo, "Nombre Completo" %>
-          <%= f.text_field :nombre_completo, class: "form-control", placeholder: "Nombre Completo" %>
+          <%= f.label :name, "Nombre Completo" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "Nombre Completo", require: true %>
         </div>
         
         <!-- Nuevo campo: Empresa -->
         <div class="form-group">
-          <%= f.label :empresa, "Empresa" %>
-          <%= f.text_field :empresa, class: "form-control", placeholder: "Empresa" %>
+          <%= f.label :bussiness, "Empresa" %>
+          <%= f.text_field :bussiness, class: "form-control", placeholder: "Empresa", require: true %>
         </div>
 
         <!-- Nuevo campo: Cargo -->
         <div class="form-group">
-          <%= f.label :cargo, "Cargo" %>
-          <%= f.text_field :cargo, class: "form-control", placeholder: "Cargo" %>
+          <%= f.label :position, "Cargo" %>
+          <%= f.text_field :position, class: "form-control", placeholder: "Cargo", require: true %>
         </div>
 
         <!-- Nuevo campo: Teléfono -->
         <div class="form-group">
-          <%= f.label :telefono, "Teléfono" %>
-          <%= f.telephone_field :telefono, class: "form-control", placeholder: "Teléfono" %>
+          <%= f.label :phone, "Teléfono" %>
+          <%= f.telephone_field :phone, class: "form-control", placeholder: "Teléfono" %>
         </div>
 
         <!-- Campo de Correo Electrónico -->

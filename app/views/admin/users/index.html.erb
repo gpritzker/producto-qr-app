@@ -1,32 +1,68 @@
-<h1>Gestión de Usuarios</h1>
-<%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
-
-<table class="table table-striped mt-4">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Nombre Completo</th>
-      <th>Empresa</th>
-      <th>Cargo</th>
-      <th>Teléfono</th>
-      <th>Administrador</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.email %></td>
-        <td><%= user.name %></td>
-        <td><%= user.empresa&.razon_social %></td> <!-- Muestra la empresa si existe -->
-        <td><%= user.cargo %></td>
-        <td><%= user.telefono %></td>
-        <td><%= user.admin? ? 'Sí' : 'No' %></td>
-        <td>
-          <%= link_to 'Editar', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
-          <%= link_to 'Eliminar', admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' %>
-        </td>
-      </tr>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <% if current_user.admin? %>
+      <h1 class="mb-0">Gestión de Usuarios</h1>
+      <%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
+    <% else %>
+      <h1 class="mb-0">Mis Datos</h1>
     <% end %>
-  </tbody>
-</table>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Email</th>
+          <th>Nombre Completo</th>
+          <th>Empresa</th>
+          <th>Cargo</th>
+          <th>Teléfono</th>
+          <th>Admin</th>
+          <th>CUIL</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @users.present? %>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.email %></td>
+              <td><%= user.name %></td>
+              <td><%= user.bussiness.presence || '-' %></td> <!-- Muestra la empresa o un guión si no existe -->
+              <td><%= user.position.presence || '-' %></td>
+              <td><%= user.phone.presence || '-' %></td>
+              <td>
+                <span class="badge <%= user.admin? ? 'bg-success' : 'bg-secondary' %>">
+                  <%= user.admin? ? 'Sí' : 'No' %>
+                </span>
+              </td>
+              <td><%= user.cuil.presence || '-' %></td>
+              <td class="text-center">
+                <!-- Botón Ver con Icono -->
+                <%= link_to admin_user_path(user), class: 'btn btn-success btn-sm me-1' do %>
+                  <i class="bi bi-eye"></i> 
+                <% end %>
+
+                <!-- Botón Editar con Icono -->
+                <%= link_to edit_admin_user_path(user), class: 'btn btn-warning btn-sm me-1' do %>
+                  <i class="bi bi-pencil"></i> 
+                <% end %>
+
+                <!-- Botón Eliminar con Icono -->
+                <% if current_user.admin? %>
+                  <%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' do %>
+                    <i class="bi bi-trash"></i> 
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="8" class="text-center text-muted">No hay usuarios registrados.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

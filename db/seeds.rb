@@ -1,4 +1,13 @@
 # db/seeds.rb
+admin = User.new
+admin.email = "admin@admin.com"
+admin.name = "ADMINISTRADOR"
+admin.password = '12345678'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = true
+admin.save
 
 reglamentos_tecnicos = [
   "Acero para la construcción",

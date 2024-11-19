@@ -1,0 +1,160 @@
+<div class="container mt-5">
+  
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Gestión de Empresas</h1>
+    <%= link_to "Nueva Empresa", new_company_path, class: "btn btn-success" %>
+  </div>
+
+  <div id="responses" role="alert"></div>
+
+  <div id="delegar" class="justify-content-between align-items-center mb-3 d-none">
+    <div class="input-group">
+      <input type="text" id="email" class="form-control" placeholder="Ingrese el email a delegar">
+      <select id="role"></select>
+      <input type="hidden" id="company_id" class="form-control">
+      <button class="btn btn-primary" type="button" onclick="enviar_delegacion();">Delegar</button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>CUIT</th>
+          <th>Dirección</th>
+          <th>Contacto</th>
+          <th>Rol</th>
+          <th>Estatuto</th>
+          <th>Verificada</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @companies.size > 0 %>
+          <% @companies.each do |company| %>
+            <tr>
+              <td><%= company.name %></td>
+              <td><%= company.cuit %></td>
+              <td><%= company.address %></td>
+              <td>
+                <div>
+                  <small><strong>Email:</strong> <%= company.contact_email %></small><br>
+                  <small><strong>Nombre:</strong> <%= company.contact_name %></small><br>
+                  <small><strong>Teléfono:</strong> <%= company.contact_phone %></small>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-info">
+                  <% if current_user.admin? %>  
+                    ADMINISITRADOR
+                  <% else %>
+                    <% case company.user_role %>
+                      <% when 1 %>
+                        <%= "SUPERVISOR" %>
+                      <% when 2 %>
+                        <%= "APODERADO" %>
+                      <% else %>
+                        <%= "DELEGADO" %>
+                    <% end %>
+                  <% end %>
+                </span>
+              </td>
+              <td class="text-center">
+                <% if company.estatuto_file.attached? %>
+                  <a href="<%= url_for(company.estatuto_file) %>" 
+                    target="_blank" 
+                    class="btn btn-primary btn-sm d-inline-flex align-items-center">
+                    <i class="bi bi-file-earmark-text me-1"></i> Ver Estatuto
+                  </a>
+                <% else %>
+                  <span class="badge bg-danger">NO</span>
+                <% end %>
+              </td>
+              <td class="text-center">
+                <% if company.verified %>
+                  <span class="badge bg-success">SI</span>
+                <% else %>
+                  <span class="badge bg-danger">NO</span>
+                <% end %>
+              </td>
+              <td class="text-center">
+                <%= link_to company_path(company), class: "btn btn-success btn-sm me-1" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <div class="btn btn-primary btn-sm me-1" onclick="delegar(<%= company.id %>, <%= current_user.admin ? -1 : company.user_role  %>)">
+                <i class="bi bi-person-add"></i>
+              </div>
+                <%= link_to edit_company_path(company), class: 'btn btn-warning btn-sm me-1' do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+                
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="8" class="text-center text-muted">
+              Aún no hay empresas.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function delegar(company_id, actual_rol) {
+    $("#company_id").val(company_id);
+    var select = $("#role");
+    select.empty(); // Limpiamos el select antes de agregar nuevas opciones
+    
+    datos = Array();
+    if(actual_rol != 0) {
+      datos.push({"name": "DELEGADO", "id": 0}); 
+      datos.push({"name": "SUPERVISOR", "id": 1});
+    } 
+    datos.push({"name": "APODERADO", "id": 2});
+
+    $.each(datos, function(index, value) {
+      var option = $("<option></option>").attr("value", value.id).text(value.name);
+      if(index == 0)
+        option.attr("selected","true");
+      select.append(option);
+    });
+    $("#delegar").removeClass("d-none");
+  }
+
+  async function enviar_delegacion() {
+    const data = {
+      email: $("#email").val(),
+      company_id: $("#company_id").val(),
+      role: $("#role").val()
+    };
+    
+    try {
+      $("#delegar").addClass("d-none");
+      response = await fetch("<%= delegar_api_v1_delegations_url %>", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        ul = $("<ul></ul>");
+        $.each( errorMessage.messages, function( index, value ) {
+          ul.append($("<li></li>").html(value))
+        });
+        $("#responses").removeClass().addClass("alert alert-danger").html(ul);
+      } else {
+        const data = await response.json();
+        $("#responses").removeClass().addClass("alert alert-success").html("Delegación exitosa");
+      }
+    } catch(error) {
+      console.error('Error al delegar:', error);
+    }
+  }
+</script>

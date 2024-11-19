@@ -1,14 +1,62 @@
-<p style="color: green"><%= notice %></p>
 
-<h1>Qrs</h1>
-
-<div id="qrs">
-  <% @qrs.each do |qr| %>
-    <%= render qr %>
-    <p>
-      <%= link_to "Show this qr", qr %>
-    </p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Gestión de QR</h1>
+    <%= link_to "Nuevo QR", new_qr_path, class: "btn btn-success" %>
+  </div>
+  
+  <% if notice %>
+    <div class="alert alert-success" role="alert">
+      <%= notice %>
+    </div>
   <% end %>
-</div>
+  <% if alert %>
+    <div class="alert alert-warning" role="alert">
+      <%= alert %>
+    </div>
+  <% end %>
 
-<%= link_to "New qr", new_qr_path %>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Código</th>
+          <th>Alias</th>
+          <th>Descripción</th>
+          <th>Origen</th>
+          <th>DoC</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @qrs.size > 0 %>
+          <% @qrs.each do |qr| %>
+            <tr>
+              <td><%= qr.code %></td>
+              <td><%= qr.alias %></td>
+              <td><%= qr.description %></td>
+              <td><%= qr.origin %></td>
+              <td>
+                <span class="badge bg-info"><%= 0 %></span>
+              </td>
+              <td class="text-center">
+                <%= link_to qr_path(qr), class: "btn btn-success btn-sm me-1" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <%= link_to edit_qr_path(qr), class: 'btn btn-warning btn-sm me-1' do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7" class="text-center text-muted">
+              Aún no hay QRs.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

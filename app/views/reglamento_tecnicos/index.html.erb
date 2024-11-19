@@ -1,14 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Reglamento tecnicos</h1>
+    <%= link_to 'Crear reglamento técnico', new_reglamento_tecnico_path, class: 'btn btn-primary' %>
+  </div>
 
-<h1>Reglamento tecnicos</h1>
-
-<div id="reglamento_tecnicos">
-  <% @reglamento_tecnicos.each do |reglamento_tecnico| %>
-    <%= render reglamento_tecnico %>
-    <p>
-      <%= link_to "Show this reglamento tecnico", reglamento_tecnico %>
-    </p>
-  <% end %>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Reglamento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @reglamento_tecnicos.present? %>
+          <% @reglamento_tecnicos.each do |reglamento_tecnico| %>
+            <tr>
+              <td><%= reglamento_tecnico.nombre %></td>              
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td class="text-center text-muted">No hay reglamentos técnicos cargados.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to "New reglamento tecnico", new_reglamento_tecnico_path %>

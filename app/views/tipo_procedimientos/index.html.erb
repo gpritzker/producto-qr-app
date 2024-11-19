@@ -1,14 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Tipo de Procedimiento</h1>
+    <%= link_to 'Crear Tipo de Procedimiento', new_tipo_procedimiento_path, class: 'btn btn-primary' %>
+  </div>
 
-<h1>Tipo procedimientos</h1>
-
-<div id="tipo_procedimientos">
-  <% @tipo_procedimientos.each do |tipo_procedimiento| %>
-    <%= render tipo_procedimiento %>
-    <p>
-      <%= link_to "Show this tipo procedimiento", tipo_procedimiento %>
-    </p>
-  <% end %>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Tipos de Procedimiento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @tipo_procedimientos.present? %>
+          <% @tipo_procedimientos.each do |tipo_procedimiento| %>
+            <tr>
+              <td><%= tipo_procedimiento.nombre %></td>              
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td class="text-center text-muted">No hay tipos de procedimiento cargados.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to "New tipo procedimiento", new_tipo_procedimiento_path %>
