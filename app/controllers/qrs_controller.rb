@@ -1,13 +1,13 @@
 class QrsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_qr, only: %i[show edit update destroy]
+  before_action :set_qr, only: %i[show edit update]
 
   # GET /qrs
   def index
     if current_user.admin?
       @qrs = Qr.all
     else
-      @qrs = current_user.qrs
+      @qrs = Qr.joins(company: :roles).where(roles: { user_id: current_user.id })
     end
   end
 
@@ -37,7 +37,6 @@ class QrsController < ApplicationController
   # POST /qrs
   def create
     @qr = Qr.new(qr_params)
-    @qr.user = current_user
     respond_to do |format|
       if @qr.save
         format.html { redirect_to qrs_url, notice: "QR creado exitosamente." }
@@ -50,24 +49,11 @@ class QrsController < ApplicationController
 
   # PATCH/PUT /qrs/1
   def update
-    if @qr.user_id != current_user.id
-      redirect_to @qr, alert: "No puede actualizar este QR"
+    if @qr.update(qr_params)
+      redirect_to qrs_url, notice: "QR actualizado exitosamente."
     else
-      if @qr.update(qr_params)
-        redirect_to qrs_url, notice: "QR actualizado exitosamente."
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @qr.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /qrs/1
-  def destroy
-    @qr.destroy
-    respond_to do |format|
-      format.html { redirect_to qrs_path, status: :see_other, notice: "QR eliminado exitosamente." }
-      format.json { head :no_content }
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @qr.errors, status: :unprocessable_entity }
     end
   end
 

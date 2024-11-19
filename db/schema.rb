@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_19_142323) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -48,9 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
     t.bigint "company_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "delegation_id"
     t.index ["company_id"], name: "index_authorizations_on_company_id"
-    t.index ["delegation_id"], name: "index_authorizations_on_delegation_id"
     t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
 
@@ -64,33 +62,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
     t.boolean "verified", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "creator_id", null: false
-    t.index ["creator_id"], name: "index_companies_on_creator_id"
   end
 
   create_table "delegations", force: :cascade do |t|
     t.bigint "company_id"
     t.string "email", null: false
-    t.integer "status", default: 0, null: false
     t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "creator_id", null: false
     t.index ["company_id"], name: "index_delegations_on_company_id"
-    t.index ["creator_id"], name: "index_delegations_on_creator_id"
+    t.index ["email", "company_id"], name: "index_delegations_on_email_and_company_id", unique: true
   end
 
   create_table "qrs", force: :cascade do |t|
     t.bigint "company_id"
-    t.bigint "user_id"
-    t.string "code", null: false
+    t.string "code", limit: 20, null: false
     t.string "description", null: false
-    t.string "alias", null: false
-    t.string "origin", null: false
+    t.string "alias", limit: 50, null: false
+    t.string "origin", limit: 50, null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_qrs_on_company_id"
-    t.index ["user_id"], name: "index_qrs_on_user_id"
   end
 
   create_table "reglamento_tecnicos", force: :cascade do |t|
@@ -101,6 +94,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
   end
 
   create_table "roles", force: :cascade do |t|
+    t.bigint "company_id"
+    t.bigint "user_id"
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_roles_on_company_id"
+    t.index ["user_id", "company_id"], name: "index_roles_on_user_id_and_company_id", unique: true
+    t.index ["user_id"], name: "index_roles_on_user_id"
   end
 
   create_table "tipo_procedimientos", force: :cascade do |t|
@@ -114,7 +115,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
     t.string "name", limit: 50, null: false
     t.string "bussiness", null: false
     t.string "position", null: false
-    t.string "phone", limit: 50, null: false
+    t.string "phone", limit: 20, null: false
     t.string "cuil", limit: 20
     t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
@@ -130,7 +131,4 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_17_223647) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "authorizations", "delegations"
-  add_foreign_key "companies", "users", column: "creator_id"
-  add_foreign_key "delegations", "users", column: "creator_id"
 end

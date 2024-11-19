@@ -13,13 +13,15 @@
     </div>
   <% end %>
 
-  <!-- Firma -->
+  <!-- poder -->
   <div class="form-group mt-4">
-    <%= form.label :authorization_file, class: "form-label" do %>
-      Cargue el poder otorgado por la empresa <%=@delegation.company.try(:name)%>
+    <%= form.fields_for :authorization do |authorization_form| %>
+      <%= authorization_form.label :authorization_file, class: "form-label" do %>
+        Cargue el poder otorgado por la empresa <%=@delegation.company.try(:name)%>
+      <% end %>
+      <%= authorization_form.file_field :authorization_file, accept: 'application/pdf', class: 'form-control', required: true %>
+      <small class="form-text text-muted">Cargue el archivo pdf con el poder dado por la empresa</small>
     <% end %>
-    <%= form.file_field :authorization_file, accept: 'application/pdf', class: 'form-control', required: true %>
-    <small class="form-text text-muted">Cargue el archivo pdf con el poder dado por la empresa</small>
   </div>
 
   <!-- Acciones -->

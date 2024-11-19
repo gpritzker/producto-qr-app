@@ -4,7 +4,7 @@ class Company < ApplicationRecord
   validates :cuit, 
             presence: true,
             format: { with: /\A\d{2}-\d{8}-\d{1}\z/, message: "El CUIT debe tener el formato XX-XXXXXXXX-X" }
-  validates :name, presence: true, length: {minimum:3, maximum:50}
+  validates :name, presence: true, length: {minimum:1, maximum:50}
   validates :address, presence: true, length: {minimum:3}
   validates :contact_email, 
             presence: true,
@@ -18,17 +18,15 @@ class Company < ApplicationRecord
             format: { with: /\A\d{8,50}\z/, message: "El número de teléfono debe tener mas de 7 dígitos" }
   validates :estatuto_file, 
             content_type: ['application/pdf'], 
-            size: { less_than: 5.megabytes }, 
+            size: { less_than: 12.megabytes }, 
             if: -> { estatuto_file.present? }
 
-  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   has_many :delegations
   has_many :roles
   has_many :authorizations
+  has_many :qrs
+  has_many :users, through: :roles
 
-  accepts_nested_attributes_for :delegations
-
-  # Normalizaciones
   before_validation :normalize_attributes
 
   def verificable?

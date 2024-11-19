@@ -3,10 +3,11 @@ class Authorization < ApplicationRecord
 
   belongs_to :company
   belongs_to :user
-  belongs_to :delegation
 
-  validates :authorization_file, 
-            content_type: ['application/pdf'], 
-            size: { less_than: 5.megabytes }, 
-            if: -> { authorization_file.present? }
+  validates :authorization_file,
+            presence: { message: "El archivo de autorización es obligatorio." },
+            content_type: { in: ['application/pdf'], message: "Solo se permiten archivos PDF." },
+            size: { less_than: 5.megabytes, message: "El archivo de autorización no puede exceder los 5 MB." }
+
+  validates :user_id, uniqueness: { scope: :company_id }
 end

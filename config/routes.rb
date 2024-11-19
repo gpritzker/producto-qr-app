@@ -1,24 +1,33 @@
 Rails.application.routes.draw do
-  resources :companies, except: [:destroy] do
-    member do
-      get :delegate
-      post :delegate_user
-    end
-  end
+  devise_for :users
+  resources :companies, except: [:destroy]
   resources :delegations, only: [:index] do
     member do
       get :apoderar
-      get :supervisar
-      post :apoderar, to: "delegations#completar_apoderar"
+      post :apoderar, to: "delegations#completar_apoderamiento"
     end
   end
-  resources :tipo_procedimientos
-  resources :reglamento_tecnicos
-  resources :qrs
-  get "/d/:id", to: "qrs#details"
-  resources :declaracion_conformidads
-  devise_for :users
-
+  resources :qrs, except: [:destroy] do
+    member do
+      get "d/:id", to: "qrs#details"
+    end
+  end
+  resources :tipo_procedimientos, except: [:destroy]
+  resources :reglamento_tecnicos, except: [:destroy]
+  
+  namespace :api do
+    namespace :v1 do
+      resources :delegations, only: [] do
+        collection do
+          post :delegar
+          post "aceptar", to: "delegations#aceptar", as: "aceptar"
+          post "rechazar", to: "delegations#rechazar", as: "rechazar"
+        end
+      end
+      resources :roles, only: [:destroy]
+    end
+  end
+  
   # Namespace para administración de usuarios, accesible solo por administradores
   namespace :admin do
     resources :users, only: [:index, :new, :create, :edit, :update, :show]

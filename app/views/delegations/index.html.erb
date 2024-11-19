@@ -4,12 +4,13 @@
     <!-- Espacio para un botón adicional si se requiere en el futuro -->
   </div>
 
-  <% unless current_user.can_by_supervisor? %>
-    <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
-      <span>Debe completar los datos para ser supervisor (requiere: CUIL y DNI).</span>
-      <%= link_to 'Editar', edit_admin_user_path(current_user), class: "btn btn-primary btn-sm" %>
-    </div>
+  <div class="alert alert-info" role="alert">
+    Para aceptar delegaciones como APODERADO debe cargar el poder previamente
+  </div>
+   <% if alert %>
+    <div class="alert alert-warning" role="alert"><%= alert %></div>
   <% end %>
+
   <% unless current_user.can_by_apoderado? %>
     <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
       <span>Debe completar datos para ser apoderado (requiere: CUIL, firma y DNI).</span>
@@ -17,48 +18,41 @@
     </div>
   <% end %>
 
+  <div id="responses" role="alert"></div>
+
   <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover align-middle">
       <thead class="table-dark">
         <tr>
           <th>Compañía</th>
           <th>Correo Electrónico</th>
-          <th>Estado</th>
           <th>Rol</th>
           <th>Fecha de Creación</th>
-          <th>Delegado por</th>
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <% if @delegations.present? %>
           <% @delegations.each do |delegation| %>
-            <tr>
-              <td><%= delegation.company.name %></td>
+            <tr id="delegation-<%= delegation.id %>">
+              <td><%= delegation.company.try(:name) %></td>
               <td><%= delegation.email %></td>
               <td>
-                <span class="badge <%= delegation.status == 'waiting' ? 'bg-warning text-dark' : 'bg-success' %>">
-                  <%= delegation.status.capitalize %>
-                </span>
-              </td>
-              <td>
-                <%= delegation.role == Role::ROL_SUPERVISOR ? 
-                      '<span class="badge bg-primary">Supervisor</span>'.html_safe : 
-                      '<span class="badge bg-info">Apoderado</span>'.html_safe %>
+                <span class="badge bg-primary"><%= delegation.role.upcase %></span>
               </td>
               <td><%= delegation.created_at.strftime("%d-%m-%Y %H:%M") %></td>
-              <td><%= delegation.creator.try(:name) %></td>
+              
               <td class="text-center">
-                <% if delegation.role == Role::ROL_APODERADO %>
-                  <%= link_to apoderar_delegation_path(delegation), class: "btn btn-success btn-sm me-1 #{'disabled' unless current_user.can_by_apoderado?}" do %>
-                    <i class="bi bi-check-circle"></i> 
+                <% if  delegation.role == "apoderado" %>
+                  <%= link_to apoderar_delegation_path(delegation), class: "btn btn-sm btn-success #{current_user.can_by_apoderado? ? '' : 'disabled'}" do %>
+                    <i class="bi bi-check-circle"></i>
                   <% end %>
                 <% else %>
-                  <%= link_to supervisar_delegation_path(delegation), class: "btn btn-success btn-sm me-1 #{'disabled' unless current_user.can_by_supervisor?}" do %>
+                  <button type="button" class="btn btn-sm btn-success" onclick="aceptar(<%= delegation.id %>)">
                     <i class="bi bi-check-circle"></i> 
-                  <% end %>
+                  </button>
                 <% end %>
-                <button type="button" class="btn btn-sm btn-danger">
+                <button type="button" class="btn btn-sm btn-danger" onclick="rechazar(<%= delegation.id %>)">
                   <i class="bi bi-x-circle"></i> 
                 </button>
               </td>
@@ -75,3 +69,56 @@
     </table>
   </div>
 </div>
+
+<script>
+  async function aceptar(delegationId) {
+    try {
+      response = await fetch("<%= aceptar_api_v1_delegations_url %>", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: delegationId})
+      });
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        ul = $("<ul></ul>");
+        $.each( errorMessage.messages, function( index, value ) {
+          ul.append($("<li></li>").html(value))
+        });
+        $("#responses").removeClass().addClass("alert alert-danger").html(ul);
+      } else {
+        const data = await response.json();
+        $("#responses").removeClass().addClass("alert alert-success").html("Delegación aceptada exitosamente");
+        $("#delegation-"+delegationId).remove();
+      }
+    } catch(error) {
+      console.error('Error al aceptar delegación:', error);
+    }
+  }
+  async function rechazar(delegationId) {
+    try {
+      response = await fetch("<%= rechazar_api_v1_delegations_url %>", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: delegationId})
+      });
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        ul = $("<ul></ul>");
+        $.each( errorMessage.messages, function( index, value ) {
+          ul.append($("<li></li>").html(value))
+        });
+        $("#responses").removeClass().addClass("alert alert-danger").html(ul);
+      } else {
+        const data = await response.json();
+        $("#responses").removeClass().addClass("alert alert-success").html("Delegación rechazada exitosamente");
+        $("#delegation-"+delegationId).remove();
+      }
+    } catch(error) {
+      console.error('Error al rechazar delegación:', error);
+    }
+  }
+</script>

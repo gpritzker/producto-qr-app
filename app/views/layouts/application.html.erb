@@ -78,10 +78,10 @@
           <li><%= link_to 'Empresas', companies_path, class: 'text-white d-block py-2' %></li>
           <li class="d-inline-block">
             <%= link_to 'Delegaciones', delegations_path, class: 'text-white d-inline-block py-2' %>
-            <span class="badge badge-info ml-2"><%= Delegation.with_email(current_user.email).waiting.count %></span>
+            <span class="badge badge-info ml-2"><%= Delegation.with_email(current_user.email).count %></span>
           </li>
           <li><%= link_to 'QRs', qrs_path, class: 'text-white d-block py-2' %></li>
-          <li><%= link_to 'Declaraciones de Conformidad', declaracion_conformidads_path, class: 'text-white d-block py-2' %></li>
+          <li><%= link_to 'Declaraciones de Conformidad', reglamento_tecnicos_path, class: 'text-white d-block py-2' %></li>
           <% if current_user.admin? %>
             <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path, class: 'text-white d-block py-2' %></li>
             <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path, class: 'text-white d-block py-2' %></li>

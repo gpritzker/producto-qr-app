@@ -6,15 +6,17 @@ class User < ApplicationRecord
   has_one_attached :signature_file, service: :signatures
 
   # Relaciones
-  has_many :companies, foreign_key: :creator_id, dependent: :destroy
   has_many :roles
   has_many :authorizations
-  has_many :delegations, foreign_key: :creator_id, dependent: :destroy
-  has_many :qrs, dependent: :destroy
-  # has_many :empresas, foreign_key: :admin_user_id, dependent: :destroy
-  # has_many :delegaciones_enviadas, class_name: "Delegacion", foreign_key: "usuario_origen_id", dependent: :destroy
-  # has_many :delegaciones_recibidas, class_name: "Delegacion", foreign_key: "usuario_destino_id", dependent: :destroy
-  # has_many :empresas_autorizadas, through: :delegaciones_recibidas, source: :empresa
+  has_many :delegations, foreign_key: :email
+  has_many :companies, through: :roles
+
+  scope :companies_with_role, -> (user_id) { 
+    Company
+    .joins(roles: :user)
+    .where(users: { id: user_id })
+    .select('companies.*, roles.role AS user_role')
+  }
 
   # Validaciones
   validates :email, presence: true, uniqueness: true
@@ -41,13 +43,8 @@ class User < ApplicationRecord
   # Normalizaciones
   before_validation :normalize_attributes
 
-  def can_by_supervisor?
-    return true if !cuil.nil? && dni_files.attached?
-    false
-  end
-
   def can_by_apoderado?
-    return true if can_by_supervisor? && signature_file.attached?
+    return true if !cuil.nil? && dni_files.attached? && signature_file.attached?
     false
   end
 

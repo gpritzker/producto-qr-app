@@ -9,7 +9,7 @@
     <p><strong>Correo de Contacto:</strong> <%= @company.contact_email %></p>
     <p><strong>Nombre del Contacto:</strong> <%= @company.contact_name %></p>
     <p><strong>Teléfono de Contacto:</strong> <%= @company.contact_phone %></p>
-    <p><strong>Creado por:</strong> <%= @company.creator.try(:name) %></p>
+    <p><strong>Rol:</strong> <%= current_user.roles.where(company_id: @company.id).first.role.upcase || 'ADMINISTRADOR' %></p>
 
     <!-- Estatuto -->
     <p><strong>Estatuto:</strong> 
@@ -30,9 +30,8 @@
     </p>
 
     <!-- Delegaciones -->
-    <h5 class="mt-4">Delegaciones</h5>
-    <p><strong>Apoderados:</strong> <%= @company.delegations.as_apoderado.count %></p>
-    <p><strong>Supervisores:</strong> <%= @company.delegations.as_supervisor.count %></p>
+    <h5 class="mt-4">Usuarios</h5>
+    <%= render 'usuarios', company: @company %>
   </div>
 </div>
 

@@ -1,32 +1,46 @@
 class DelegationsController < ApplicationController
   before_action :authenticate_user!  # Asegura que el usuario esté autenticado
-  before_action :set_delegation, only: [:apoderar, :completar_apoderar, :supervisar]
-  before_action :verify_apoderado, only: [:apoderar, :completar_apoderar]
-
+  before_action :set_delegation, only: [:apoderar, :completar_apoderamiento]
+  
   def index
-    @delegations = Delegation.with_email(current_user.email)#.sort(id: :desc)
+    @delegations = Delegation.with_email(current_user.email)
   end
 
-  def completar_apoderar
+  def completar_apoderamiento
     begin
-      authorization = Authorization.new
-      authorization.company = @delegation.company
-      authorization.user = current_user
-      authorization.authorization_file = delegations_params[:authorization_file]
-      authorization.delegation = @delegation
-      authorization.save!
-      @delegation.update!(status: :accepted)
+      raise "No puede aceptar esta delegación" unless current_user.email == @delegation.email
+      
+      if @delegation.apoderado?
+        # Obtengo el rol actual si es que tiene
+        rol_actual = current_user.roles.where(company_id: @delegation.company_id).first
+        
+        ActiveRecord::Base.transaction do       
+          # Creo la autorizacion guardando el poder para la compañia
+          Authorization.create!({
+            company_id: @delegation.company_id,
+            user_id: current_user.id,
+            authorization_file: authorizations_params[:authorization_file]
+          })
+          
+          # Creo o actualizo el rol
+          if rol_actual.nil?
+            Role.create!({
+              user_id: current_user.id, 
+              company_id: @delegation.company_id, 
+              role: @delegation.role
+            })
+          else
+            rol_actual.update!(role: @delegation.role)
+          end
+          # Borro la delegacion
+          @delegation.destroy!
+        end
+      end
+
+      redirect_to companies_url
     rescue => e
-      render :index, alert: "Error al apoderar el usuario."
-    else
-      redirect_to delegations_url, notice: "Apoderamiento exitoso"
+      redirect_to delegations_url, alert: "No se pudo completar la delegación"
     end
-
-  end
-
-  def supervisar
-    @delegation.update!(status: :accepted)
-    redirect_to delegations_url, notice: "Supervidor asociado exitosamente"
   end
 
   private
@@ -35,13 +49,11 @@ class DelegationsController < ApplicationController
     @delegation = Delegation.find(params[:id])
   end
 
-  def verify_apoderado
-    unless current_user.can_by_apoderado? && @delegation.email == current_user.email
-      redirect_to delegations_path, alert: "No tienes permisos para acceder a esta sección." 
-    end
+  def delegations_params
+    params.require(:delegation).permit(:role)
   end
 
-  def delegations_params
-    params.require(:delegation).permit(:authorization_file)
+  def authorizations_params
+    params.require(:delegation).require(:authorization).permit(:authorization_file)
   end
 end

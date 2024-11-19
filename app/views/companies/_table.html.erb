@@ -6,7 +6,7 @@
           <th>CUIT</th>
           <th>Dirección</th>
           <th>Contacto</th>
-          <th>Asociación</th>
+          <th>Rol</th>
           <th>Estatuto</th>
           <th>Verificada</th>
           <th class="text-center">Acciones</th>
@@ -27,7 +27,7 @@
                 </div>
               </td>
               <td>
-                <span class="badge bg-info"><%= relacion %></span>
+                <span class="badge bg-info"><%= current_user.admin ? 'ADMINISITRADOR' : company.user_role  %></span>
               </td>
               <td class="text-center">
                 <% if company.estatuto_file.attached? %>
@@ -51,17 +51,13 @@
                 <%= link_to company_path(company), class: "btn btn-success btn-sm me-1" do %>
                   <i class="bi bi-eye"></i>
                 <% end %>
-                <% if relacion.downcase == "apoderador" || relacion.downcase == "supervisor" %>
-                  <%= link_to company_path(company), class: "btn btn-outline-primary btn-sm me-1 #{'disabled' unless company.verificable?}" do %>
-                    <i class="bi bi-check-circle-fill"></i>
-                  <% end %>
+                <%= link_to company_path(company), class: "btn btn-primary btn-sm me-1" do %>
+                  <i class="bi bi-person-add"></i>
                 <% end %>
                 <%= link_to edit_company_path(company), class: 'btn btn-warning btn-sm me-1' do %>
                   <i class="bi bi-pencil"></i>
                 <% end %>
-                <%= link_to delegate_company_path(company), class: "btn btn-info btn-sm" do %>
-                  <i class="bi bi-person-plus"></i>
-                <% end %>
+                
               </td>
             </tr>
           <% end %>

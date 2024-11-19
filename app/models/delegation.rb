@@ -1,29 +1,23 @@
 class Delegation < ApplicationRecord
-  enum status: { waiting: 0, accepted: 1, rejected: 2 }
-
   belongs_to :company
-  has_one :authorization
-  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
-
-  validates :status, inclusion: { in: statuses.keys }
+  
+  enum role: {delegado: Role::ROL_DELEGADO, supervisor: Role::ROL_SUPERVISOR, apoderado: Role::ROL_APODERADO }
+  
   validates :email, 
-            presence: true,
-            format: { with: URI::MailTo::EMAIL_REGEXP, message: 'El correo al cual delegar debe ser un correo electrónico válido' }, 
-            length: {minimum:3, maximum:250}
-  validates :role, inclusion: { in: Role::roles.values }
+            presence: { message: 'El campo de correo electrónico no puede estar vacío.' },
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: 'El correo electrónico ingresado no es válido.' },
+            length: { minimum: 3, maximum: 250, 
+                      too_short: 'El correo electrónico debe tener al menos 3 caracteres.',
+                      too_long: 'El correo electrónico no puede exceder los 250 caracteres.' }
 
-  scope :as_supervisor, -> { where(role: Role::ROL_SUPERVISOR) }
-  scope :as_apoderado, -> { where(role: Role::ROL_APODERADO) }
   scope :with_email, -> (email) { where(email: email) }
 
   # Normalizaciones
   before_validation :normalize_attributes
 
-  accepts_nested_attributes_for :authorization
-
   private
 
   def normalize_attributes
-    self.email = email.downcase.strip unless email.nil?
+    self.email = email.downcase.strip unless self.email.nil?
   end
 end

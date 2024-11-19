@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :name, :limit => 50, :null => false
       t.string :bussiness, :null => false
       t.string :position, :null => false
-      t.string :phone, limit: 50, :null => false
+      t.string :phone, limit: 20, :null => false
       t.string :cuil, limit: 20, :null => true
 
       # Campos para devise

@@ -24,7 +24,6 @@
           <th>Alias</th>
           <th>Descripción</th>
           <th>Origen</th>
-          <th>Creador</th>
           <th>DoC</th>
           <th class="text-center">Acciones</th>
         </tr>
@@ -37,7 +36,6 @@
               <td><%= qr.alias %></td>
               <td><%= qr.description %></td>
               <td><%= qr.origin %></td>
-              <td><%= qr.user.try(:name) %></td>
               <td>
                 <span class="badge bg-info"><%= 0 %></span>
               </td>

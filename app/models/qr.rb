@@ -1,16 +1,13 @@
 class Qr < ApplicationRecord
   belongs_to :company
-  belongs_to :user
   
   # Validaciones
-  # validates :url_destino, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "debe ser una URL válida" }
   validates :code, presence: true
   validates :description, presence: true
   validates :alias, presence: true
   validates :origin, presence: true
 
-  # Normalizaciones
-  before_validation :normalize_attributes, :generate_code
+  before_validation :generate_code, :normalize_attributes
 
   private 
 
@@ -21,7 +18,9 @@ class Qr < ApplicationRecord
   end
 
   def generate_code
-    data = "#{Time.now.to_i}#{self.description}#{self.alias}"
-    self.code = Digest::SHA256.new.update(data).hexdigest.slice(1,10)
+    if self.code.nil?
+      data = "#{Time.now.to_i}#{self.description}#{self.alias}"
+      self.code = Digest::SHA256.new.update(data).hexdigest.slice(1,10)
+    end
   end
 end
