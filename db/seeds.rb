@@ -9,36 +9,6 @@ admin.phone = "1123452345"
 admin.admin = true
 admin.save
 
-user = User.new
-user.email = "delegado@admin.com"
-user.name = "DELEGADO"
-user.password = '12345678'
-user.bussiness = "ninguno"
-user.position = "ninguno"
-user.phone = "1123452345"
-user.admin = false
-user.save
-
-user = User.new
-user.email = "supervisor@admin.com"
-user.name = "SUPERVISOR"
-user.password = '12345678'
-user.bussiness = "ninguno"
-user.position = "ninguno"
-user.phone = "1123452345"
-user.admin = false
-user.save
-
-user = User.new
-user.email = "apoderado@admin.com"
-user.name = "APODERADO"
-user.password = '12345678'
-user.bussiness = "ninguno"
-user.position = "ninguno"
-user.phone = "1123452345"
-user.admin = false
-user.save
-
 reglamentos_tecnicos = [
   "Acero para la construcción",
   "Ascensores y sus componentes de seguridad",
