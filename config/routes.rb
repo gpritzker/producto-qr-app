@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
   resources :tipo_procedimientos, except: [:destroy]
   resources :reglamento_tecnicos, except: [:destroy]
+  resources :djcs, only: [:index, :edit, :update, :show, :new]
   
   namespace :api do
     namespace :v1 do
@@ -24,7 +25,13 @@ Rails.application.routes.draw do
           post "rechazar", to: "delegations#rechazar", as: "rechazar"
         end
       end
+      resources :companies, only: [:index] do
+        member do
+          get :qrs
+        end
+      end
       resources :roles, only: [:destroy]
+      resources :djcs, only: [:approve, :sign]
     end
   end
   

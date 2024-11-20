@@ -1,6 +1,5 @@
 class TipoProcedimiento < ApplicationRecord
-  # Relaciones
-  has_many :declaraciones_conformidad
+  has_many :djcs
 
   # Validaciones
   validates :nombre, presence: true, uniqueness: true

@@ -1,6 +1,6 @@
 class QrsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_qr, only: %i[show edit update]
+  before_action :authenticate_user!, except: [:download]
+  before_action :set_qr, only: %i[show edit update download]
 
   # GET /qrs
   def index
@@ -8,20 +8,6 @@ class QrsController < ApplicationController
       @qrs = Qr.all
     else
       @qrs = Qr.joins(company: :roles).where(roles: { user_id: current_user.id })
-    end
-  end
-
-  # GET /qrs/1
-  def show
-    if @qr.present?
-      @qr_code_svg = RQRCode::QRCode.new("http://localhost:3000/d/#{@qr.code}").as_svg(
-        offset: 0,
-        color: '000',
-        shape_rendering: 'crispEdges',
-        module_size: 6
-      )
-    else
-      redirect_to qrs_url, alert: "QR inexistente"
     end
   end
 

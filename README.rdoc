@@ -45,3 +45,7 @@ Este proyecto está configurado para realizar despliegues automáticos en Heroku
   ```bash
   rails active_storage:install
   ```
+
+## Instalacion de libreria ImageMagick
+sudo apt update
+sudo apt install imagemagick

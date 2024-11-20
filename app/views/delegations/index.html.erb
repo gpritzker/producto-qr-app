@@ -82,10 +82,15 @@
       });
       if (!response.ok) {
         const errorMessage = await response.json();
-        ul = $("<ul></ul>");
-        $.each( errorMessage.messages, function( index, value ) {
-          ul.append($("<li></li>").html(value))
-        });
+        if(errorMessage.hasOwnProperty("messages")) {
+          ul = $("<ul></ul>");
+          $.each( errorMessage.messages, function( index, value ) {
+            ul.append($("<li></li>").html(value))
+          });
+        }
+        else {
+          ul = errorMessage.message;
+        }
         $("#responses").removeClass().addClass("alert alert-danger").html(ul);
       } else {
         const data = await response.json();
@@ -107,10 +112,15 @@
       });
       if (!response.ok) {
         const errorMessage = await response.json();
-        ul = $("<ul></ul>");
-        $.each( errorMessage.messages, function( index, value ) {
-          ul.append($("<li></li>").html(value))
-        });
+        if(errorMessage.hasOwnProperty("messages")) {
+          ul = $("<ul></ul>");
+          $.each( errorMessage.messages, function( index, value ) {
+            ul.append($("<li></li>").html(value))
+          });
+        }
+        else {
+          ul = errorMessage.message;
+        }
         $("#responses").removeClass().addClass("alert alert-danger").html(ul);
       } else {
         const data = await response.json();

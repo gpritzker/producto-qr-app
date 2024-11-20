@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_19_142323) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_19_230305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -74,6 +74,33 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_142323) do
     t.index ["email", "company_id"], name: "index_delegations_on_email_and_company_id", unique: true
   end
 
+  create_table "djcs", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "qr_id", null: false
+    t.bigint "tipo_procedimiento_id", null: false
+    t.bigint "reglamento_tecnico_id", null: false
+    t.string "product_description", null: false
+    t.string "legal_address", null: false
+    t.string "deposit_address", null: false
+    t.string "manufacturer", null: false
+    t.jsonb "product_attributes", default: [], null: false
+    t.jsonb "reports", default: [], null: false
+    t.boolean "approved", default: false, null: false
+    t.boolean "signed", default: false, null: false
+    t.datetime "approved_at"
+    t.datetime "signed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "signed_by_id"
+    t.bigint "approved_by_id"
+    t.index ["approved_by_id"], name: "index_djcs_on_approved_by_id"
+    t.index ["company_id"], name: "index_djcs_on_company_id"
+    t.index ["qr_id"], name: "index_djcs_on_qr_id"
+    t.index ["reglamento_tecnico_id"], name: "index_djcs_on_reglamento_tecnico_id"
+    t.index ["signed_by_id"], name: "index_djcs_on_signed_by_id"
+    t.index ["tipo_procedimiento_id"], name: "index_djcs_on_tipo_procedimiento_id"
+  end
+
   create_table "qrs", force: :cascade do |t|
     t.bigint "company_id"
     t.string "code", limit: 20, null: false
@@ -131,4 +158,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_142323) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "djcs", "companies"
+  add_foreign_key "djcs", "qrs"
+  add_foreign_key "djcs", "reglamento_tecnicos"
+  add_foreign_key "djcs", "tipo_procedimientos"
+  add_foreign_key "djcs", "users", column: "approved_by_id"
+  add_foreign_key "djcs", "users", column: "signed_by_id"
 end

@@ -1,0 +1,386 @@
+<style>
+  th, 
+  td {
+    border-left: none; /* Sin bordes laterales */
+    border-right: none; /* Sin bordes laterales */
+  }
+</style>
+
+<%= form_with model: @djc, local: true do |form| %>
+  <div class="card p-4 mb-4 shadow-sm">
+    <h3 class="card-title mb-4">Crear Nueva Declaración</h3>
+
+    <div class="form-group">
+      <%= form.label :company_id, "Selecciona la Compañía", class: "mr-2" %>
+      <div id="loading-message" class="text-muted mb-2">Cargando compañías...</div>
+      <%= form.select :company_id, [], { prompt: "Seleccione una compañía" }, class: "form-control", id: "company_select" %>
+    </div>
+    <hr>
+    <div id="djc_fields" style="display: none;">
+      <div class="container">
+        <%# QR %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :qr_id, "Selecciona el QR", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <div id="loading-message-qr" class="text-muted mb-2">Cargando QRs...</div>
+            <%= form.select :qr_id, [], { prompt: "Seleccione un QR" }, class: "form-control", id: "qr_select" %>
+          </div>
+        </div>
+        <%# Razón Social %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :razon_social, "Razón social", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :razon_social, class: "form-control" %>
+          </div>
+        </div>
+        <%# Marca Registrada %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :marca, "Marca registrada", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :marca, class: "form-control" %>
+          </div>
+        </div>
+        <%# Dirección Legal %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :legal_address, "Dirección Legal", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :legal_address, class: "form-control" %>
+          </div>
+        </div>
+        <%# Dirección del Depósito %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :deposit_address, "Dirección del Depósito", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :deposit_address, class: "form-control" %>
+          </div>
+        </div>
+        <%# Descripción del Producto %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :product_description, "Descripción del Producto", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :product_description, class: "form-control" %>
+          </div>
+        </div>
+        <%# Fabricante %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :manufacturer, "Fabricante", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :manufacturer, class: "form-control" %>
+          </div>
+        </div>
+        <%# Dirección del Fabricante %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :manufacturer_address, "Dirección del Fabricante", class: "form-label" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.text_field :manufacturer_address, class: "form-control" %>
+          </div>
+        </div>
+        <%# Reglamento Técnico %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :reglamento_tecnico_id, "Selecciona el Reglamento técnico", class: "mr-2" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.select :reglamento_tecnico_id, 
+                ReglamentoTecnico.all.map { |reglamento| [reglamento.nombre, reglamento.id] }, 
+                { prompt: "Selecciona un Reglamento Técnico" }, 
+                { class: "form-control", id: "rt_select" } %>
+          </div>
+        </div>
+        <%# Tipo de procedimiento %>
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :tipo_procedimiento_id, "Selecciona el Tipo de procedimiento", class: "mr-2" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.select :tipo_procedimiento_id, 
+                TipoProcedimiento.all.map { |tp| [tp.nombre, tp.id] }, 
+                { prompt: "Selecciona un Tipo de procedimiento" }, 
+                { class: "form-control", id: "tp_select" } %>
+          </div>
+        </div>
+      </div>
+
+      <%# Tabla con los datos de marca, modelo, características técnicas %>
+      <div class="container mt-4">
+        <%= hidden_field_tag :product_attributes %>
+        <table id="product_attributes" class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th colspan="2">Características Técnicas</th>
+            </tr>
+            <tr>
+              <th><%= form.text_field :marca, class: "form-control", placeholder: "Marca", id: "marca" %></th>
+              <th><%= form.text_field :modelo, class: "form-control", placeholder: "Modelo", id: "modelo" %></th>
+              <th><%= form.text_field :caracteristicas_tecnicas, class: "form-control", placeholder: "Características Técnicas", id: "caracteristica" %></th>
+              <th class="d-flex justify-content-end">
+                <button type="button" class="btn btn-success" onclick="addProductAttributes()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <%# Normas Técnicas %>
+      <div class="container mt-4">
+        <table id="normas_tecnicas" class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th class="text-center align-middle">Norma Técnica</th>
+              <th class="align-middle">
+                <%= form.text_field :norma_tecnica, class: "form-control", placeholder: "Norma técnica", id: "norma_tecnica" %>
+              </th>
+              <th class="d-flex justify-content-end">
+                <button type="button" class="btn btn-success d-block ms-auto" onclick="addNormaTecnica()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <%# Reportes %>
+      <div class="container mt-4">
+        <table id="reports" class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th class="text-center align-middle">Número de Reporte</th>
+              <th colspan="2" class="text-center align-middle">Emisor</th>
+            </tr>            
+            <tr> 
+              <th class="align-middle">
+                <%= form.text_field :report_number, class: "form-control", id: "report_number" %>
+              </th>
+              <th class="align-middle">
+                <%= form.text_field :report_emiter, class: "form-control", id: "report_emiter" %>
+              </th>
+              <th class="d-flex justify-content-end">
+                <button type="button" class="btn btn-success d-block ms-auto" onclick="addReporte()">
+                  <i class="bi bi-plus-circle"></i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="container">
+        <div class="row mb-3">
+          <div class="col-md-4 text-md-end">
+            <%= form.label :cr_files, "Archivos CRS (PDF)", class: "mr-2" %>
+          </div>
+          <div class="col-md-8">
+            <%= form.file_field :cr_files, multiple: true, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group text-left">
+        <%= form.submit "Crear Declaración", class: "btn btn-success" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= link_to 'Volver', djcs_path, class: 'btn btn-secondary' %>
+
+<script>
+$(document).ready(function() {
+  // Mostrar el mensaje de "Cargando compañías..." al inicio
+  $('#loading-message').show();
+  $('#company_select').hide();
+  $('#qr_select').hide();
+
+  $('#company_select').change(function() {
+    $('#company_select option[value=""]').remove();
+    if ($(this).val()) {
+      $('#djc_fields').show(); // Muestra los campos
+      $('#loading-message-qr').show();
+      $('#qr_select').empty().hide();
+      load_qrs()
+    } 
+  });
+  $('#qr_select').change(function() {
+    $('#qr_select option[value=""]').remove();
+  });
+   $('#tp_select').change(function() {
+    $('#tp_select option[value=""]').remove();
+  });
+   $('#rt_select').change(function() {
+    $('#rt_select option[value=""]').remove();
+  });
+
+  // Hacer la solicitud fetch a la API para obtener las compañías
+  fetch("<%= api_v1_companies_url %>")
+    .then(response => response.json()) // Convertir la respuesta a JSON
+    .then(data => {
+      // Escondemos el mensaje de carga cuando los datos estén listos
+      $('#loading-message').remove();
+      
+      // Obtenemos el select de compañías
+      var companySelect = $('#company_select');
+      
+      // Vaciar el select antes de llenarlo
+      companySelect.empty();
+      
+      // Agregar la opción por defecto "Seleccione una compañía"
+      companySelect.append('<option value="">Seleccione una compañía</option>');
+
+      // Iterar sobre la lista de compañías y agregar cada una como opción
+      $.each(data.data.data, (index, company) => {
+        companySelect.append('<option value="' + company.id + '">' + company.name + '</option>');
+      });
+      $('#company_select').show();
+    })
+    .catch(error => {
+      console.error('Error al cargar las compañías:', error);
+      $('#loading-message').text('Hubo un error al cargar las compañías');
+    });
+});
+
+function load_qrs() {
+  url = "<%= qrs_api_v1_company_url(id: "__ID__") %>"
+  fetch(url.replace('__ID__', $('#company_select').val()))
+  .then(response => response.json()) // Convertir la respuesta a JSON
+  .then(data => {
+    // Escondemos el mensaje de carga cuando los datos estén listos
+    $('#loading-message-qr').hide();
+    
+    var qrSelect = $('#qr_select');
+    qrSelect.append('<option value="">Seleccione un QR</option>');
+    $.each(data.data.data, (index, qr) => {
+      qrSelect.append('<option value="' + qr.id + '">' + qr.alias + '</option>');
+    });
+    $('#qr_select').show();
+  })
+  .catch(error => {
+    console.error('Error al cargar los QRs:', error);
+    $('#loading-message-qr').text('Hubo un error al cargar los QRs');
+  });
+}
+function addProductAttributes() {
+  // Obtener los valores de los campos de texto
+  const marca = $("#marca").val();
+  const modelo = $("#modelo").val();
+  const caracteristica = $("#caracteristica").val();
+
+  // Crear una nueva fila con los valores
+  const id = `product-attribute-${$('#product_attributes tbody tr').length}`
+  const newRow = `
+    <tr id="${id}">
+      <td class="align-middle">${marca}</td>
+      <td class="align-middle">${modelo}</td>
+      <td class="align-middle">${caracteristica}</td>
+      <td class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" onclick="delTableRow('${id}')">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `;
+  console.log(newRow)
+  // Agregar la fila al cuerpo de la tabla
+  $("#product_attributes tbody").append(newRow);
+
+  // Limpiar los campos del formulario
+  $("#marca").val("");
+  $("#modelo").val("");
+  $("#caracteristica").val("");
+}
+function addNormaTecnica() {
+  // Obtener los valores de los campos de texto
+  const norma = $("#norma_tecnica").val();
+  
+  // Crear una nueva fila con los valores
+  const id = `norma_tecnica-${$('#normas_tecnicas tbody tr').length}`
+  const newRow = `
+    <tr id="${id}">
+      <td colspan="2" class="align-middle">${norma}</td>
+      <td class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" onclick="delTableRow('${id}')">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `;
+  // Agregar la fila al cuerpo de la tabla
+  $("#normas_tecnicas tbody").append(newRow);
+
+  // Limpiar los campos del formulario
+  $("#norma_tecnica").val("");
+}
+function addReporte() {
+  // Obtener los valores de los campos de texto
+  const report_number = $("#report_number").val();
+  const report_emiter = $("#report_emiter").val();
+  
+  // Crear una nueva fila con los valores
+  const id = `report-${$('#reports tbody tr').length}`
+  const newRow = `
+    <tr id="${id}">
+      <td class="align-middle">${report_number}</td>
+      <td class="align-middle">${report_emiter}</td>
+      <td class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" onclick="delTableRow('${id}')">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `;
+  // Agregar la fila al cuerpo de la tabla
+  $("#reports tbody").append(newRow);
+
+  // Limpiar los campos del formulario
+  $("#report_number").val("");
+  $("#report_emiter").val("");
+}
+
+function delTableRow(id) {
+  $(`#${id}`).remove();
+}
+
+function obtenerValoresProductAttributes() {
+  const productAttributes = [];
+  
+  // Iterar sobre cada fila en el footer
+  $("#product_attributes tbody tr").each(function () {
+    const marca = $(this).find("td:nth-child(1)").text().trim();
+    const modelo = $(this).find("td:nth-child(2)").text().trim();
+    const caracteristica = $(this).find("td:nth-child(3)").text().trim();
+
+    // Crear un objeto con los valores
+    const atributo = {
+      marca: marca,
+      modelo: modelo,
+      caracteristica: caracteristica
+    };
+
+    // Agregar el objeto al array
+    productAttributes.push(atributo);
+  });
+
+  return productAttributes;
+}
+</script>

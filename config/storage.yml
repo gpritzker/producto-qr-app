@@ -13,3 +13,12 @@ signatures:
 authorizations:
   service: Disk
   root: <%= Rails.root.join("storage/authorizations") %>
+crs:
+  service: Disk
+  root: <%= Rails.root.join("storage/crs") %>
+djcs:
+  service: Disk
+  root: <%= Rails.root.join("storage/djcs") %>
+qrs:
+  service: Disk
+  root: <%= Rails.root.join("public/storage/qrs") %>

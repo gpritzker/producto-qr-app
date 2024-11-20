@@ -79,6 +79,12 @@ module Api
 
       def set_delegation
         @delegation = Delegation.find(params[:id])
+        unless @delegation
+          return render ApiResponseService::error(
+            info: "No se encontró la delegación a procesar", 
+            code: :not_found
+          )
+        end
       end
 
       def delegations_params

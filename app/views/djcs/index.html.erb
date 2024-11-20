@@ -1,0 +1,41 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Listado de DJCs</h1>
+    <%= link_to 'Nuevo DJC', new_djc_path, class: 'btn btn-success' %>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Descripción del Producto</th>
+          <th>Dirección Legal</th>
+          <th>Fabricante</th>
+          <th>Empresa</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @djcs.size.zero? %>
+          <tr><td colspan="6" class="text-center text-muted">Aún no hay DJCs.</td></tr>
+        <% end %>
+        <% @djcs.each do |djc| %>
+          <tr>
+            <td><%= djc.id %></td>
+            <td><%= djc.product_description %></td>
+            <td><%= djc.legal_address %></td>
+            <td><%= djc.manufacturer %></td>
+            <td><%= djc.company.name %></td>
+            <td>
+              <div class="d-flex gap-2">
+                <%= link_to 'Ver', djc_path(djc), class: 'btn btn-primary btn-sm' %>
+                <%= link_to 'Editar', edit_djc_path(djc), class: 'btn btn-warning btn-sm' %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

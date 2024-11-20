@@ -17,6 +17,11 @@ class User < ApplicationRecord
     .where(users: { id: user_id })
     .select('companies.*, roles.role AS user_role')
   }
+  scope :djcs_with_role, -> (user_id) {
+    Djc.joins(company: { roles: :user })
+   .where(roles: { user_id: user_id })
+   .select('djcs.*, roles.role AS user_role')
+  }
 
   # Validaciones
   validates :email, 

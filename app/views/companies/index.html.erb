@@ -47,16 +47,9 @@
               <td>
                 <span class="badge bg-info">
                   <% if current_user.admin? %>  
-                    ADMINISITRADOR
+                    ADMINISTRADOR
                   <% else %>
-                    <% case company.user_role %>
-                      <% when 1 %>
-                        <%= "SUPERVISOR" %>
-                      <% when 2 %>
-                        <%= "APODERADO" %>
-                      <% else %>
-                        <%= "DELEGADO" %>
-                    <% end %>
+                    <%= Role::role_name(company.user_role).upcase %>
                   <% end %>
                 </span>
               </td>

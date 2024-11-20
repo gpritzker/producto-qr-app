@@ -115,6 +115,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     method_source (1.1.0)
+    mini_magick (5.0.1)
     mini_mime (1.1.5)
     minitest (5.25.1)
     net-imap (0.5.0)
@@ -222,6 +223,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   json (>= 2.0)
+  mini_magick
   pg (>= 1.1)
   puma
   rails (~> 7.0.6)
