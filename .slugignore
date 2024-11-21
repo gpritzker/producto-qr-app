@@ -1,6 +1,8 @@
-node_modules/
-log/
-tmp/
-test/
-spec/
-.git/
+/test
+/spec
+/node_modules
+/tmp
+/log
+*.log
+*.tmp
+*.swp
