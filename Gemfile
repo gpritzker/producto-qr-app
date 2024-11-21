@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+ruby '3.1.2'
 gem 'rails', '~> 7.0.6'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
 gem 'terser'
