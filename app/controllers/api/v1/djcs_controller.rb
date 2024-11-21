@@ -7,7 +7,7 @@ module Api
       # Firma de la DJC
       def sign
         if @role.apoderado? 
-          if @djc.update(signed_by: current_user.id, signed_at: Time.current)
+          if @djc.update(signed_by: current_user, signed_at: Time.current)
             render json: {message: "Se firmo exitosamente."}, status: :ok
           else
             messages = @djc.errors.map do |err|
@@ -23,7 +23,7 @@ module Api
       # Aprueba un DJC
       def approve
         if @role.apoderado? || @role.supervisor?
-          if @djc.update(approved_by: current_user.id, approved_at: Time.current)
+          if @djc.update(approved_by: current_user, approved_at: Time.current)
             render json: {message: "Se aprobó exitosamente."}, status: :ok
           else
             messages = @djc.errors.map do |err|
@@ -56,7 +56,7 @@ module Api
       private
 
       def set_djc
-        @djc = Djc.find_by(id: params[:id])
+        @djc = Djc.find(params[:id])
         unless @djc
           return render json: {message: "No se encontró la declaracion jurada de conformidad"}, status: :not_found
         end

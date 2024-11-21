@@ -65,7 +65,7 @@ class Djc < ApplicationRecord
     )
     
     # Definir el path donde se guardará el archivo
-    if approved_by.present?
+    if signed_by.present?
       file_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
     else  
       file_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
@@ -80,7 +80,7 @@ class Djc < ApplicationRecord
     end
 
     # Agrego la marca de agua
-    unless approved_by.present?
+    unless signed_by.present?
       watermark_pdf_path = Rails.root.join("public", "pdfs", "watermark.pdf")
       main_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
       output_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
@@ -88,6 +88,16 @@ class Djc < ApplicationRecord
       system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{main_pdf_path} #{output_pdf_path}")
       system("rm #{main_pdf_path}")
     end    
+  end
+
+  def can_approve?
+    return true if approved_by.nil?
+    false
+  end
+
+  def can_sign?
+    return true if approved_by.present? && signed_by.nil?
+    false
   end
 
   private

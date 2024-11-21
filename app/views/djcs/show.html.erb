@@ -109,15 +109,21 @@
 
         <p class="mt-4">La presente declaración jurada de conformidad se emite, en todo de acuerdo con el/los Reglamentos Técnicos aludidos precedentemente, asumiendo la responsabilidad directa por los datos declarados, así como por la conformidad del producto.</p>
 
-        <div class="text-end mt-5">
-            <p>#firma apoderado#</p>
-            <p><strong>#Nombre</strong></p>
-            <p><strong>#Cargo#</strong></p>
-            <p><strong><%= djc.company.name %></strong></p>
-        </div>
+        <% if djc.signed_by.present? %>
+          <% signature = Base64.encode64(djc.signed_by.signature_file.download) %>
+          <div class="text-end mt-5">
+              <img src="data:<%= djc.signed_by.signature_file.content_type %>;base64,<%= signature %>" alt="Signature" width="120"/>
+              <p><strong><%= djc.signed_by.name %></strong></p>
+              <p><strong><%= djc.signed_by.position %></strong></p>
+              <p><strong><%= djc.company.name %></strong></p>
+          </div>
+        <% end %>
 
         <footer class="mt-5">
-            <p>Generado por: <strong><#nombre delegado#></strong> - Aprobado por: <strong>#nombre supervisor#</strong></p>
+            <p><small>
+              Generado por: <strong><%= djc.creator.name %></strong> - 
+              Aprobado por: <strong><%= djc.approved_by.try(:name) %></strong>
+            </small></p>
         </footer>
     </div>
 </body>
