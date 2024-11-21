@@ -1,5 +1,5 @@
 class QrsController < ApplicationController
-  before_action :authenticate_user!, except: [:download]
+  before_action :authenticate_user!, except: [:details]
   before_action :set_qr, only: %i[show edit update download]
 
   # GET /qrs
