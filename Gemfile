@@ -4,6 +4,7 @@ gem 'rails', '~> 7.0.6'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
 gem 'uglifier', '>= 1.3.0'
 gem 'devise'
+gem 'jquery-rails'
 gem 'pg', '>= 1.1'
 gem 'sprockets-rails'
 gem 'rqrcode'
