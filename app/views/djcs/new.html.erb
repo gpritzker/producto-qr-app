@@ -8,7 +8,7 @@
 
 <div id="responses" role="alert"></div>
 
-<div class="card p-4 mb-4 shadow-sm">
+<div id="djc-card" class="card p-4 mb-4 shadow-sm">
   <h3 class="card-title mb-4">Crear Nueva Declaración</h3>
 
   <div class="form-group">
@@ -416,7 +416,10 @@ async function enviar(data) {
       technical_normatives: getTechnicalNormatives(),
       reports: getReports()
     };    
-    $("#responses").removeClass().html("");
+
+    $("#djc-card").hide();
+    $("#responses").removeClass().addClass("alert alert-info").html("Guardando DJC...");
+
     response = await fetch("<%= api_v1_djcs_url %>", {
       method: "POST",
       headers: {
@@ -436,13 +439,16 @@ async function enviar(data) {
       else {
         ul = errorMessage.message;
       }
-      $("#responses").addClass("alert alert-danger").html(ul);
+      $("#responses").removeClass().addClass("alert alert-danger").html(ul);
+      $("#djc-card").show();
     } else {
       const data = await response.json();
-      $("#responses").addClass("alert alert-success").html("DJC creada exitosamente");
+      $("#responses").removeClass().addClass("alert alert-success").html("DJC creada exitosamente");
+      $("#djc-card").show();
     }
   } catch(error) {
-    console.error('Error al procesar la peticion:', error);
+    $("#responses").removeClass().addClass("alert alert-success").html(`Error al procesar la peticion. ${error}`);
+    $("#djc-card").show();
   }
 }
 </script>

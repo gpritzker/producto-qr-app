@@ -3,6 +3,7 @@
   <div class="d-flex flex-wrap justify-content-center gap-3">
     <% @qr.djcs.each do |djc| %>
       <%= link_to "Declaracion Jurada de Conformidad djc-#{@qr.code}-#{djc.id}", "#{ENV['PDF_DOMAIN']}djc-#{@qr.code}-#{djc.id}.pdf", class: "btn btn-primary", target: '_blank' %>
+      <br/>
     <% end %>
   </div>
 </div>
