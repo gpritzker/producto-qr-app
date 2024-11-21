@@ -26,3 +26,6 @@
 
 # Backups y scripts locales
 /backup
+node_modules/
+log/
+tmp/
