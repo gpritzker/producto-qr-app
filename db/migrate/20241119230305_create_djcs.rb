@@ -25,5 +25,6 @@ class CreateDjcs < ActiveRecord::Migration[7.0]
 
     add_reference :djcs, :signed_by, foreign_key: { to_table: :users }, null: true
     add_reference :djcs, :approved_by, foreign_key: { to_table: :users }, null: true
+    add_reference :djcs, :creator, foreign_key: { to_table: :users }, null: true
   end
 end

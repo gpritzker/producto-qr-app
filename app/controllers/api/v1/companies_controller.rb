@@ -8,12 +8,12 @@ module Api
         else
           companies = User.companies_with_role(current_user.id)
         end
-        render ApiResponseService::ok(data: companies)
+        render json: {data: companies}, status: :ok
       end
 
       def qrs
         qrs = Qr.where(company_id: params[:id])
-        render ApiResponseService::ok(data: qrs)
+        render json: {data: qrs}, status: :ok
       end 
 
       private

@@ -15,9 +15,10 @@ module Api
           else
             raise "No puede eliminar este rol"
           end
-          render ApiResponseService::ok(info: "Rol eliminado exitosamente")
+          render json: {message: "Rol eliminado exitosamente"}, status: :ok
         rescue => e
-          render ApiResponseService::error(info: e.message, code: :forbidden)
+          logger.error e.message
+          render json: {message: e.message}, status: :forbidden
         end
       end
 
@@ -26,10 +27,7 @@ module Api
       def set_role
         @role = Role.find(params[:id])
         unless @role
-          return render ApiResponseService::error(
-            info: "No se encontró el rol a procesar", 
-            code: :not_found
-          )
+          return render json: {message: : "No se encontró el rol a procesar"}, status: :not_found
         end
       end
 

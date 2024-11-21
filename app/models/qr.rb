@@ -3,6 +3,7 @@ class Qr < ApplicationRecord
   has_one_attached :qr_small_image, service: :qrs
 
   belongs_to :company
+  has_many :djcs
   
   # Validaciones
   validates :code, presence: true
@@ -12,6 +13,10 @@ class Qr < ApplicationRecord
 
   before_validation :generate_code, :normalize_attributes
   before_create :generate_images
+
+  def url
+    ENV['QR_DOMAIN']+self.code
+  end
 
   private 
 
@@ -30,7 +35,7 @@ class Qr < ApplicationRecord
 
   def generate_images
     # 1. Generar el QR con RQRCode
-    qr_code = RQRCode::QRCode.new(ENV['QR_DOMAIN']+self.code)
+    qr_code = RQRCode::QRCode.new(url)
 
     # 2. Convertir el QR a una imagen PNG
     png = qr_code.as_png(
@@ -53,11 +58,11 @@ class Qr < ApplicationRecord
     resized_file = Tempfile.new(['resized_qr_code', '.png'])
     resized_small_file = Tempfile.new(['resized_small_qr_code', '.png'])
     MiniMagick::Image.new(temp_file.path).tap do |image|
-      image.resize '236x236'
+      image.resize '236x236!'  # Use "!" to resize with exact dimensions
       image.write resized_file.path
     end
     MiniMagick::Image.new(temp_file.path).tap do |image|
-      image.resize '94x94'
+      image.resize '94x94!'  # Use "!" to resize with exact dimensions
       image.write resized_small_file.path
     end
 

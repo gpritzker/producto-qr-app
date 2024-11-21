@@ -1,0 +1,7 @@
+# config/locales/es.yml
+es:
+  date:
+    formats:
+      default: "%d de %B de %Y"  # 25 de Diciembre de 2023
+      short: "%d/%m/%Y"       # 25/12/2023
+      long: "%A %d de %B de %Y a las %H:%M"  # Miércoles 25 de Diciembre de 2023 a las 14:30

@@ -6,203 +6,196 @@
   }
 </style>
 
-<%= form_with model: @djc, local: true do |form| %>
-  <div class="card p-4 mb-4 shadow-sm">
-    <h3 class="card-title mb-4">Crear Nueva Declaración</h3>
+<div id="responses" role="alert"></div>
 
-    <div class="form-group">
-      <%= form.label :company_id, "Selecciona la Compañía", class: "mr-2" %>
-      <div id="loading-message" class="text-muted mb-2">Cargando compañías...</div>
-      <%= form.select :company_id, [], { prompt: "Seleccione una compañía" }, class: "form-control", id: "company_select" %>
+<div class="card p-4 mb-4 shadow-sm">
+  <h3 class="card-title mb-4">Crear Nueva Declaración</h3>
+
+  <div class="form-group">
+    <label class="mr-2">Selecciona la Compañía</label>
+    <div id="loading-message" class="text-muted mb-2">Cargando compañías...</div>
+    <select class="form-control" id="company" style=""></select>
+  </div>
+  <hr>
+  <div id="djc_fields" style="display: none;">
+    <div class="container">
+      <%# QR %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Selecciona el QR</label>
+        </div>
+        <div class="col-md-8">
+          <div id="loading-message-qr" class="text-muted mb-2">Cargando QRs...</div>
+          <select class="form-control" id="qr" style=""></select>
+        </div>
+      </div>
+      <%# Razón Social %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Razón social</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="bussiness_name">
+        </div>
+      </div>
+      <%# Marca Registrada %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Marca registrada</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="trade_mark">
+        </div>
+      </div>
+      <%# Dirección Legal %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Dirección Legal</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="legal_address">
+        </div>
+      </div> 
+      <%# Dirección del Depósito %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Dirección del Depósito</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="deposit_address">
+        </div> 
+      </div>
+      <%# Descripción del Producto %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Descripción del Producto</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="product_description">
+        </div>
+      </div>
+      <%# Fabricante %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Fabricante</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="manufacturer">
+        </div> 
+      </div>
+      <%# Dirección del Fabricante %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Dirección del Fabricante</label>
+        </div>
+        <div class="col-md-8">
+          <input class="form-control" type="text" id="manufacturer_address">
+        </div>
+      </div>
+      <%# Reglamento Técnico %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Selecciona el Reglamento técnico</label>
+        </div>
+        <div class="col-md-8">
+          <select class="form-control" id="reglamento_tecnico">
+            <option value="">Seleccione un reglamento técnico</option>
+            <% ReglamentoTecnico.all.each do |r| %>
+              <option value="<%= r.id %>"><%= r.nombre %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <%# Tipo de procedimiento %>
+      <div class="row mb-1">
+        <div class="col-md-4 text-md-end">
+          <label class="mr-2">Selecciona el Tipo de procedimiento</label>
+        </div>
+        <div class="col-md-8">
+          <select class="form-control" id="tipo_procedimiento">
+            <option value="">Seleccione un tipo de procedimiento</option>
+            <% TipoProcedimiento.all.each do |r| %>
+              <option value="<%= r.id %>"><%= r.nombre %></option>
+            <% end %>
+          </select>
+      </div>
     </div>
-    <hr>
-    <div id="djc_fields" style="display: none;">
-      <div class="container">
-        <%# QR %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :qr_id, "Selecciona el QR", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <div id="loading-message-qr" class="text-muted mb-2">Cargando QRs...</div>
-            <%= form.select :qr_id, [], { prompt: "Seleccione un QR" }, class: "form-control", id: "qr_select" %>
-          </div>
-        </div>
-        <%# Razón Social %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :razon_social, "Razón social", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :razon_social, class: "form-control" %>
-          </div>
-        </div>
-        <%# Marca Registrada %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :marca, "Marca registrada", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :marca, class: "form-control" %>
-          </div>
-        </div>
-        <%# Dirección Legal %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :legal_address, "Dirección Legal", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :legal_address, class: "form-control" %>
-          </div>
-        </div>
-        <%# Dirección del Depósito %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :deposit_address, "Dirección del Depósito", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :deposit_address, class: "form-control" %>
-          </div>
-        </div>
-        <%# Descripción del Producto %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :product_description, "Descripción del Producto", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :product_description, class: "form-control" %>
-          </div>
-        </div>
-        <%# Fabricante %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :manufacturer, "Fabricante", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :manufacturer, class: "form-control" %>
-          </div>
-        </div>
-        <%# Dirección del Fabricante %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :manufacturer_address, "Dirección del Fabricante", class: "form-label" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.text_field :manufacturer_address, class: "form-control" %>
-          </div>
-        </div>
-        <%# Reglamento Técnico %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :reglamento_tecnico_id, "Selecciona el Reglamento técnico", class: "mr-2" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.select :reglamento_tecnico_id, 
-                ReglamentoTecnico.all.map { |reglamento| [reglamento.nombre, reglamento.id] }, 
-                { prompt: "Selecciona un Reglamento Técnico" }, 
-                { class: "form-control", id: "rt_select" } %>
-          </div>
-        </div>
-        <%# Tipo de procedimiento %>
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :tipo_procedimiento_id, "Selecciona el Tipo de procedimiento", class: "mr-2" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.select :tipo_procedimiento_id, 
-                TipoProcedimiento.all.map { |tp| [tp.nombre, tp.id] }, 
-                { prompt: "Selecciona un Tipo de procedimiento" }, 
-                { class: "form-control", id: "tp_select" } %>
-          </div>
-        </div>
-      </div>
 
-      <%# Tabla con los datos de marca, modelo, características técnicas %>
-      <div class="container mt-4">
-        <%= hidden_field_tag :product_attributes %>
-        <table id="product_attributes" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>Marca</th>
-              <th>Modelo</th>
-              <th colspan="2">Características Técnicas</th>
-            </tr>
-            <tr>
-              <th><%= form.text_field :marca, class: "form-control", placeholder: "Marca", id: "marca" %></th>
-              <th><%= form.text_field :modelo, class: "form-control", placeholder: "Modelo", id: "modelo" %></th>
-              <th><%= form.text_field :caracteristicas_tecnicas, class: "form-control", placeholder: "Características Técnicas", id: "caracteristica" %></th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success" onclick="addProductAttributes()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <%# Normas Técnicas %>
-      <div class="container mt-4">
-        <table id="normas_tecnicas" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center align-middle">Norma Técnica</th>
-              <th class="align-middle">
-                <%= form.text_field :norma_tecnica, class: "form-control", placeholder: "Norma técnica", id: "norma_tecnica" %>
-              </th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success d-block ms-auto" onclick="addNormaTecnica()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <%# Reportes %>
-      <div class="container mt-4">
-        <table id="reports" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center align-middle">Número de Reporte</th>
-              <th colspan="2" class="text-center align-middle">Emisor</th>
-            </tr>            
-            <tr> 
-              <th class="align-middle">
-                <%= form.text_field :report_number, class: "form-control", id: "report_number" %>
-              </th>
-              <th class="align-middle">
-                <%= form.text_field :report_emiter, class: "form-control", id: "report_emiter" %>
-              </th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success d-block ms-auto" onclick="addReporte()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+    <%# Tabla con los datos de marca, modelo, características técnicas %>
+    <div class="container mt-4">
+      <table id="product_attributes" class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th colspan="2">Características Técnicas</th>
+          </tr>
+          <tr>
+            <th><input class="form-control" id="marca" type="text"></th>
+            <th><input class="form-control" id="modelo" type="text"></th>
+            <th><input class="form-control" id="caracteristica" type="text"></th>
+            <th class="d-flex justify-content-end">
+              <button type="button" class="btn btn-success" onclick="addProductAttributes()">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <%# Normas Técnicas %>
+    <div class="container mt-4">
+      <table id="normas_tecnicas" class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th class="text-center align-middle">Norma Técnica</th>
+            <th class="align-middle">
+              <input class="form-control" id="norma_tecnica" type="text" />
+            </th>
+            <th class="d-flex justify-content-end">
+              <button type="button" class="btn btn-success d-block ms-auto" onclick="addNormaTecnica()">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <%# Reportes %>
+    <div class="container mt-4">
+      <table id="reports" class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th class="text-center align-middle">Número de Reporte</th>
+            <th colspan="2" class="text-center align-middle">Emisor</th>
+          </tr>            
+          <tr> 
+            <th class="align-middle">
+              <input class="form-control" id="report_number" type="text" />
+            </th>
+            <th class="align-middle">
+              <input class="form-control" id="report_emiter" type="text" />
+            </th>
+            <th class="d-flex justify-content-end">
+              <button type="button" class="btn btn-success d-block ms-auto" onclick="addReporte()">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      <div class="container">
-        <div class="row mb-3">
-          <div class="col-md-4 text-md-end">
-            <%= form.label :cr_files, "Archivos CRS (PDF)", class: "mr-2" %>
-          </div>
-          <div class="col-md-8">
-            <%= form.file_field :cr_files, multiple: true, class: "form-control" %>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group text-left">
-        <%= form.submit "Crear Declaración", class: "btn btn-success" %>
-      </div>
+    <div class="form-group text-left">
+      <button type="button" class="btn btn-success d-block ms-auto" onclick="enviar()">
+        Crear Declaración
+      </button>
     </div>
   </div>
-<% end %>
+</div>
 
 <%= link_to 'Volver', djcs_path, class: 'btn btn-secondary' %>
 
@@ -210,26 +203,26 @@
 $(document).ready(function() {
   // Mostrar el mensaje de "Cargando compañías..." al inicio
   $('#loading-message').show();
-  $('#company_select').hide();
-  $('#qr_select').hide();
+  $('#company').hide();
+  $('#qr').hide();
 
-  $('#company_select').change(function() {
-    $('#company_select option[value=""]').remove();
+  $('#company').change(function() {
+    $('#company option[value=""]').remove();
     if ($(this).val()) {
       $('#djc_fields').show(); // Muestra los campos
       $('#loading-message-qr').show();
-      $('#qr_select').empty().hide();
-      load_qrs()
+      $('#qr').empty().hide();
+      loadQRs()
     } 
   });
-  $('#qr_select').change(function() {
-    $('#qr_select option[value=""]').remove();
+  $('#qr').change(function() {
+    $('#qr option[value=""]').remove();
   });
-   $('#tp_select').change(function() {
-    $('#tp_select option[value=""]').remove();
+   $('#tipo_procedimiento').change(function() {
+    $('#tipo_procedimiento option[value=""]').remove();
   });
-   $('#rt_select').change(function() {
-    $('#rt_select option[value=""]').remove();
+   $('#reglamento_tecnico').change(function() {
+    $('#reglamento_tecnico option[value=""]').remove();
   });
 
   // Hacer la solicitud fetch a la API para obtener las compañías
@@ -240,7 +233,7 @@ $(document).ready(function() {
       $('#loading-message').remove();
       
       // Obtenemos el select de compañías
-      var companySelect = $('#company_select');
+      var companySelect = $('#company');
       
       // Vaciar el select antes de llenarlo
       companySelect.empty();
@@ -249,10 +242,10 @@ $(document).ready(function() {
       companySelect.append('<option value="">Seleccione una compañía</option>');
 
       // Iterar sobre la lista de compañías y agregar cada una como opción
-      $.each(data.data.data, (index, company) => {
+      $.each(data.data, (index, company) => {
         companySelect.append('<option value="' + company.id + '">' + company.name + '</option>');
       });
-      $('#company_select').show();
+      $('#company').show();
     })
     .catch(error => {
       console.error('Error al cargar las compañías:', error);
@@ -260,20 +253,20 @@ $(document).ready(function() {
     });
 });
 
-function load_qrs() {
+function loadQRs() {
   url = "<%= qrs_api_v1_company_url(id: "__ID__") %>"
-  fetch(url.replace('__ID__', $('#company_select').val()))
+  fetch(url.replace('__ID__', $('#company').val()))
   .then(response => response.json()) // Convertir la respuesta a JSON
   .then(data => {
     // Escondemos el mensaje de carga cuando los datos estén listos
     $('#loading-message-qr').hide();
     
-    var qrSelect = $('#qr_select');
+    var qrSelect = $('#qr');
     qrSelect.append('<option value="">Seleccione un QR</option>');
-    $.each(data.data.data, (index, qr) => {
+    $.each(data.data, (index, qr) => {
       qrSelect.append('<option value="' + qr.id + '">' + qr.alias + '</option>');
     });
-    $('#qr_select').show();
+    $('#qr').show();
   })
   .catch(error => {
     console.error('Error al cargar los QRs:', error);
@@ -300,7 +293,7 @@ function addProductAttributes() {
       </td>
     </tr>
   `;
-  console.log(newRow)
+  
   // Agregar la fila al cuerpo de la tabla
   $("#product_attributes tbody").append(newRow);
 
@@ -361,26 +354,95 @@ function delTableRow(id) {
   $(`#${id}`).remove();
 }
 
-function obtenerValoresProductAttributes() {
+function getProductAttributes() {
   const productAttributes = [];
   
   // Iterar sobre cada fila en el footer
   $("#product_attributes tbody tr").each(function () {
-    const marca = $(this).find("td:nth-child(1)").text().trim();
-    const modelo = $(this).find("td:nth-child(2)").text().trim();
-    const caracteristica = $(this).find("td:nth-child(3)").text().trim();
-
     // Crear un objeto con los valores
     const atributo = {
-      marca: marca,
-      modelo: modelo,
-      caracteristica: caracteristica
+      brand: $(this).find("td:nth-child(1)").text().trim(),
+      model: $(this).find("td:nth-child(2)").text().trim(),
+      characteristic: $(this).find("td:nth-child(3)").text().trim()
     };
-
     // Agregar el objeto al array
     productAttributes.push(atributo);
   });
 
   return productAttributes;
+}
+function getTechnicalNormatives() {
+  const technicalNormatives = [];
+  
+  // Iterar sobre cada fila en el footer
+  $("#normas_tecnicas tbody tr").each(function () {
+    // Agregar el objeto al array
+    technicalNormatives.push($(this).find("td:nth-child(1)").text().trim());
+  });
+
+  return technicalNormatives;
+}
+function getReports() {
+  const reports = [];
+  
+  // Iterar sobre cada fila en el footer
+  $("#reports tbody tr").each(function () {
+    // Crear un objeto con los valores
+    const atributo = {
+      number: $(this).find("td:nth-child(1)").text().trim(),
+      emitter: $(this).find("td:nth-child(2)").text().trim()
+    };
+    // Agregar el objeto al array
+    reports.push(atributo);
+  });
+
+  return reports;
+}
+async function enviar(data) {
+  try {
+    var objetoDatos = {
+      company_id: $("#company").val(),
+      qr_id: $("#qr").val(),
+      trade_mark: $("#trade_mark").val(),
+      legal_address: $("#legal_address").val(),
+      deposit_address: $("#deposit_address").val(),
+      manufacturer: $("#manufacturer").val(),
+      manufacturer_address: $("#manufacturer_address").val(),
+      bussiness_name: $("#bussiness_name").val(),
+      tipo_procedimiento_id: $("#tipo_procedimiento").val(),
+      reglamento_tecnico_id: $("#reglamento_tecnico").val(),
+      product_description: $("#product_description").val(),
+      product_attributes: getProductAttributes(),
+      technical_normatives: getTechnicalNormatives(),
+      reports: getReports()
+    };    
+    $("#responses").removeClass().html("");
+    response = await fetch("<%= api_v1_djcs_url %>", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(objetoDatos)
+    });
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      
+      if(errorMessage.hasOwnProperty('messages')) {
+        ul = $("<ul></ul>");
+        $.each( errorMessage.messages, function( index, value ) {
+          ul.append($("<li></li>").html(value))
+        });
+      }
+      else {
+        ul = errorMessage.message;
+      }
+      $("#responses").addClass("alert alert-danger").html(ul);
+    } else {
+      const data = await response.json();
+      $("#responses").addClass("alert alert-success").html("DJC creada exitosamente");
+    }
+  } catch(error) {
+    console.error('Error al procesar la peticion:', error);
+  }
 }
 </script>

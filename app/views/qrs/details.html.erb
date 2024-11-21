@@ -1,1 +1,8 @@
-<h1>Llego</h1>
+<div class="container my-4">
+  <h2 class="text-center mb-4">Lista de Archivos</h2>
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+    <% @qr.djcs.each do |djc| %>
+      <%= link_to "Declaracion Jurada de Conformidad djc-#{@qr.code}-#{djc.id}", "#{ENV['PDF_DOMAIN']}djc-#{@qr.code}-#{djc.id}.pdf", class: "btn btn-primary", target: '_blank' %>
+    <% end %>
+  </div>
+</div>

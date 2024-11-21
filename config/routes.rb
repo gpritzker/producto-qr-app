@@ -7,11 +7,8 @@ Rails.application.routes.draw do
       post :apoderar, to: "delegations#completar_apoderamiento"
     end
   end
-  resources :qrs, except: [:destroy] do
-    member do
-      get "d/:id", to: "qrs#details"
-    end
-  end
+  get "d/:id", to: "qrs#details"
+  resources :qrs, except: [:destroy]
   resources :tipo_procedimientos, except: [:destroy]
   resources :reglamento_tecnicos, except: [:destroy]
   resources :djcs, only: [:index, :edit, :update, :show, :new]
@@ -31,7 +28,12 @@ Rails.application.routes.draw do
         end
       end
       resources :roles, only: [:destroy]
-      resources :djcs, only: [:approve, :sign]
+      resources :djcs, only: [:create] do
+        member do
+          put :approve 
+          put :sign
+        end
+      end
     end
   end
   

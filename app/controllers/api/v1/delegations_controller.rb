@@ -42,6 +42,7 @@ module Api
         rescue ActiveRecord::RecordInvalid => e
           render json: {messages: e.record.errors.full_messages}, status: :unprocessable_entity
         rescue => e
+          logger.error e.message
           render json: {messages: [e.message]}, status: :unprocessable_entity
         end
       end
@@ -61,6 +62,7 @@ module Api
         rescue ActiveRecord::RecordInvalid => e
           render json: {messages: e.record.errors.full_messages}, status: :unprocessable_entity
         rescue => e
+          logger.error e.message
           render json: {messages: [e.message]}, status: :unprocessable_entity
         end
       end
@@ -71,6 +73,7 @@ module Api
           @delegation.destroy
           render json: {messages: ["Delegación rechazada."]}, status: :ok
         rescue => e
+          logger.error e.message
           render json: {messages: [e.message]}, status: :unprocessable_entity
         end
       end
@@ -80,10 +83,7 @@ module Api
       def set_delegation
         @delegation = Delegation.find(params[:id])
         unless @delegation
-          return render ApiResponseService::error(
-            info: "No se encontró la delegación a procesar", 
-            code: :not_found
-          )
+          return render json: {message: "No se encontró la delegación a procesar"}, status: :not_found
         end
       end
 

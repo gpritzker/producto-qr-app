@@ -8,12 +8,15 @@ module Api
       def sign
         if @role.apoderado? 
           if @djc.update(signed_by: current_user.id, signed_at: Time.current)
-            render ApiResponseService::ok(info: "Se firmo exitosamente.")
+            render json: {message: "Se firmo exitosamente."}, status: :ok
           else
-            render ApiResponseService::error(info: @djc.errors.full_messages, code: :unprocessable_entity)
+            messages = @djc.errors.map do |err|
+              err.options&.[](:message) || "Error message not available"
+            end
+            return render json: {messages: messages}, status: :unprocessable_entity
           end
         else
-          render ApiResponseService::error(info: "No puede firmar la declaracion jurada de conformidad", code: :forbidden)
+          render json: {message: "No puede firmar la declaracion jurada de conformidad"}, status: :forbidden
         end
       end
 
@@ -21,12 +24,32 @@ module Api
       def approve
         if @role.apoderado? || @role.supervisor?
           if @djc.update(approved_by: current_user.id, approved_at: Time.current)
-            render ApiResponseService::ok(info: "Se aprobó exitosamente.")
+            render json: {message: "Se aprobó exitosamente."}, status: :ok
           else
-            render ApiResponseService::error(info: @djc.errors.full_messages, code: :unprocessable_entity)
+            messages = @djc.errors.map do |err|
+              err.options&.[](:message) || "Error message not available"
+            end
+            return render json: {messages: messages}, status: :unprocessable_entity
           end
         else
-          render ApiResponseService::error(info: "No puede aprobar la declaracion jurada de conformidad", code: :forbidden)
+          render json: {message: "No puede aprobar la declaracion jurada de conformidad"}, status: :forbidden
+        end
+      end
+
+      def create
+        begin
+          @djc = Djc.new(djcs_params)
+          # @djc.creator = current_user
+          unless @djc.save
+            messages = @djc.errors.map do |err|
+              err.options&.[](:message) || "Error message not available"
+            end
+            return render json: {messages: messages}, status: :unprocessable_entity
+          end
+          render json: {message: "DJC creada exitosamente"}, status: :ok
+        rescue => e
+          logger.error e.message
+          render json: {message: "No se pudo crear la DJC"}, status: :unprocessable_entity
         end
       end
 
@@ -35,21 +58,34 @@ module Api
       def set_djc
         @djc = Djc.find_by(id: params[:id])
         unless @djc
-          return render ApiResponseService::error(
-            info: "No se encontró la declaracion jurada de conformidad", 
-            code: :not_found
-          )
+          return render json: {message: "No se encontró la declaracion jurada de conformidad"}, status: :not_found
         end
       end
 
       def set_role
         @role = current_user.roles.where(company_id: @djc.company_id).first
         unless @role
-          return render ApiResponseService::error(
-            info: "No puede modificar la declaracion jurada de conformidad", 
-            code: :forbidden
-          )
+          return render json: {message: "No puede modificar la declaracion jurada de conformidad"}, status: :forbidden
         end
+      end
+
+      def djcs_params
+        params.require(:djc).permit(
+          :company_id,
+          :qr_id,
+          :tipo_procedimiento_id,
+          :reglamento_tecnico_id,
+          :product_description,
+          :legal_address,
+          :deposit_address,
+          :manufacturer,
+          :bussiness_name,
+          :trade_mark,
+          :manufacturer_address,
+          technical_normatives: [],
+          product_attributes: [:brand, :model, :characteristic],
+          reports: [:number, :emitter]
+        )
       end
     end
   end

@@ -7,12 +7,23 @@ class Djc < ApplicationRecord
   belongs_to :reglamento_tecnico
   belongs_to :signed_by, class_name: 'User', optional: true
   belongs_to :approved_by, class_name: 'User', optional: true
+  # belongs_to :creator, class_name: 'User', optional: true
 
-  # validates :razon_social
-  # validates :marca
-  # validates :manufacturer_address
-  # validates :normas_tecnicas
-
+  validates :bussiness_name,
+            presence: { message: "La razón social es obligatorio" },
+            length: { minimum: 1, maximum: 50,
+              too_short: "La razón social debe tener al menos 1 carácter",
+              too_long: "La razón social no puede exceder los 50 caracteres" }
+  validates :trade_mark,
+            presence: { message: "La marca registrada es obligatoria" },
+            length: { minimum: 1, maximum: 50,
+              too_short: "La marca registrada debe tener al menos 1 carácter",
+              too_long: "La marca registrada no puede exceder los 50 caracteres" }
+  validates :manufacturer_address,
+            presence: { message: "La dirección del fabricante es obligatoria" },
+            length: { minimum: 1, maximum: 250,
+              too_short: "La dirección del fabricante debe tener al menos 1 carácter",
+              too_long: "La dirección del fabricante no puede exceder los 250 caracteres" }
   validates :product_description,
             presence: { message: "La descripción de productos es obligatorio" },
             length: { minimum: 1, maximum: 50,
@@ -29,47 +40,104 @@ class Djc < ApplicationRecord
             length: { minimum: 1, maximum: 50,
               too_short: "El fabricante debe tener al menos 1 carácter",
               too_long: "El fabricante no puede exceder los 50 caracteres" }
-  validates :cr_files, 
+  validates :crs_files, 
             content_type: { in: ['application/pdf'], message: "Solo se permiten archivos PDF" }, 
             size: { less_than: 10.megabytes, message: "Cada archivo no puede superar 10MB" }, 
-            if: -> { cr_files.attached? }
-  validate :product_attributes_must_be_an_array_of_hashes # [{marca, modelo, características técnicas}]
-  validate :reports_must_be_an_array_of_hashes # [{número_de_reporte, emisor}]
+            if: -> { crs_files.attached? }
+  validate :product_attributes_must_be_an_array_of_hashes # [{marca, modelo, características técnicas}, ...]
+  validate :reports_must_be_an_array_of_hashes # [{número_de_reporte, emisor}, ...]
+  validate :technical_normatives_must_be_an_array #[normativa, ...]
 
   before_validation :normalize_attributes
+  after_save :generate_pdf
+
+  def generate_pdf
+    nombre = "djc-#{qr.code}-#{id}"
+    # Generar el PDF como un string binario
+    controller = ActionController::Base.new
+    pdf_content = controller.render_to_string(
+      pdf: nombre, # Nombre del archivo
+      template: "djcs/show",       # Vista para el PDF
+      encoding: "UTF-8",
+      margin: { top: 10, bottom: 10, left: 10, right: 10 },
+      locals: { djc: self },
+      page_size: "A4" # Usa un tamaño de página estándar
+    )
+    
+    # Definir el path donde se guardará el archivo
+    if approved_by.present?
+      file_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
+    else  
+      file_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
+    end  
+
+    # Crear el directorio si no existe
+    FileUtils.mkdir_p(File.dirname(file_path))
+
+    # Guardar el contenido del PDF en un archivo
+    File.open(file_path, 'ab') do |file|
+      file.write(pdf_content)
+    end
+
+    # Agrego la marca de agua
+    unless approved_by.present?
+      watermark_pdf_path = Rails.root.join("public", "pdfs", "watermark.pdf")
+      main_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
+      output_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
+      system("rm #{output_pdf_path}")
+      system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{main_pdf_path} #{output_pdf_path}")
+      system("rm #{main_pdf_path}")
+    end    
+  end
 
   private
   
   def product_attributes_must_be_an_array_of_hashes
-    unless product_attributes.is_a?(Array)
-      errors.add("Debe cargar al menos una marca, modelo y características técnicas")
+    unless product_attributes.is_a?(Array) && product_attributes.size.positive?
+      errors.add(:product_attributes, :invalid, message: "Debe cargar al menos una marca, modelo y características técnicas")
       return false
     end  
     unless product_attributes.all? { |item| 
-      item.is_a?(Hash) &&
-      (item.try(:marca).nil? || item.try(:marca).size < 1) && 
-      (item.try(:modelo).nil? || item.try(:modelo).size < 1) &&
-      (item.try(:cat_tec).nil? || item.try(:cat_tec).size < 1)
+      if item.is_a?(Hash)
+        item = item.with_indifferent_access
+        return false if item[:brand].nil? || item[:brand].empty?
+        return false if item[:model].nil? || item[:model].empty?
+        return false if item[:characteristic].nil? || item[:characteristic].empty?
+        return true
+      end
+      false
     }
-      errors.add("Verifique tener marca, modelo y característica técnica")
+      errors.add(:product_attributes, :invalid, message: "Verifique tener marca, modelo y característica técnica")
       return false
     end
     true
   end
 
   def reports_must_be_an_array_of_hashes
-    unless reports.is_a?(Array)
-      errors.add("Debe cargar al menos un reporte con número y emisor")
+    unless reports.is_a?(Array) && reports.size.positive?
+      errors.add(:reports, :invalid, message: "Debe cargar al menos un reporte con número y emisor")
       return false
     end  
-    unless product_attributes.all? { |item| 
-      item.is_a?(Hash) &&
-      (item.try(:numero).nil? || item.try(:numero).size < 1) && 
-      (item.try(:emisor).nil? || item.try(:emisor).size < 1)
+    unless reports.all? { |item| 
+      if item.is_a?(Hash)
+        item = item.with_indifferent_access
+        return false if item[:number].nil? || item[:number].empty?
+        return false if item[:emitter].nil? || item[:emitter].empty?
+        return true
+      end
+      false
     }
-      errors.add("Verifique tener número de reporte y emisor")
+      errors.add(:reports, :invalid, message: "Verifique tener número de reporte y emisor")
       return false
     end
+    true
+  end
+
+  def technical_normatives_must_be_an_array
+    if !technical_normatives.is_a?(Array) || technical_normatives.size.zero?
+      errors.add(:technical_normatives, :invalid, message: "Debe cargar al menos una técnica normativa")
+      return false
+    end  
     true
   end
 

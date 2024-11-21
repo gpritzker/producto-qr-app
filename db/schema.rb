@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_19_230305) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_214634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -93,6 +93,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_230305) do
     t.datetime "updated_at", null: false
     t.bigint "signed_by_id"
     t.bigint "approved_by_id"
+    t.string "bussiness_name", limit: 50, null: false
+    t.string "trade_mark", limit: 50, null: false
+    t.string "manufacturer_address", null: false
+    t.string "technical_normatives", default: [], array: true
     t.index ["approved_by_id"], name: "index_djcs_on_approved_by_id"
     t.index ["company_id"], name: "index_djcs_on_company_id"
     t.index ["qr_id"], name: "index_djcs_on_qr_id"
