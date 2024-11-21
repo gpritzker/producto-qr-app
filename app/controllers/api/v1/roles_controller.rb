@@ -27,7 +27,7 @@ module Api
       def set_role
         @role = Role.find(params[:id])
         unless @role
-          return render json: {message: : "No se encontró el rol a procesar"}, status: :not_found
+          return render json: {message: "No se encontró el rol a procesar"}, status: :not_found
         end
       end
 
