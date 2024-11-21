@@ -8,7 +8,8 @@ class Role < ApplicationRecord
 
   enum role: {delegado: self::ROL_DELEGADO, supervisor: self::ROL_SUPERVISOR, apoderado: self::ROL_APODERADO }
 
-  validates :user_id, uniqueness: { scope: :company_id }
+  validates :company_id, presence: true
+  validates :user_id, presence: true, uniqueness: { scope: :company_id }
 
   def self.role_name(role_id)
     return  case role_id

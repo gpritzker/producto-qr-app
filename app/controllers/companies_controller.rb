@@ -22,16 +22,20 @@ class CompaniesController < ApplicationController
 
   # POST /companies or /companies.json
   def create
-    @company = Company.new(company_params)
-    @company.transaction do
-      @company.save
-      Role.create(
-        user_id: current_user.id,
-        company_id: @company.id,
-        role: Role::ROL_DELEGADO
-      )
-    end
-    redirect_to @company, notice: 'La empresa fué creada exitosamente' 
+    begin
+      @company = Company.new(company_params)
+      @company.transaction do
+        @company.save!
+        Role.create(
+          user_id: current_user.id,
+          company_id: @company.id,
+          role: Role::ROL_DELEGADO
+        )
+      end
+      redirect_to @company, notice: 'La empresa fué creada exitosamente' 
+    rescue => e
+      render :new
+    end    
   end
 
   # PATCH/PUT /companies/:id or /companies/:id.json
