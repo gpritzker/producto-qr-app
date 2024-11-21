@@ -4,6 +4,17 @@
     <%= link_to 'Nuevo DJC', new_djc_path, class: 'btn btn-success' %>
   </div>
 
+  <% if notice %>
+    <div class="alert alert-success" role="alert">
+      <%= notice %>
+    </div>
+  <% end %>
+  <% if alert %>
+    <div class="alert alert-warning" role="alert">
+      <%= alert %>
+    </div>
+  <% end %>
+
   <div id="responses" role="alert"></div>
 
   <div class="table-responsive">
@@ -15,6 +26,7 @@
           <th>Dirección Legal</th>
           <th>Fabricante</th>
           <th>Empresa</th>
+          <th>CRs</th>
           <th>Rol</th>
           <th>Acciones</th>
         </tr>
@@ -30,6 +42,7 @@
             <td><%= djc.legal_address %></td>
             <td><%= djc.manufacturer %></td>
             <td><%= djc.company.name %></td>
+            <td><%= djc.crs_files.count %></td>
             <td><span class="badge bg-info"><%= Role.role_name(djc.user_role) %></span></td>
             <td>
               <div class="d-flex gap-2">
@@ -39,7 +52,7 @@
                 <% if djc.can_approve? && 
                       (djc.user_role == Role::ROL_SUPERVISOR || djc.user_role == Role::ROL_APODERADO)
                 %>
-                  <button type="button" class="btn btn-sm btn-warning" onclick="approve(<%= djc.id %>)">
+                  <button type="button" class="btn btn-sm btn-success" onclick="approve(<%= djc.id %>)">
                     <i class="bi bi-check-circle"></i>
                   </button>
                 <% end %>
@@ -48,6 +61,10 @@
                     <i class="bi bi-pen"></i>
                   </button>
                 <% end %>
+                <%= link_to certificados_djc_path(djc), class: 'btn btn-outline-primary btn-sm mx-1' do %>
+                  <i class="bi bi-upload"></i>
+                <% end %>
+                
               </div>
             </td>
           </tr>

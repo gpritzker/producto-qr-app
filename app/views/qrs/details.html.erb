@@ -4,6 +4,12 @@
     <% @qr.djcs.each do |djc| %>
       <%= link_to "Declaracion Jurada de Conformidad djc-#{@qr.code}-#{djc.id}", "#{ENV['PDF_DOMAIN']}djc-#{@qr.code}-#{djc.id}.pdf", class: "btn btn-primary", target: '_blank' %>
       <br/>
+      <% if djc.crs_files.attached? %>
+        <% djc.crs_files.each do |cr| %>
+          <%= link_to cr.filename.to_s, "#{ENV['PDF_DOMAIN']}djc-#{@qr.code}-#{djc.id}.pdf", class: "btn btn-primary", target: '_blank' %>
+          <br/>
+        <% end %>
+      <% end %>  
     <% end %>
   </div>
 </div>

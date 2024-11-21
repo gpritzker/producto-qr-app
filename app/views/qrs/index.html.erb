@@ -24,7 +24,7 @@
           <th>Alias</th>
           <th>Descripción</th>
           <th>Origen</th>
-          <th>DoC</th>
+          <th>DJCs</th>
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
@@ -37,7 +37,7 @@
               <td><%= qr.description %></td>
               <td><%= qr.origin %></td>
               <td>
-                <span class="badge bg-info"><%= 0 %></span>
+                <span class="badge bg-info"><%= qr.djcs.count %></span>
               </td>
               <td class="text-center">
                 <%= link_to qr_path(qr), class: "btn btn-success btn-sm me-1" do %>

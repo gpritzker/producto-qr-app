@@ -11,7 +11,12 @@ Rails.application.routes.draw do
   resources :qrs, except: [:destroy]
   resources :tipo_procedimientos, except: [:destroy]
   resources :reglamento_tecnicos, except: [:destroy]
-  resources :djcs, only: [:index, :edit, :update, :show, :new]
+  resources :djcs, only: [:index, :edit, :update, :show, :new] do
+    member do
+      get :certificados
+      post :certificados, to: "djcs#save_certificados"
+    end
+  end
   
   namespace :api do
     namespace :v1 do

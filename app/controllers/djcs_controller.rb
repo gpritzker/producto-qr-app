@@ -1,6 +1,6 @@
 class DjcsController < ApplicationController
   before_action :authenticate_user!  # Asegura que el usuario esté autenticado
-  before_action :set_djc, only: %i[show edit update destroy pdf]
+  before_action :set_djc, only: %i[show edit update destroy certificados save_certificados]
 
   # GET /djcs
   def index
@@ -37,6 +37,14 @@ class DjcsController < ApplicationController
     end
   end
 
+  def save_certificados
+    if @djc.update(djc_params)
+      redirect_to djcs_path, notice: 'DJC actualizada exitosamente.'
+    else
+      render :certificados, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_djc
@@ -56,9 +64,10 @@ class DjcsController < ApplicationController
       :bussiness_name,
       :trade_mark,
       :manufacturer_address,
-      :technical_normatives,
-      product_attributes: [:marca, :modelo, :cat_tec],
-      reports: [:numero, :emisor]
+      technical_normatives: [],
+      crs_files: [],
+      product_attributes: [:brand, :model, :characteristic],
+      reports: [:number, :emitter]
     )
   end
 end

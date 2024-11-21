@@ -1,0 +1,24 @@
+
+<%= form_with(model: @djc, url: certificados_djc_path, method: :post, local: true, class: "form-container") do |f| %>
+  <% if @djc.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@djc.errors.count, "error") %> impidió que se cargaran los certificados:</h4>
+      <ul>
+        <% @djc.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <!-- Certificados respaldatorios -->
+  <div class="mb-3">
+    <%= f.label 'Certificados respaldatorios', class: "form-label" %>
+    <%= f.file_field :crs_files, multiple: true, accept: 'application/pdf', class: "form-control" %>
+    <small class="form-text text-muted">Cargue los archivo PDF con los certificado respaldatorio.</small>
+  </div>
+
+  <!-- Botón de acción -->
+  <div class="mb-3">
+    <%= f.submit "Cargar" class: "btn btn-primary w-100" %>
+  </div>
+<% end %>
