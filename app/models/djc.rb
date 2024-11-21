@@ -81,7 +81,7 @@ class Djc < ApplicationRecord
 
     # Agrego la marca de agua
     unless signed_by.present?
-      watermark_pdf_path = Rails.root.join("public", "pdfs", "watermark.pdf")
+      watermark_pdf_path = Rails.root.join("app", "assets", "watermark.pdf")
       main_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
       output_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
       system("rm #{output_pdf_path}")
