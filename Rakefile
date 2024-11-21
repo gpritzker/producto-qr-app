@@ -4,8 +4,3 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
-
-Rake::Task["assets:precompile"].clear
-task "assets:precompile" do
-  puts "Skipping assets precompilation because SKIP_ASSET is set."
-end
