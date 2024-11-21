@@ -39,7 +39,7 @@ module Api
       def create
         begin
           @djc = Djc.new(djcs_params)
-          # @djc.creator = current_user
+          @djc.creator = current_user
           unless @djc.save
             messages = @djc.errors.map do |err|
               err.options&.[](:message) || "Error message not available"

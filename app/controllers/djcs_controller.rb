@@ -70,17 +70,6 @@ class DjcsController < ApplicationController
     @djc = Djc.new
   end
 
-  # POST /djcs
-  def create
-    @djc = Djc.new(djc_params)
-
-    if @djc.save
-      redirect_to @djc, notice: 'DJC creada exitosamente.'
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
   # GET /djcs/:id/edit
   def edit
   end

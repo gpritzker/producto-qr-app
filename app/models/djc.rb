@@ -7,7 +7,7 @@ class Djc < ApplicationRecord
   belongs_to :reglamento_tecnico
   belongs_to :signed_by, class_name: 'User', optional: true
   belongs_to :approved_by, class_name: 'User', optional: true
-  # belongs_to :creator, class_name: 'User', optional: true
+  belongs_to :creator, class_name: 'User', optional: true
 
   validates :bussiness_name,
             presence: { message: "La razón social es obligatorio" },
