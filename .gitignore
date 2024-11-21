@@ -16,3 +16,13 @@
 /config/credentials/production.key
 /public
 .byebug_history
+# Archivos de logs
+/log/*
+!/log/.keep
+
+# Archivos temporales
+/tmp/*
+!/tmp/.keep
+
+# Backups y scripts locales
+/backup
