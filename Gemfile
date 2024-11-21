@@ -2,18 +2,18 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 7.0.6'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
-gem 'uglifier', '>= 1.3.0'
+# gem 'uglifier', '>= 1.3.0'
 gem 'devise'
-gem 'jquery-rails'
+# gem 'jquery-rails'
 gem 'pg', '>= 1.1'
-gem 'sprockets-rails'
+# gem 'sprockets-rails'
 gem 'rqrcode'
 gem "puma"
 
 gem 'json', '>= 2.0'
 gem 'active_storage_validations'
 gem 'dotenv-rails', groups: [:development, :test, :production]
-gem 'sassc-rails', '>= 2.1.0'
+# gem 'sassc-rails', '>= 2.1.0'
 gem 'mini_magick'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary' # Incluye el binario para wkhtmltopdf
