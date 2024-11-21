@@ -27,7 +27,7 @@ Rails.application.configure do
   # Compress JavaScripts and CSS.
   # config.assets.js_compressor = Uglifier.new(harmony: true)
   # config.assets.css_compressor = :sass
-  config.assets.enabled = false
+  config.assets.enabled = true
 
   config.active_storage.service = :local
 
