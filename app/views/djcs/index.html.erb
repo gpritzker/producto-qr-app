@@ -43,23 +43,33 @@
             <td><%= djc.manufacturer %></td>
             <td><%= djc.company.name %></td>
             <td><%= djc.crs_files.count %></td>
-            <td><span class="badge bg-info"><%= Role.role_name(djc.user_role) %></span></td>
+            <td>
+              <span class="badge bg-info">
+                <% unless current_user.admin? %>
+                  <%= Role.role_name(djc.user_role) %>
+                <% else %>
+                  ADMINISTRADOR
+                <% end %>
+              </span>
+            </td>
             <td>
               <div class="d-flex gap-2">
                 <%= link_to djc_path(djc), class: 'btn btn-primary btn-sm mx-1', target: '_blank' do %>
                   <i class="bi bi-eye"></i>
                 <% end %>
-                <% if djc.can_approve? && 
-                      (djc.user_role == Role::ROL_SUPERVISOR || djc.user_role == Role::ROL_APODERADO)
-                %>
-                  <button type="button" class="btn btn-sm btn-success" onclick="approve(<%= djc.id %>)">
-                    <i class="bi bi-check-circle"></i>
-                  </button>
-                <% end %>
-                <% if djc.can_sign? && djc.user_role == Role::ROL_APODERADO %>
-                  <button type="button" class="btn btn-sm btn-success" onclick="sign(<%= djc.id %>)">
-                    <i class="bi bi-pen"></i>
-                  </button>
+                <% unless current_user.admin? %>
+                  <% if djc.can_approve? && 
+                        (djc.user_role == Role::ROL_SUPERVISOR || djc.user_role == Role::ROL_APODERADO)
+                  %>
+                    <button type="button" class="btn btn-sm btn-success" onclick="approve(<%= djc.id %>)">
+                      <i class="bi bi-check-circle"></i>
+                    </button>
+                  <% end %>
+                  <% if djc.can_sign? && djc.user_role == Role::ROL_APODERADO %>
+                    <button type="button" class="btn btn-sm btn-success" onclick="sign(<%= djc.id %>)">
+                      <i class="bi bi-pen"></i>
+                    </button>
+                  <% end %>
                 <% end %>
                 <%= link_to certificados_djc_path(djc), class: 'btn btn-outline-primary btn-sm mx-1' do %>
                   <i class="bi bi-upload"></i>
