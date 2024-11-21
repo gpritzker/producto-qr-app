@@ -7,15 +7,4 @@ default: &default
   password: <%= ENV.fetch("PG_PASSWORD") %>
   host: <%= ENV.fetch("PG_HOST") %>
   port: <%= ENV.fetch("PG_PORT") %>
-
-development:
-  <<: *default
-  database: <%= ENV.fetch("PG_DATABASE") %>_development
-
-test:
-  <<: *default
-  database: <%= ENV.fetch("PG_DATABASE") %>_test
-
-production:
-  <<: *default
-  database: <%= ENV.fetch("DATABASE_URL") %>_production'
+  database: <%= ENV.fetch("DATABASE_URL") %>'
