@@ -19,6 +19,7 @@
       <thead class="table-dark">
         <tr>
           <th>Código</th>
+          <th>Empresa</th>
           <th>Descripción</th>
           <th>DJCs</th>
           <th class="text-center">Acciones</th>
@@ -27,8 +28,9 @@
       <tbody>
         <% if @qrs.size > 0 %>
           <% @qrs.each do |qr| %>
-            <tr>
+            <tr id="qr_id_<%= qr.id %>>
               <td><%= qr.code %></td>
+              <td><%= qr.company.name %></td>
               <td><%= qr.description %></td>
               <td>
                 <span class="badge bg-info"><%= qr.djcs.count %></span>
@@ -36,9 +38,6 @@
               <td class="text-center">
                 <%= link_to qr_path(qr), class: "btn btn-success btn-sm me-1", target: "_blank" do %>
                   <i class="bi bi-download"></i>
-                <% end %>
-                <%= link_to edit_qr_path(qr), class: 'btn btn-warning btn-sm me-1' do %>
-                  <i class="bi bi-pencil"></i>
                 <% end %>
               </td>
             </tr>
