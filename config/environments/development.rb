@@ -25,7 +25,7 @@ Rails.application.configure do
   config.server_timing = false
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
@@ -42,6 +42,16 @@ Rails.application.configure do
   # config.i18n.raise_on_missing_translations = true
   config.i18n.default_locale = :es
   config.i18n.fallbacks = [:en]
+  config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: 'smtp.mailgun.org',
+      port: 587,
+      domain: 'sandboxf063cd81e68749fcbe076a7bb9a93c5f.mailgun.org',
+      user_name: 'postmaster@sandboxf063cd81e68749fcbe076a7bb9a93c5f.mailgun.org',
+      password: 'aadee7e203bdc40641fbe6389f00d1d5-6df690bb-4031ae0d',
+      authentication: 'plain',
+      enable_starttls_auto: true
+    }
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
