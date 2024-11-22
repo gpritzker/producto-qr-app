@@ -8,10 +8,10 @@ Rails.application.routes.draw do
     end
   end
   get "d/:id", to: "qrs#details"
-  resources :qrs, except: [:new, :create, :destroy]
+  resources :qrs, only: [:index, :show]
   resources :tipo_procedimientos, except: [:destroy]
   resources :reglamento_tecnicos, except: [:destroy]
-  resources :djcs, only: [:index, :edit, :update, :show] do
+  resources :djcs, only: [:index, :new, :edit, :update, :show] do
     member do
       get :certificados
       post :certificados, to: "djcs#save_certificados"

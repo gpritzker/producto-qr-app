@@ -28,7 +28,7 @@
       <tbody>
         <% if @qrs.size > 0 %>
           <% @qrs.each do |qr| %>
-            <tr id="qr_id_<%= qr.id %>>
+            <tr id="qr_id_<%= qr.id %>">
               <td><%= qr.code %></td>
               <td><%= qr.company.name %></td>
               <td><%= qr.description %></td>
@@ -36,8 +36,11 @@
                 <span class="badge bg-info"><%= qr.djcs.count %></span>
               </td>
               <td class="text-center">
-                <%= link_to qr_path(qr), class: "btn btn-success btn-sm me-1", target: "_blank" do %>
+                <%= link_to qr_path(qr), class: "btn btn-info btn-sm me-1", target: "_blank" do %>
                   <i class="bi bi-download"></i>
+                <% end %>
+                <%= link_to new_djc_path(company_id: qr.company_id), class: "btn btn-success btn-sm me-1" do %>
+                  <i class="bi bi-file-earmark-plus"></i>
                 <% end %>
               </td>
             </tr>
