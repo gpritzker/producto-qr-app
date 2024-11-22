@@ -1,39 +1,9 @@
-<div class="card p-4 mb-4 shadow-sm text-center">
-  <h3 class="card-title mb-4">Código QR</h3>
-
-  <% if @qr %>
-    <div class="row justify-content-center mb-3">
-      <!-- Imagen QR grande -->
-      <div class="col-md-4 text-center">
-        <div class="qr-code">
-          <%= image_tag @qr.qr_image, alt: "QR", class: "img-fluid rounded shadow mb-2" %>
-        </div>
-      </div>
-
-      <!-- Imagen QR pequeña -->
-      <div class="col-md-4 text-center">
-        <div class="qr-code">
-          <%= image_tag @qr.qr_small_image, alt: "QR pequeño", class: "img-fluid rounded shadow mb-2" %>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center mb-3">
-      <div class="col-md-4 text-center">
-        <%= link_to "Descargar QR Grande", rails_blob_path(@qr.qr_image, disposition: "attachment"), class: "btn btn-primary mb-2" %>
-      </div>
-      <div class="col-md-4 text-center">
-        <%= link_to "Descargar QR Pequeño", rails_blob_path(@qr.qr_small_image, disposition: "attachment"), class: "btn btn-primary mb-2" %>
-      </div>
-    </div>
-
-    <p class="text-muted">Escanea este código QR para obtener más información sobre esta declaración de conformidad.</p>
-  <% else %>
-    <div class="alert alert-danger" role="alert">
-      No se ha generado un código QR para esta declaración.
-    </div>
-  <% end %>
+<!-- QR Code de 20mm x 20mm -->
+<div style="width: 20mm; height: 20mm;">
+  <%= raw @qr.generate_svg_big %>
 </div>
-
-<div class="text-center">
-  <%= link_to 'Volver', qrs_path, class: 'btn btn-secondary btn-lg mt-3' %>
+<br/><br/><br/><br/><br/><br/><br/><br/>
+<!-- QR Code de 8mm x 8mm -->
+<div style="width: 8mm; height: 8mm;">
+  <%= raw @qr.generate_svg_small %>
 </div>

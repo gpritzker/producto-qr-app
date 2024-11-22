@@ -11,6 +11,22 @@ class QrsController < ApplicationController
     end
   end
 
+  def show
+    pdf_content = render_to_string(
+      pdf: @qr.description, # Nombre del archivo
+      template: "qrs/show",       # Vista para el PDF
+      encoding: "UTF-8",
+      margin: { top: 10, bottom: 10, left: 10, right: 10 },
+      locals: { qr: @qr },
+      page_size: "A4" # Usa un tamaño de página estándar
+    )
+    # Enviar el PDF como archivo descargable
+    send_data pdf_content,
+              filename: "#{@qr.description.gsub(" ","_")}.pdf", # Nombre del archivo
+              type: "application/pdf",
+              disposition: "attachment" # Forzar descarga
+  end
+
   # GET /qrs/1/edit
   def edit
   end

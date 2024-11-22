@@ -23,6 +23,26 @@ class Qr < ApplicationRecord
     ENV['QR_DOMAIN']+self.code
   end
 
+  def generate_svg_big
+    RQRCode::QRCode.new(url).as_svg(
+      offset: 0,
+      color: '000',
+      shape_rendering: 'crispEdges',
+      border_modules: 0, # borde del QR
+      module_size: 3.62
+    )
+  end
+
+  def generate_svg_small
+    RQRCode::QRCode.new(url).as_svg(
+      offset: 0,
+      color: '000',
+      shape_rendering: 'crispEdges',
+      border_modules: 0, # borde del QR
+      module_size: 1.43
+    )
+  end
+
   private 
 
   def normalize_attributes
