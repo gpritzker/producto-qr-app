@@ -2,7 +2,7 @@
 admin = User.new
 admin.email = "admin@admin.com"
 admin.name = "ADMINISTRADOR"
-admin.password = '12345678'
+admin.password = 'Admin123'
 admin.bussiness = "ninguno"
 admin.position = "ninguno"
 admin.phone = "1123452345"
@@ -10,6 +10,9 @@ admin.admin = true
 admin.save
 
 reglamentos_tecnicos = [
+  'Seguridad Eléctrica Res. 169/2018',
+  'Materiales para la construcción Res. 236/2024',
+  'Eficiencia Energética Res. 319/1999',
   "Acero para la construcción",
   "Ascensores y sus componentes de seguridad",
   "Barras y perfiles de aluminio",

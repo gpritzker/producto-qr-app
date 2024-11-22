@@ -1,29 +1,25 @@
 
-<div class="container mt-5">
+<div class="container mt-1">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">Gestión de QR</h1>
-    <%= link_to "Nuevo QR", new_qr_path, class: "btn btn-success" %>
   </div>
   
-  <% if notice %>
-    <div class="alert alert-success" role="alert">
-      <%= notice %>
+  <%= render "layouts/responses" %>
+
+  <div id="qrCreate" class="justify-content-between align-items-center mb-3" style="display: none;">
+    <div class="input-group">
+      <input type="text" id="qr_description" class="form-control" placeholder="Ingrese la descripción">
+      <select id="companies"></select>
+      <button class="btn btn-success" type="button" onclick="create();">Crear</button>
     </div>
-  <% end %>
-  <% if alert %>
-    <div class="alert alert-warning" role="alert">
-      <%= alert %>
-    </div>
-  <% end %>
+  </div>
 
   <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover align-middle">
       <thead class="table-dark">
         <tr>
           <th>Código</th>
-          <th>Alias</th>
           <th>Descripción</th>
-          <th>Origen</th>
           <th>DJCs</th>
           <th class="text-center">Acciones</th>
         </tr>
@@ -33,9 +29,7 @@
           <% @qrs.each do |qr| %>
             <tr>
               <td><%= qr.code %></td>
-              <td><%= qr.alias %></td>
               <td><%= qr.description %></td>
-              <td><%= qr.origin %></td>
               <td>
                 <span class="badge bg-info"><%= qr.djcs.count %></span>
               </td>
@@ -60,3 +54,54 @@
     </table>
   </div>
 </div>
+
+<script>
+$(document).ready(function() {
+  loadCompanies();
+});
+
+async function loadCompanies() {
+  // Mostrar el mensaje de "Cargando compañías..." al inicio
+  createApiResponse("info", {message: "Cargando compañias..."})
+
+  r = await doGet("<%= api_v1_companies_url %>");
+  if(r != null) {
+
+    $('#companies').empty();
+    if(r.length == 1) {
+      $("#companies").append(`<option value="${r[0].id}" selected="true">${r[0].name}</option>`);
+    }
+    else {
+      $("#companies").append('<option value="">Seleccione una compañía</option>')
+      // Iterar sobre la lista de compañías y agregar cada una como opción
+      $.each(r, (index, company) => {
+        $("#companies").append('<option value="' + company.id + '">' + company.name + '</option>');
+      });
+      $('#companies').one('change', function() {
+        $('#companies option[value=""]').remove();
+      });
+    }
+    $('#qrCreate').show();
+    cleanApiResponse();
+  }
+}
+async function create() {
+  const company_id = $("#companies").val();
+  if(company_id == "") {
+    createApiResponse("warning", {message: "Debe seleccionar una compañia"});
+    return;
+  }
+  const description = $("#qr_description").val();
+  if(description == "") {
+    createApiResponse("warning", {message: "Debe ingresar una descripción"});
+    return;
+  }
+  
+  qr = await doPost("<%= api_v1_qrs_url %>", {
+    description: description,
+    company_id: company_id
+  });
+  console.log(qr);
+}
+
+</script>

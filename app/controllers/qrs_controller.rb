@@ -11,26 +11,8 @@ class QrsController < ApplicationController
     end
   end
 
-  # GET /qrs/new
-  def new
-    @qr = Qr.new
-  end
-
   # GET /qrs/1/edit
   def edit
-  end
-
-  # POST /qrs
-  def create
-    @qr = Qr.new(qr_params)
-    respond_to do |format|
-      if @qr.save
-        format.html { redirect_to qrs_url, notice: "QR creado exitosamente." }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @qr.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /qrs/1
@@ -55,6 +37,6 @@ class QrsController < ApplicationController
   end
 
   def qr_params
-    params.require(:qr).permit(:company_id, :origin, :description, :alias)
+    params.require(:qr).permit(:company_id, :description)
   end
 end
