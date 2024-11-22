@@ -1,28 +1,40 @@
-<!-- app/views/devise/passwords/edit.html.erb -->
+<!-- app/views/devise/mailer/reset_password_instructions.html.erb -->
 
-<h2>Cambiar tu contraseña</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <style type="text/css">
+    /* Estilos CSS aquí */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      margin: 0 auto;
+      width: 600px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Hola <%= @resource.email %>!</p>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'password-form' }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <p>Alguien ha solicitado un enlace para cambiar tu contraseña. Puedes hacerlo a través del enlace de abajo.</p>
 
-  <%= f.hidden_field :reset_password_token %>
+    <p><a href="<%= edit_password_url(@resource, reset_password_token: @token) %>" class="button">Cambiar mi contraseña</a></p>
 
-  <div class="form-group">
-    <%= f.label :password, "Nueva contraseña", class: 'control-label' %>
-    <% if @minimum_password_length %>
-      <small class="form-text text-muted">(Mínimo <%= @minimum_password_length %> caracteres)</small>
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: 'form-control' %>
+    <p>Si no solicitaste este cambio, por favor ignora este correo. Tu contraseña no se cambiará hasta que accedas al enlace anterior y crees una nueva.</p>
   </div>
-
-  <div class="form-group">
-    <%= f.label :password_confirmation, "Confirmar nueva contraseña", class: 'control-label' %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <%= f.submit "Cambiar mi contraseña", class: 'btn btn-primary' %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</body>
+</html>
