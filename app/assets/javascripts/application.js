@@ -14,8 +14,7 @@
 //= require jquery_ujs
 //= require cuil_autocomplete
 
-async function doPost(url, body = {}, headers = {}) {
-  cleanApiResponse();
+async function doPost(url, body = {}, headers = {}, options= {}) {
   if(!headers.hasOwnProperty('Content-Type')) 
     headers['Content-Type'] = 'application/json';
 
@@ -40,7 +39,6 @@ async function doPost(url, body = {}, headers = {}) {
   }
 }
 async function doGet(url, headers = {}) {
-  cleanApiResponse();
   if (!headers.hasOwnProperty('Content-Type')) {
     headers['Content-Type'] = 'application/json';
   }
