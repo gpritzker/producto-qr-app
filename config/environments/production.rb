@@ -82,13 +82,22 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address:              'smtp.mailgun.org',
+  #   port:                 587,
+  #   domain:               ENV['MAILGUN_DOMAIN'],
+  #   user_name:            ENV['MAILGUN_SMTP_LOGIN'],
+  #   password:             ENV['MAILGUN_SMTP_PASSWORD'],
+  #   authentication:       'plain',
+  #   enable_starttls_auto: true
+  # }
   config.action_mailer.smtp_settings = {
-    address:              'smtp.mailgun.org',
-    port:                 587,
-    domain:               ENV['MAILGUN_DOMAIN'],
-    user_name:            ENV['MAILGUN_SMTP_LOGIN'],
-    password:             ENV['MAILGUN_SMTP_PASSWORD'],
-    authentication:       'plain',
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com', # Reemplaza con tu dominio
+    authentication: :plain,
+    user_name: 'apikey', # Esto debe ser literalmente 'apikey'
+    password: ENV['SENDGRID_API_KEY'],
     enable_starttls_auto: true
   }
 config.action_mailer.default_url_options = { host: ENV['APP_HOST'], protocol: 'https' }

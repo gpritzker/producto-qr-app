@@ -43,6 +43,15 @@ Rails.application.configure do
   config.i18n.default_locale = :es
   config.i18n.fallbacks = [:en]
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com', # Reemplaza con tu dominio
+    authentication: :plain,
+    user_name: 'apikey', # Esto debe ser literalmente 'apikey'
+    password: ENV['SENDGRID_API_KEY'],
+    enable_starttls_auto: true
+  }
    
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
