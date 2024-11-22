@@ -55,6 +55,8 @@ es:
       unlocked: "Tu cuenta ha sido desbloqueada. Inicia sesión para continuar."
   errors:
     messages:
+      too_short: "es demasiado corto (mínimo es %{count} caracteres)"
+      password_too_short: "debe tener al menos %{count} caracteres"
       already_confirmed: "ya fue confirmada. Intenta ingresar."
       confirmation_period_expired: "necesita ser confirmada dentro de %{period}, por favor pide una nueva"
       expired: "ha expirado, por favor pide una nueva"

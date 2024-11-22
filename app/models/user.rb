@@ -52,6 +52,9 @@ class User < ApplicationRecord
             size: { less_than: 1.megabytes, message: "Cada archivo no puede superar 1MB" }, 
             if: -> { dni_files.attached? }
   
+  # Validación personalizada para contraseñas seguras
+  validate :secure_password
+  
   # Normalizaciones
   before_validation :normalize_attributes
 
@@ -66,4 +69,14 @@ class User < ApplicationRecord
     self.name = name.upcase.strip unless name.nil?
     self.email = email.downcase.strip unless email.nil?
   end
+
+  # Validación para contraseñas seguras
+  def secure_password
+    return if password.blank?
+
+    unless password.match?(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)
+      errors.add(:password, 'debe tener al menos una letra mayúscula, una letra minúscula, un número y tener al menos 8 caracteres.')
+    end
+  end
+  
 end
