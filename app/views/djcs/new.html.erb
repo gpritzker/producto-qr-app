@@ -264,7 +264,7 @@ function loadQRs() {
     var qrSelect = $('#qr');
     qrSelect.append('<option value="">Seleccione un QR</option>');
     $.each(data.data, (index, qr) => {
-      qrSelect.append('<option value="' + qr.id + '">' + qr.alias + '</option>');
+      qrSelect.append('<option value="' + qr.id + '">' + qr.description + '</option>');
     });
     $('#qr').show();
   })
