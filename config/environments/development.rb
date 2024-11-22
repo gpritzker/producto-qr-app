@@ -43,15 +43,6 @@ Rails.application.configure do
   config.i18n.default_locale = :es
   config.i18n.fallbacks = [:en]
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              'smtp.mailgun.org',
-    port:                 587,
-    domain:               ENV['MAILGUN_DOMAIN'],
-    user_name:            ENV['MAILGUN_SMTP_LOGIN'],
-    password:             ENV['MAILGUN_SMTP_PASSWORD'],
-    authentication:       'plain',
-    enable_starttls_auto: true
-  }
    
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
