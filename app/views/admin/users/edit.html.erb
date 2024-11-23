@@ -15,27 +15,27 @@
   <% end %>
 
   <div class="row">
-    <!-- Correo Electrónico -->
+    <!-- Correo Electrónico (Deshabilitado) -->
     <div class="col-md-6 mb-3">
       <%= form.label :email, "Correo Electrónico", class: "form-label" %>
-      <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+      <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario", disabled: true %>
     </div>
 
-    <!-- Contraseña -->
+    <!-- Contraseña (Deshabilitada) -->
     <div class="col-md-6 mb-3">
       <%= form.label :password, "Contraseña", class: "form-label" %>
-      <%= form.password_field :password, class: "form-control", placeholder: "Ingrese una contraseña" %>
+      <%= form.password_field :password, class: "form-control", placeholder: "Ingrese una contraseña", disabled: true %>
     </div>
   </div>
 
   <div class="row">
-    <!-- Confirmación de Contraseña -->
+    <!-- Confirmación de Contraseña (Editable) -->
     <div class="col-md-6 mb-3">
       <%= form.label :password_confirmation, "Confirmación de Contraseña", class: "form-label" %>
       <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Confirme la contraseña" %>
     </div>
 
-    <!-- CUIL -->
+    <!-- CUIL (Editable) -->
     <div class="col-md-6 mb-3">
       <%= form.label :cuil, "CUIL", class: "form-label" %>
       <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL del usuario" %>
@@ -49,14 +49,14 @@
     </div>
   <% end %>
 
-  <!-- DNI -->
+  <!-- DNI (Editable) -->
   <div class="form-group mt-4">
     <%= form.label :dni_files, "DNI", class: "form-label" %>
     <%= form.file_field :dni_files, multiple: true, accept: 'image/png, image/jpeg', class: 'form-control' %>
     <small class="form-text text-muted">Cargue imagen PNG o JPG del frente y reverso de su DNI</small>
   </div>
 
-  <!-- Firma -->
+  <!-- Firma (Editable) -->
   <div class="form-group mt-4">
     <%= form.label :signature_file, "Firma", class: "form-label" %>
     <%= form.file_field :signature_file, accept: 'image/png', class: 'form-control' %>
