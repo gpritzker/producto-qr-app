@@ -76,13 +76,6 @@
     <%= form.label :admin, "Administrador", class: "form-check-label" %>
   </div>
 
-  <!-- DNI -->
-  <div class="form-group mt-4">
-    <%= form.label :dni_files, "DNI", class: "form-label" %>
-    <%= form.file_field :dni_files, multiple: true, accept: 'image/png, image/jpeg', class: 'form-control' %>
-    <small class="form-text text-muted">Cargue imagen PNG o JPG del frente y reverso de su DNI</small>
-  </div>
-
   <!-- Firma -->
   <div class="form-group mt-4">
     <%= form.label :signature_file, "Firma", class: "form-label" %>
