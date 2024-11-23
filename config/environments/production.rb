@@ -67,6 +67,7 @@ Rails.application.configure do
   config.hosts << "www.qar.ar"
   config.hosts << "qar.com.ar"
   config.hosts << "www.qar.com.ar"
+  config.hosts << "product-qr-app-c0b80da9a0c6.herokuapp.com"
 
   # Fuerza SSL
   config.force_ssl = true
