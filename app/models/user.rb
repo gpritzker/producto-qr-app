@@ -59,7 +59,7 @@ class User < ApplicationRecord
   before_validation :normalize_attributes
 
   def can_by_apoderado?
-    return true if !cuil.nil? && dni_files.attached? && signature_file.attached?
+    return true if !cuil.nil? && signature_file.attached?
     false
   end
 
