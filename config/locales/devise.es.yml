@@ -2,6 +2,14 @@
 
 es:
   activerecord:
+    attributes:
+      user:
+        email: "Correo Electrónico"
+        current_password: "Contraseña Actual"
+        new_password: "Nueva Contraseña"
+        new_password_confirmation: "Confirmación de Nueva Contraseña"
+        cuil: "CUIL/CUIT"
+        signature_file: "Firma"
     errors:
       models:
         user: # Reemplaza "user" por el nombre de tu modelo si es diferente
