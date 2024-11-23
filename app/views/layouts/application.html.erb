@@ -71,6 +71,12 @@
   <!-- End Google Tag Manager -->
 </head>
 
+<% flash.each do |key, message| %>
+  <div class="alert alert-<%= key %>">
+    <%= message %>
+  </div>
+<% end %>
+
 <body class="bg-light">
   <!-- Google Tag Manager (noscript) -->
   <noscript>
