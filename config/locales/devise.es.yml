@@ -1,6 +1,13 @@
 # Traducciones adicionales en https://github.com/plataformatec/devise/wiki/I18n
 
 es:
+  activerecord:
+    errors:
+      models:
+        user: # Reemplaza "user" por el nombre de tu modelo si es diferente
+          attributes:
+            password_confirmation:
+              confirmation: "La confirmación de la contraseña no coincide con la contraseña"
   devise:
     confirmations:
       confirmed: "Tu correo electrónico ha sido confirmado exitosamente."
@@ -56,6 +63,7 @@ es:
       unlocked: "Tu cuenta ha sido desbloqueada. Inicia sesión para continuar."
   errors:
     messages:
+      confirmation: "no coincide con %{attribute}"
       too_short: "es demasiado corto (mínimo es %{count} caracteres)"
       password_too_short: "debe tener al menos %{count} caracteres"
       already_confirmed: "ya fue confirmada. Intenta ingresar."
