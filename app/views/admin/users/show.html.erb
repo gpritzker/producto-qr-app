@@ -15,24 +15,7 @@
 
   <hr>
 
-  <!-- Archivos Adjuntos -->
-  <h2 class="my-4">Archivos Adjuntos</h2>
-
   <div class="attachments">
-    <!-- Archivos del DNI -->
-    <h3>Archivos del DNI</h3>
-    <% if @user.dni_files.attached? %>
-      <div class="row">
-        <% @user.dni_files.each do |file| %>
-          <div class="col-md-4 mb-3">
-            <%= image_tag file, alt: "DNI", class: "img-fluid rounded" %>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p>No se han subido archivos del DNI.</p>
-    <% end %>
-
     <!-- Firma Digital -->
     <h3>Firma Digital</h3>
     <% if @user.signature_file.attached? %>
@@ -47,9 +30,8 @@
   <hr>
 
   <!-- Acciones -->
-  <h2 class="my-4">Acciones</h2>
   <div class="actions">
-    <%= link_to 'Editar Usuario', edit_admin_user_path(@user), class: "btn btn-primary btn-lg me-2" %>
+    <%= link_to 'Aceptar', edit_admin_user_path(@user), class: "btn btn-primary btn-lg me-2" %>
     <%= link_to 'Volver', admin_users_path, class: "btn btn-secondary btn-lg" %>
   </div>
 </div>

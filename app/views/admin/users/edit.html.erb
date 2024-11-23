@@ -18,7 +18,11 @@
     <!-- Correo Electrónico (Deshabilitado) -->
     <div class="col-md-6 mb-3">
       <%= form.label :email, "Correo Electrónico", class: "form-label" %>
+<<<<<<< HEAD
       <%= form.email_field :email, class: "form-control", placeholder: "Correo electrónico", disabled: true %>
+=======
+      <%= form.email_field :email, readonly: true, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+>>>>>>> 2c8decc (feat: formateo de cuit/cuil)
     </div>
 
     <!-- Contraseña Actual -->

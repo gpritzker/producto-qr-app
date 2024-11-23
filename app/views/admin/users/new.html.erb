@@ -60,7 +60,7 @@
     <!-- CUIL -->
     <div class="col-md-6 mb-3">
       <%= form.label :cuil, "CUIL", class: "form-label" %>
-      <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL del usuario" %>
+      <%= form.text_field :cuil, id: "user_cuit", class: "form-control", placeholder: "Ingrese el CUIL del usuario" %>
     </div>
 
     <!-- Teléfono -->
@@ -89,3 +89,12 @@
     <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary btn-lg ml-3' %>
   </div>
 <% end %>
+
+<script>
+$(document).ready(function() {
+  $("#user_cuit").on('input', function() {
+    if($(this).val().length >= 11)
+      $(this).val(formatCuit($(this).val()));
+  });
+});
+</script>

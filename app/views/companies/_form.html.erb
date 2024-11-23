@@ -26,7 +26,7 @@
   <!-- CUIT -->
   <div class="mb-3">
     <%= f.label :cuit, class: "form-label" %>
-    <%= f.text_field :cuit, class: "form-control", required: true, placeholder: "Ingrese el CUIT de la empresa" %>
+    <%= f.text_field :cuit, id: "user_cuit", class: "form-control", required: true, placeholder: "Ingrese el CUIT de la empresa" %>
   </div>
 
   <!-- Correo electrónico de contacto -->
@@ -61,3 +61,12 @@
     <% end %>
   </div>
 <% end %>
+
+<script>
+$(document).ready(function() {
+  $("#user_cuit").on('input', function() {
+    if($(this).val().length >= 11)
+      $(this).val(formatCuit($(this).val()));
+  });
+});
+</script>
