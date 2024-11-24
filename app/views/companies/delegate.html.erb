@@ -1,18 +1,8 @@
 <h1 class="my-4">Nueva Delegación</h1>
 
 <%= form_with(model: @company, method: 'POST', url: delegate_user_company_path, local: true, class: "form-container") do |f| %>
-  <!-- Errores -->
-  <% if @company.errors.any? %>
-    <div class="alert alert-danger">
-      <h4><%= pluralize(@company.errors.count, "error") %> impidió que se guardara la delegación:</h4>
-      <ul>
-        <% @company.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render 'layouts/errors', entity: company %>
+ 
   <!-- Explicación de la delegación -->
   <div class="mb-3">
     <span class="text-muted">

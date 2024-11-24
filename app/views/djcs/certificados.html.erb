@@ -1,15 +1,6 @@
-
 <%= form_with(model: @djc, url: certificados_djc_path, method: :post, local: true, class: "form-container") do |f| %>
-  <% if @djc.errors.any? %>
-    <div class="alert alert-danger">
-      <h4><%= pluralize(@djc.errors.count, "error") %> impidió que se cargaran los certificados:</h4>
-      <ul>
-        <% @djc.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'layouts/errors', entity: @djc %>
+ 
   <!-- Certificados respaldatorios -->
   <div class="mb-3">
     <%= f.label 'Certificados respaldatorios', class: "form-label" %>

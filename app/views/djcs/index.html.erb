@@ -4,19 +4,6 @@
     <%= link_to 'Nuevo DJC', new_djc_path, class: 'btn btn-success' %>
   </div>
 
-  <% if notice %>
-    <div class="alert alert-success" role="alert">
-      <%= notice %>
-    </div>
-  <% end %>
-  <% if alert %>
-    <div class="alert alert-warning" role="alert">
-      <%= alert %>
-    </div>
-  <% end %>
-
-  <div id="responses" role="alert"></div>
-
   <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover align-middle">
       <thead class="table-dark">

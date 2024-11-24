@@ -3,16 +3,8 @@
 </h1>
 
 <%= form_with model: @delegation, method: 'POST', url: apoderar_delegation_path, local: true do |form| %>
-  <% if @delegation.errors.any? %>
-    <div class="alert alert-danger" id="error_explanation">
-      <ul>
-        <% @delegation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render 'layouts/errors', entity: @delegation %>
+  
   <!-- poder -->
   <div class="form-group mt-4">
     <%= form.fields_for :authorization do |authorization_form| %>

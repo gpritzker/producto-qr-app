@@ -3,17 +3,8 @@
 </h1>
 
 <%= form_with model: [:admin, @user], local: true do |form| %>
-  <% if @user.errors.any? %>
-    <div class="alert alert-danger" id="error_explanation">
-      <h4><%= pluralize(@user.errors.count, "error") %> impidió que el usuario se guardara:</h4>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <%= render 'layouts/errors', entity: @user %>
+  
   <div class="row">
     <!-- Correo Electrónico -->
     <div class="col-md-6 mb-3">

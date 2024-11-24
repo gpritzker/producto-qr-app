@@ -3,26 +3,13 @@
 </h1>
 
 <%= form_with model: [:admin, @user], local: true do |form| %>
-  <% if @user.errors.any? %>
-    <div class="alert alert-danger" id="error_explanation">
-      <h4><%= pluralize(@user.errors.count, "error") %> impidió que el usuario se guardara:</h4>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'layouts/errors', entity: @user %>
 
   <div class="row">
     <!-- Correo Electrónico (Deshabilitado) -->
     <div class="col-md-6 mb-3">
       <%= form.label :email, "Correo Electrónico", class: "form-label" %>
-<<<<<<< HEAD
-      <%= form.email_field :email, class: "form-control", placeholder: "Correo electrónico", disabled: true %>
-=======
       <%= form.email_field :email, readonly: true, class: "form-control", placeholder: "Ingrese el email del usuario" %>
->>>>>>> 2c8decc (feat: formateo de cuit/cuil)
     </div>
 
     <!-- Contraseña Actual -->

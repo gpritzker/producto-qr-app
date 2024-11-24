@@ -84,16 +84,8 @@ function createApiResponse(status, response) {
   }
 
   $("#responses").show();
+  document.getElementById("responses").scrollIntoView({ behavior: "smooth" });
 }
 function cleanApiResponse() {
   $("#responses").removeClass().html("").hide();
-}
-
-function formatCuit(cuit) {
-  cuit = cuit.replace(/\D/g, '');
-  if(cuit.length > 11) 
-    cuit = cuit.slice(0, 11);
-  if (cuit.length === 11) 
-    return cuit.replace(/(\d{2})(\d{8})(\d)/, '$1-$2-$3');
-  return cuit;
 }
