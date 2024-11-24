@@ -12,7 +12,7 @@
       </div>
     </div>
     <hr>
-    <div id="djc_fields" style="display: none;">
+    <div id="djc_fields" style="display: block;">
       <div class="container">
         <%# QR %>
         <div class="row mb-1">
@@ -115,73 +115,90 @@
         </div>
       </div>
       <%# Tabla con los datos de marca, modelo, características técnicas %>
-      <div class="container mt-4">
-        <table id="product_attributes" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>Marca</th>
-              <th>Modelo</th>
-              <th colspan="2">Características Técnicas</th>
-            </tr>
-            <tr>
-              <th><input class="form-control" id="marca" type="text"></th>
-              <th><input class="form-control" id="modelo" type="text"></th>
-              <th><input class="form-control" id="caracteristica" type="text"></th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success" onclick="addProductAttributes()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card mt-2">
+        <div class="card-header bg-light">
+          <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Características Técnicas</h6>
+          </div>
+        </div>
+        <div class="card-body p-2">
+          <table id="product_attributes" class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th style="border: none;">
+                  <input class="form-control" id="marca" type="text" placeholder="Marca">
+                </th>
+                <th style="border: none;">
+                  <input class="form-control" id="modelo" placeholder="Modelo" type="text">
+                </th>
+                <th style="border: none;">
+                  <input class="form-control" id="caracteristica" placeholder="Característica" type="text">
+                </th>
+                <th style="border: none;" class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-success" onclick="addProductAttributes()">
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
       <%# Normas Técnicas %>
-      <div class="container mt-4">
-        <table id="normas_tecnicas" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center align-middle">Norma Técnica</th>
-              <th class="align-middle">
-                <input class="form-control" id="norma_tecnica" type="text" />
-              </th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success d-block ms-auto" onclick="addNormaTecnica()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card mt-2">
+        <div class="card-header bg-light">
+          <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Normas Técnicas</h6>
+          </div>
+        </div>
+        <div class="card-body p-2">
+          <table id="normas_tecnicas" class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th style="border: none;">
+                  <input class="form-control" id="norma_tecnica" placeholder="norma" type="text" />
+                </th>
+                <th style="border: none;" class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-success d-block ms-auto" onclick="addNormaTecnica()">
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
       <%# Reportes %>
-      <div class="container mt-4">
-        <table id="reports" class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center align-middle">Número de Reporte</th>
-              <th colspan="2" class="text-center align-middle">Emisor</th>
-            </tr>            
-            <tr> 
-              <th class="align-middle">
-                <input class="form-control" id="report_number" type="text" />
-              </th>
-              <th class="align-middle">
-                <input class="form-control" id="report_emiter" type="text" />
-              </th>
-              <th class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success d-block ms-auto" onclick="addReporte()">
-                  <i class="bi bi-plus-circle"></i>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card mt-2">
+        <div class="card-header bg-light">
+          <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Reportes</h6>
+          </div>
+        </div>
+        <div class="card-body p-2">
+          <table id="reports" class="table table-hover align-middle">
+            <thead>
+              <tr> 
+                <th style="border: none;">
+                  <input class="form-control" id="report_number" placeholder="Número de Reporte" type="text" />
+                </th>
+                <th style="border: none;">
+                  <input class="form-control" id="report_emiter" placeholder="Emisor" type="text" />
+                </th>
+                <th style="border: none;" class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-success d-block ms-auto" onclick="addReporte()">
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
-      <div class="form-group text-left">
+      <div class="form-group text-left mt-4">
         <button type="button" class="btn btn-success ms-auto" onclick="enviar()">
           Crear
         </button>
