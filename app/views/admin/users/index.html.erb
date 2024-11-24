@@ -3,7 +3,7 @@
       <div class="card-title mb-0 d-flex justify-content-between align-items-center">
         <% if current_user.admin? %>
           <h4 class="mb-0">Gestión de Usuarios</h4>
-          <%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
+          <%= link_to 'Crear usuario', new_admin_user_path, class: 'btn btn-primary' %>
         <% else %>
           <h4 class="mb-0">Mis Datos</h4>
         <% end %>

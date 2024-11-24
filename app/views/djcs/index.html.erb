@@ -12,7 +12,7 @@
           <tr>
             <th>ID</th>
             <th>Descripción del Producto</th>
-            <th>Dirección Legal</th>
+            <th>Origen</th>
             <th>Fabricante</th>
             <th>Empresa</th>
             <th>CRs</th>
@@ -28,7 +28,7 @@
             <tr>
               <td><%= djc.id %></td>
               <td><%= djc.product_description %></td>
-              <td><%= djc.legal_address %></td>
+              <td><%= djc.origin %></td>
               <td><%= djc.manufacturer %></td>
               <td><%= djc.company.name %></td>
               <td><%= djc.crs_files.count %></td>
@@ -76,13 +76,13 @@
 
 <script>
   async function approve(djcId) {
-    try {
-      url = "<%= approve_api_v1_djc_url(id: "__ID__") %>";
-      doPut(url.replace('__ID__', djcId))
+    createApiResponse("info", {message: "Aprobando declaración jurada de conformidad..."});
+    url = "<%= approve_api_v1_djc_url(id: "__ID__") %>";
+    doPut(url.replace('__ID__', djcId))
   }
   async function sign(djcId) {
-    try {
-      url = "<%= sign_api_v1_djc_url(id: "__ID__") %>";
-      doPut(url.replace('__ID__', djcId))
+    createApiResponse("info", {message: "Firmando declaración jurada de conformidad..."});
+    url = "<%= sign_api_v1_djc_url(id: "__ID__") %>";
+    doPut(url.replace('__ID__', djcId))
   }
 </script>

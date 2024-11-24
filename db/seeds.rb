@@ -15,6 +15,38 @@ admin.update(
   confirmed_at: Time.current # Marca el email como confirmado
 )
 
+admin = User.new
+admin.email = "pablo.paganini@gmail.com"
+admin.name = "Pablo"
+admin.password = 'Admin123'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = false
+admin.save
+
+admin.reload
+
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
+
+admin = User.new
+admin.email = "gjpritzker@gmail.com"
+admin.name = "Gonzalo"
+admin.password = 'Milo3009#'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = false
+admin.save
+
+admin.reload
+
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
+
 reglamentos_tecnicos = [
   'Seguridad Eléctrica Res. 169/2018',
   'Materiales para la construcción Res. 236/2024',

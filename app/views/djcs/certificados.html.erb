@@ -1,15 +1,25 @@
-<%= form_with(model: @djc, url: certificados_djc_path, method: :post, local: true, class: "form-container") do |f| %>
-  <%= render 'layouts/errors', entity: @djc %>
- 
-  <!-- Certificados respaldatorios -->
-  <div class="mb-3">
-    <%= f.label 'Certificados respaldatorios', class: "form-label" %>
-    <%= f.file_field :crs_files, multiple: true, accept: 'application/pdf', class: "form-control" %>
-    <small class="form-text text-muted">Cargue los archivo PDF con los certificado respaldatorio.</small>
+<div class="card">
+  <div class="card-header bg-light">
+    <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Cargar Certificados Respaldatorios</h4>
+    </div>
   </div>
+  <div class="card-body">
+    <%= form_with(model: @djc, url: certificados_djc_path, method: :post, local: true, class: "form-container") do |f| %>
+      <%= render 'layouts/errors', entity: @djc %>
+    
+      <!-- Certificados respaldatorios -->
+      <div class="mb-3">
+        <%= f.label 'Certificados respaldatorios', class: "form-label" %>
+        <%= f.file_field :crs_files, multiple: true, accept: 'application/pdf', class: "form-control" %>
+        <small class="form-text text-muted">Cargue los archivo PDF con los certificado respaldatorio.</small>
+      </div>
 
-  <!-- Botón de acción -->
-  <div class="mb-3">
-    <%= f.submit "Cargar" class: "btn btn-primary w-100" %>
+      <!-- Botón de acción -->
+      <div class="mb-3">
+        <%= f.submit "Cargar", class: "btn btn-primary" %>
+        <%= link_to 'Volver', djcs_path, class: 'btn btn-secondary ms-2' %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

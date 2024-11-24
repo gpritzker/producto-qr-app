@@ -61,7 +61,7 @@
       <!-- Botones de Acción -->
       <div class="actions mt-4">
         <%= form.submit @user.new_record? ? "Crear" : "Actualizar", class: "btn btn-primary" %>
-        <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary ml-3' %>
+        <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary' %>
       </div>
     <% end %>
   </div>
