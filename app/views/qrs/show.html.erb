@@ -1,9 +1,14 @@
-<!-- QR Code de 20mm x 20mm -->
-<div style="width: 20mm; height: 20mm;">
-  <%= raw @qr.generate_svg_big %>
-</div>
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<!-- QR Code de 8mm x 8mm -->
-<div style="width: 8mm; height: 8mm;">
-  <%= raw @qr.generate_svg_small %>
-</div>
+<table>
+  <tbody>
+    <tr>
+      <td width="300">
+        <% image_data = Base64.encode64(@qr.qr_small_image.download) %>
+        <img src="data:<%= @qr.qr_small_image.content_type %>;base64,<%= image_data %>"  alt="Qr Small" width="66" height="107">
+      </td>
+      <td width="300">
+        <% image_data = Base64.encode64(@qr.qr_image.download) %>
+        <img src="data:<%= @qr.qr_image.content_type %>;base64,<%= image_data %>" alt="Qr Big" width="149" height="215">
+      </td>
+    </tr>
+  </tbody>
+</table>
