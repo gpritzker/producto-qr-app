@@ -12,7 +12,7 @@
       </div>
     </div>
     <hr>
-    <div id="djc_fields" style="display: block;">
+    <div id="djc_fields" style="display: none;">
       <div class="container">
         <%# QR %>
         <div class="row mb-1">
@@ -23,13 +23,13 @@
             <select class="form-control" id="qr" style=""></select>
           </div>
         </div>
-        <%# Razón Social %>
+        <%# Origen %>
         <div class="row mb-1">
           <div class="col-md-4 text-md-end">
-            <label class="mr-2">Razón social</label>
+            <label class="mr-2">Origen</label>
           </div>
           <div class="col-md-8">
-            <input class="form-control" type="text" id="bussiness_name">
+            <input class="form-control" type="text" id="origin">
           </div>
         </div>
         <%# Marca Registrada %>
@@ -41,15 +41,6 @@
             <input class="form-control" type="text" id="trade_mark">
           </div>
         </div>
-        <%# Dirección Legal %>
-        <div class="row mb-1">
-          <div class="col-md-4 text-md-end">
-            <label class="mr-2">Dirección Legal</label>
-          </div>
-          <div class="col-md-8">
-            <input class="form-control" type="text" id="legal_address">
-          </div>
-        </div> 
         <%# Dirección del Depósito %>
         <div class="row mb-1">
           <div class="col-md-4 text-md-end">
@@ -388,11 +379,10 @@ async function enviar(data) {
     company_id: $("#company").val(),
     qr_id: $("#qr").val(),
     trade_mark: $("#trade_mark").val(),
-    legal_address: $("#legal_address").val(),
     deposit_address: $("#deposit_address").val(),
     manufacturer: $("#manufacturer").val(),
     manufacturer_address: $("#manufacturer_address").val(),
-    bussiness_name: $("#bussiness_name").val(),
+    origin: $("#origin").val(),
     tipo_procedimiento_id: $("#tipo_procedimiento").val(),
     reglamento_tecnico_id: $("#reglamento_tecnico").val(),
     product_description: $("#product_description").val(),

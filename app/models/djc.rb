@@ -9,11 +9,11 @@ class Djc < ApplicationRecord
   belongs_to :approved_by, class_name: 'User', optional: true
   belongs_to :creator, class_name: 'User', optional: true
 
-  validates :bussiness_name,
-            presence: { message: "La razón social es obligatorio" },
+  validates :origin,
+            presence: { message: "El origen es obligatoria" },
             length: { minimum: 1, maximum: 50,
-              too_short: "La razón social debe tener al menos 1 carácter",
-              too_long: "La razón social no puede exceder los 50 caracteres" }
+              too_short: "El origen debe tener al menos 1 carácter",
+              too_long: "El origen no puede exceder los 50 caracteres" }
   validates :trade_mark,
             presence: { message: "La marca registrada es obligatoria" },
             length: { minimum: 1, maximum: 50,
@@ -29,9 +29,6 @@ class Djc < ApplicationRecord
             length: { minimum: 1, maximum: 50,
               too_short: "La descripción de productos debe tener al menos 1 carácter",
               too_long: "La descripción de productos no puede exceder los 50 caracteres" }
-  validates :legal_address,
-            presence: { message: "La dirección legal es obligatoria" },
-            length: { minimum: 3, message: "La dirección legal debe tener al menos 3 caracteres" }
   validates :deposit_address,
             presence: { message: "La dirección del depósito es obligatoria" },
             length: { minimum: 3, message: "La dirección del depósito debe tener al menos 3 caracteres" }
@@ -153,7 +150,7 @@ class Djc < ApplicationRecord
 
   def normalize_attributes
     self.product_description = product_description.strip unless product_description.nil?
-    self.legal_address = legal_address.strip unless legal_address.nil?
+    self.origin = origin.strip unless origin.nil?
     self.deposit_address = deposit_address.strip unless deposit_address.nil?
     self.manufacturer = manufacturer.strip unless manufacturer.nil?
   end

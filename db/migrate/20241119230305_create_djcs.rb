@@ -7,7 +7,7 @@ class CreateDjcs < ActiveRecord::Migration[7.0]
       t.references :reglamento_tecnico, null: false, foreign_key: true
       
       t.string :product_description, null: false
-      t.string :legal_address, null: false
+      t.string :origin, :limit => 50, :null => false
       t.string :deposit_address, null: false
       t.string :manufacturer, null: false
 

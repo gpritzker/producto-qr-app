@@ -20,11 +20,12 @@
         <h5 class="text-center"><%= djc.reglamento_tecnico.nombre %></h3>
 
         <p class="mt-4">Nosotros</p>
-        <p>Razón Social: <strong><%= djc.bussiness_name %></strong></p>
+        <p>Razón Social: <strong><%= djc.company.name %></strong></p>
         <p>CUIT: <strong><%= djc.company.cuit %></strong></p>
         <p>Nombre comercial o Marca registrada: <strong><%= djc.trade_mark %></strong></p>
-        <p>Dirección: <strong><%= djc.legal_address %></strong></p>
+        <p>Dirección: <strong><%= djc.company.address %></strong></p>
         <p>Dirección de fábrica o depósito en Argentina: <strong><%= djc.deposit_address %></strong></p>
+        <p>Origen: <strong><%= djc.origin %></strong></p>
         <p>Teléfono: <strong><%= djc.company.contact_phone %></strong></p>
         <p>Mail: <strong><%= djc.company.contact_email %></strong></p>
 
