@@ -9,6 +9,12 @@ admin.phone = "1123452345"
 admin.admin = true
 admin.save
 
+admin.reload
+
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
+
 reglamentos_tecnicos = [
   'Seguridad Eléctrica Res. 169/2018',
   'Materiales para la construcción Res. 236/2024',
