@@ -1,12 +1,15 @@
+<div id="responsesBlock" role="alert" style="padding: 10px; border: 1px solid #ccc; background-color: #f8d7da; color: #721c24; position: relative;">
+  <span id="responsesBlock_messages"></span>
+  <button onclick="cleanApiResponse()" style="position: absolute; top: 5px; right: 10px; background: none; border: none; font-size: 16px; cursor: pointer; color: #721c24;">&times;</button>
+</div>
+
 <% if notice %>
-  <div class="alert alert-success" role="alert">
-    <%= notice %>
-  </div>
+  <script>
+    createApiResponse("info", {message: "<%= notice %>"});
+  </script>
 <% end %>
 <% if alert %>
-  <div class="alert alert-warning" role="alert">
-    <%= alert %>
-  </div>
+  <script>
+    createApiResponse("info", {message: "<%= alert %>"});
+  </script>
 <% end %>
-
-<div id="responses" role="alert"></div>

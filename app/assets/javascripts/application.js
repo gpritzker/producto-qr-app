@@ -71,21 +71,22 @@ function createApiResponse(status, response) {
     $.each( response.messages, function( _, value ) {
       ul.append($("<li></li>").html(value))
     });
-    $("#responses").html(ul);
+    $("#responsesBlock_messages").html(ul);
   }
   else {
-    $("#responses").html(response.message)
+    $("#responsesBlock_messages").html(response.message)
   }
   switch (status) {
-    case "error": $("#responses").addClass("alert alert-danger"); break;
-    case "success": $("#responses").addClass("alert alert-success"); break;
-    case "warning": $("#responses").addClass("alert alert-warning"); break;
-    default: $("#responses").addClass("alert alert-info");
+    case "error": $("#responsesBlock").addClass("alert alert-danger"); break;
+    case "success": $("#responsesBlock").addClass("alert alert-success"); break;
+    case "warning": $("#responsesBlock").addClass("alert alert-warning"); break;
+    default: $("#responsesBlock").addClass("alert alert-info");
   }
 
-  $("#responses").show();
+  $("#responsesBlock").show();
   document.getElementById("responses").scrollIntoView({ behavior: "smooth" });
 }
 function cleanApiResponse() {
-  $("#responses").removeClass().html("").hide();
+  $("#responsesBlock").removeClass().hide();
+  $("#responsesBlock_messages").html("")
 }
