@@ -1,5 +1,10 @@
-<h1 class="my-4">Nueva Empresa</h1>
-
-<%= render 'form', company: @company %>
-
-<%= link_to "Volver", companies_path, class: "btn btn-secondary mt-3" %>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Nueva Empresa</h4>
+      </div>
+  </div>
+  <div class="card-body">
+    <%= render 'form', company: @company %>
+  </div>
+</div>

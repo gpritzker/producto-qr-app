@@ -1,18 +1,10 @@
-<div id="qrCreate" class="container my-1" style="display: none;">
-  <div class="card">
-    <div class="card-header bg-secondary text-white">
-        Crear QR para la empresa <span id="qr_company_name"></span>
-    </div>
-    <div class="card-body">
-        <div class="justify-content-between align-items-center mb-3">
-            <div class="input-group">
-                <label></label>
-                <input type="text" id="qr_description" class="form-control" placeholder="Ingrese la descripción">
-                <input type="hidden" id="qr_company_id">
-                <button class="btn btn-success" type="button" onclick="create()">Crear QR</button>
-            </div>
-        </div>
-    </div>
+
+<div id="qrCreate" class="justify-content-between align-items-center mb-3" style="display: none;">
+  <div class="input-group">
+      <label></label>
+      <input type="text" id="qr_description" class="form-control" placeholder="Ingrese la descripción">
+      <input type="hidden" id="qr_company_id">
+      <button class="btn btn-success" type="button" onclick="create()">Crear QR</button>
   </div>
 </div>
 

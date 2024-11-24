@@ -36,14 +36,14 @@ module Api
             company_id: company.id,
             role: delegations_params[:role].to_i
           })
-          render json: {messages: ["Delegación creada."]}, status: :ok
+          render json: {message: "Delegación creada."}, status: :ok
         rescue ActiveRecord::RecordNotUnique => e
-          render json: {messages: ["Esta delegación fué realizada previamente"]}, status: :unprocessable_entity
+          render json: {message: "Esta delegación fué realizada previamente"}, status: :unprocessable_entity
         rescue ActiveRecord::RecordInvalid => e
           render json: {messages: e.record.errors.full_messages}, status: :unprocessable_entity
         rescue => e
           logger.error e.message
-          render json: {messages: [e.message]}, status: :unprocessable_entity
+          render json: {messages: e.message}, status: :unprocessable_entity
         end
       end
 
@@ -56,14 +56,14 @@ module Api
             @delegation.destroy!
           end
           
-          render json: {messages: ["Delegación aceptada."]}, status: :ok
+          render json: {message: "Delegación aceptada."}, status: :ok
         rescue ActiveRecord::RecordNotUnique => e
-          render json: {messages: ["Esta delegación fué realizada previamente"]}, status: :unprocessable_entity
+          render json: {message: "Esta delegación fué realizada previamente"}, status: :unprocessable_entity
         rescue ActiveRecord::RecordInvalid => e
           render json: {messages: e.record.errors.full_messages}, status: :unprocessable_entity
         rescue => e
           logger.error e.message
-          render json: {messages: [e.message]}, status: :unprocessable_entity
+          render json: {message: e.message}, status: :unprocessable_entity
         end
       end
 

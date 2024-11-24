@@ -47,8 +47,9 @@
 
   <!-- Botón de acción -->
   <div class="mb-3">
-    <%= f.button :submit, class: "btn btn-primary w-100" do %>
-      <%= company.new_record? ? 'Crear Empresa' : 'Editar Empresa' %>
+    <%= link_to "Volver", companies_path, class: "btn btn-secondary" %>
+    <%= f.button :submit, class: "btn btn-primary" do %>
+      <%= company.new_record? ? 'Crear' : 'Actualizar' %>
     <% end %>
   </div>
 <% end %>

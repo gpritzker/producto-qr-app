@@ -1,5 +1,10 @@
-<h1>Editar Empresa</h1>
-
-<%= render 'form', company: @company %>
-
-<%= link_to "Volver", company_path(@company), class: "btn btn-secondary" %>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Editar Empresa</h4>
+      </div>
+  </div>
+  <div class="card-body">
+    <%= render 'form', company: @company %>
+  </div>
+</div>

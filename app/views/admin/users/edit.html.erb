@@ -1,63 +1,68 @@
-<h1 class="my-4 text-center">
-  <%= @user.new_record? ? 'Crear Usuario' : 'Editar Usuario' %>
-</h1>
-
-<%= form_with model: [:admin, @user], local: true do |form| %>
-  <%= render 'layouts/errors', entity: @user %>
-
-  <div class="row">
-    <!-- Correo Electrónico (Deshabilitado) -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :email, "Correo Electrónico", class: "form-label" %>
-      <%= form.email_field :email, readonly: true, class: "form-control", placeholder: "Ingrese el email del usuario" %>
-    </div>
-
-    <!-- Contraseña Actual -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :current_password, "Contraseña Actual", class: "form-label" %>
-      <%= form.password_field :current_password, class: "form-control", placeholder: "Ingrese su contraseña actual" %>
-    </div>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><%= @user.new_record? ? 'Nuevo Usuario' : 'Editar Usuario' %></h4>
+      </div>
   </div>
+  <div class="card-body">
+    <%= form_with model: [:admin, @user], local: true do |form| %>
+      <%= render 'layouts/errors', entity: @user %>
 
-  <div class="row">
-    <!-- Nueva Contraseña -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :new_password, "Nueva Contraseña", class: "form-label" %>
-      <%= form.password_field :new_password, class: "form-control", placeholder: "Ingrese la nueva contraseña" %>
-    </div>
+      <div class="row">
+        <!-- Correo Electrónico (Deshabilitado) -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :email, "Correo Electrónico", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+        </div>
 
-    <!-- Confirmación de Nueva Contraseña -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :new_password_confirmation, "Confirmación de Nueva Contraseña", class: "form-label" %>
-      <%= form.password_field :new_password_confirmation, class: "form-control", placeholder: "Confirme la nueva contraseña" %>
-    </div>
+        <!-- Contraseña Actual -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :current_password, "Contraseña Actual", class: "form-label" %>
+          <%= form.password_field :current_password, class: "form-control", placeholder: "Ingrese su contraseña actual" %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Nueva Contraseña -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :new_password, "Nueva Contraseña", class: "form-label" %>
+          <%= form.password_field :new_password, class: "form-control", placeholder: "Ingrese la nueva contraseña" %>
+        </div>
+
+        <!-- Confirmación de Nueva Contraseña -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :new_password_confirmation, "Confirmación de Nueva Contraseña", class: "form-label" %>
+          <%= form.password_field :new_password_confirmation, class: "form-control", placeholder: "Confirme la nueva contraseña" %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- CUIL/CUIT con guiones automáticamente -->
+        <div class="col-md-6 mb-3">
+          <%= form.label :cuil, "CUIL/CUIT", class: "form-label" %>
+          <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL o CUIT", data: { cuil_autocomplete: true } %>
+        </div>
+      </div>
+
+      <% if @user.admin %>
+        <div class="form-check mt-4">
+          <%= form.check_box :admin, class: "form-check-input" %>
+          <%= form.label :admin, "Administrador", class: "form-check-label" %>
+        </div>
+      <% end %>
+
+      <!-- Firma -->
+      <div class="form-group mt-4">
+        <%= form.label :signature_file, "Firma", class: "form-label" %>
+        <%= form.file_field :signature_file, accept: 'image/png', class: "form-control" %>
+        <small class="form-text text-muted">Cargue una imagen PNG de su firma con fondo transparente</small>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="actions mt-4">
+        <%= form.submit @user.new_record? ? "Crear" : "Actualizar", class: "btn btn-primary" %>
+        <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary ml-3' %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="row">
-    <!-- CUIL/CUIT con guiones automáticamente -->
-    <div class="col-md-6 mb-3">
-      <%= form.label :cuil, "CUIL/CUIT", class: "form-label" %>
-      <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL o CUIT", data: { cuil_autocomplete: true } %>
-    </div>
-  </div>
-
-  <% if @user.admin %>
-    <div class="form-check mt-4">
-      <%= form.check_box :admin, class: "form-check-input" %>
-      <%= form.label :admin, "Administrador", class: "form-check-label" %>
-    </div>
-  <% end %>
-
-  <!-- Firma -->
-  <div class="form-group mt-4">
-    <%= form.label :signature_file, "Firma", class: "form-label" %>
-    <%= form.file_field :signature_file, accept: 'image/png', class: "form-control" %>
-    <small class="form-text text-muted">Cargue una imagen PNG de su firma con fondo transparente</small>
-  </div>
-
-  <!-- Botones de Acción -->
-  <div class="actions mt-4">
-    <%= form.submit @user.new_record? ? "Crear Usuario" : "Guardar Cambios", class: "btn btn-primary btn-lg" %>
-    <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary btn-lg ml-3' %>
-  </div>
-<% end %>
+</div>

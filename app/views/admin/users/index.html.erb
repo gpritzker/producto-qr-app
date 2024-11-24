@@ -1,68 +1,71 @@
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <% if current_user.admin? %>
-      <h1 class="mb-0">Gestión de Usuarios</h1>
-      <%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
-    <% else %>
-      <h1 class="mb-0">Mis Datos</h1>
-    <% end %>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <% if current_user.admin? %>
+          <h4 class="mb-0">Gestión de Usuarios</h4>
+          <%= link_to 'Crear nuevo usuario', new_admin_user_path, class: 'btn btn-primary' %>
+        <% else %>
+          <h4 class="mb-0">Mis Datos</h4>
+        <% end %>
+      </div>
   </div>
-
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Email</th>
-          <th>Nombre Completo</th>
-          <th>Empresa</th>
-          <th>Cargo</th>
-          <th>Teléfono</th>
-          <th>Admin</th>
-          <th>CUIL</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if @users.present? %>
-          <% @users.each do |user| %>
-            <tr>
-              <td><%= user.email %></td>
-              <td><%= user.name %></td>
-              <td><%= user.bussiness.presence || '-' %></td> <!-- Muestra la empresa o un guión si no existe -->
-              <td><%= user.position.presence || '-' %></td>
-              <td><%= user.phone.presence || '-' %></td>
-              <td>
-                <span class="badge <%= user.admin? ? 'bg-success' : 'bg-secondary' %>">
-                  <%= user.admin? ? 'Sí' : 'No' %>
-                </span>
-              </td>
-              <td><%= user.cuil.presence || '-' %></td>
-              <td class="text-center">
-                <!-- Botón Ver con Icono -->
-                <%= link_to admin_user_path(user), class: 'btn btn-success btn-sm me-1' do %>
-                  <i class="bi bi-eye"></i> 
-                <% end %>
-
-                <!-- Botón Editar con Icono -->
-                <%= link_to edit_admin_user_path(user), class: 'btn btn-warning btn-sm me-1' do %>
-                  <i class="bi bi-pencil"></i> 
-                <% end %>
-
-                <!-- Botón Eliminar con Icono -->
-                <% if current_user.admin? %>
-                  <%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' do %>
-                    <i class="bi bi-trash"></i> 
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Email</th>
+            <th>Nombre Completo</th>
+            <th>Empresa</th>
+            <th>Cargo</th>
+            <th>Teléfono</th>
+            <th>Admin</th>
+            <th>CUIL</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @users.present? %>
+            <% @users.each do |user| %>
+              <tr>
+                <td><%= user.email %></td>
+                <td><%= user.name %></td>
+                <td><%= user.bussiness.presence || '-' %></td> <!-- Muestra la empresa o un guión si no existe -->
+                <td><%= user.position.presence || '-' %></td>
+                <td><%= user.phone.presence || '-' %></td>
+                <td>
+                  <span class="badge <%= user.admin? ? 'bg-success' : 'bg-secondary' %>">
+                    <%= user.admin? ? 'Sí' : 'No' %>
+                  </span>
+                </td>
+                <td><%= user.cuil.presence || '-' %></td>
+                <td class="text-center">
+                  <!-- Botón Ver con Icono -->
+                  <%= link_to admin_user_path(user), class: 'btn btn-success btn-sm me-1' do %>
+                    <i class="bi bi-eye"></i> 
                   <% end %>
-                <% end %>
-              </td>
+
+                  <!-- Botón Editar con Icono -->
+                  <%= link_to edit_admin_user_path(user), class: 'btn btn-warning btn-sm me-1' do %>
+                    <i class="bi bi-pencil"></i> 
+                  <% end %>
+
+                  <!-- Botón Eliminar con Icono -->
+                  <% if current_user.admin? %>
+                    <%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' do %>
+                      <i class="bi bi-trash"></i> 
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="8" class="text-center text-muted">No hay usuarios registrados.</td>
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td colspan="8" class="text-center text-muted">No hay usuarios registrados.</td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

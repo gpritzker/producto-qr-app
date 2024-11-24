@@ -1,133 +1,85 @@
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Delegaciones</h1>
-    <!-- Espacio para un botón adicional si se requiere en el futuro -->
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Gestión de Delegaciones</h4>
+      </div>
   </div>
-
-  <div class="alert alert-info" role="alert">
-    Para aceptar delegaciones como APODERADO debe cargar el poder previamente
-  </div>
-
-  <% unless current_user.can_by_apoderado? %>
-    <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
-      <span>Debe completar datos para ser apoderado (requiere: CUIL y firma).</span>
-      <%= link_to 'Editar', edit_admin_user_path(current_user), class: "btn btn-primary btn-sm" %>
+  <div class="card-body">
+    <div class="alert alert-info" role="alert">
+      Para aceptar delegaciones como APODERADO debe cargar el poder previamente
     </div>
-  <% end %>
 
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Compañía</th>
-          <th>Correo Electrónico</th>
-          <th>Rol</th>
-          <th>Fecha de Creación</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if @delegations.present? %>
-          <% @delegations.each do |delegation| %>
-            <tr id="delegation-<%= delegation.id %>">
-              <td><%= delegation.company.try(:name) %></td>
-              <td><%= delegation.email %></td>
-              <td>
-                <span class="badge bg-primary"><%= delegation.role.upcase %></span>
-              </td>
-              <td><%= delegation.created_at.strftime("%d-%m-%Y %H:%M") %></td>
-              
-              <td class="text-center">
-                <% if  delegation.role == "apoderado" %>
-                  <%= link_to apoderar_delegation_path(delegation), class: "btn btn-sm btn-success #{current_user.can_by_apoderado? ? '' : 'disabled'}" do %>
-                    <i class="bi bi-check-circle"></i>
+    <% unless current_user.can_by_apoderado? %>
+      <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
+        <span>Debe completar datos para ser apoderado (requiere: CUIL y firma).</span>
+        <%= link_to 'Editar', edit_admin_user_path(current_user), class: "btn btn-primary btn-sm" %>
+      </div>
+    <% end %>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Compañía</th>
+            <th>Correo Electrónico</th>
+            <th>Rol</th>
+            <th>Fecha de Creación</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @delegations.present? %>
+            <% @delegations.each do |delegation| %>
+              <tr id="delegation-<%= delegation.id %>">
+                <td><%= delegation.company.try(:name) %></td>
+                <td><%= delegation.email %></td>
+                <td>
+                  <span class="badge bg-primary"><%= delegation.role.upcase %></span>
+                </td>
+                <td><%= delegation.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+                
+                <td class="text-center">
+                  <% if  delegation.role == "apoderado" %>
+                    <%= link_to apoderar_delegation_path(delegation), class: "btn btn-sm btn-success #{current_user.can_by_apoderado? ? '' : 'disabled'}" do %>
+                      <i class="bi bi-check-circle"></i>
+                    <% end %>
+                  <% else %>
+                    <button type="button" class="btn btn-sm btn-success" onclick="aceptar(<%= delegation.id %>)">
+                      <i class="bi bi-check-circle"></i> 
+                    </button>
                   <% end %>
-                <% else %>
-                  <button type="button" class="btn btn-sm btn-success" onclick="aceptar(<%= delegation.id %>)">
-                    <i class="bi bi-check-circle"></i> 
+                  <button type="button" class="btn btn-sm btn-danger" onclick="rechazar(<%= delegation.id %>)">
+                    <i class="bi bi-x-circle"></i> 
                   </button>
-                <% end %>
-                <button type="button" class="btn btn-sm btn-danger" onclick="rechazar(<%= delegation.id %>)">
-                  <i class="bi bi-x-circle"></i> 
-                </button>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="7" class="text-center text-muted">
+                Aún no hay delegaciones.
               </td>
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td colspan="7" class="text-center text-muted">
-              Aún no hay delegaciones.
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <script>
   async function aceptar(delegationId) {
-    try {
-      response = await fetch("<%= aceptar_api_v1_delegations_url %>", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({id: delegationId})
-      });
-      if (!response.ok) {
-        const errorMessage = await response.json();
-        if(errorMessage.hasOwnProperty("messages")) {
-          ul = $("<ul></ul>");
-          $.each( errorMessage.messages, function( index, value ) {
-            ul.append($("<li></li>").html(value))
-          });
-        }
-        else {
-          ul = errorMessage.message;
-        }
-        $("#responses").removeClass().addClass("alert alert-danger").html(ul);
-      } else {
-        const data = await response.json();
-        $("#responses").removeClass().addClass("alert alert-success").html("Delegación aceptada exitosamente");
-        $("#delegation-"+delegationId).remove();
-      }
-    } catch(error) {
-      console.error('Error al aceptar delegación:', error);
-    }
+    createApiResponse("info",{message: "Aceptando delegación..."});
+
+    doPost("<%= aceptar_api_v1_delegations_url %>", {id: delegationId});
   }
   async function rechazar(delegationId) {
-    try {
-      // Mostrar el cuadro de diálogo
-      let confirmacion = confirm("¿Estás seguro que desea rechazar la delegación?");
-      if(confirmacion) {
-        response = await fetch("<%= rechazar_api_v1_delegations_url %>", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({id: delegationId})
-        });
-        if (!response.ok) {
-          const errorMessage = await response.json();
-          if(errorMessage.hasOwnProperty("messages")) {
-            ul = $("<ul></ul>");
-            $.each( errorMessage.messages, function( index, value ) {
-              ul.append($("<li></li>").html(value))
-            });
-          }
-          else {
-            ul = errorMessage.message;
-          }
-          $("#responses").removeClass().addClass("alert alert-danger").html(ul);
-        } else {
-          const data = await response.json();
-          $("#responses").removeClass().addClass("alert alert-success").html("Delegación rechazada exitosamente");
-          $("#delegation-"+delegationId).remove();
-        }
-      }
-    } catch(error) {
-      console.error('Error al rechazar delegación:', error);
+    // Mostrar el cuadro de diálogo
+    let confirmacion = confirm("¿Estás seguro que desea rechazar la delegación?");
+    if(confirmacion) {
+      createApiResponse("info",{message: "Recchazando delegación..."});
+
+      doPost("<%= rechazar_api_v1_delegations_url %>", {id: delegationId});
     }
   }
 </script>

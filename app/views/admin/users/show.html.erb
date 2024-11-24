@@ -1,37 +1,38 @@
-<h1 class="my-4 text-center">Detalles del Usuario</h1>
-
-<div class="container">
-  <!-- Detalles del Usuario -->
-  <div class="row">
-    <div class="col-md-6">
-      <p><strong>Nombre:</strong> <%= @user.name %></p>
-      <p><strong>Email:</strong> <%= @user.email %></p>
-      <p><strong>Teléfono:</strong> <%= @user.phone %></p>
-      <p><strong>CUIL:</strong> <%= @user.cuil.present? ? @user.cuil : "No especificado" %></p>
-      <p><strong>Negocio:</strong> <%= @user.bussiness %></p>
-      <p><strong>Posición:</strong> <%= @user.position %></p>
-    </div>
-  </div>
-
-  <hr>
-
-  <div class="attachments">
-    <!-- Firma Digital -->
-    <h3>Firma Digital</h3>
-    <% if @user.signature_file.attached? %>
-      <div>
-        <%= image_tag @user.signature_file, alt: "Firma Digital", class: "img-fluid rounded" %>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Detalles del Usuario</h4>
       </div>
-    <% else %>
-      <p>No se ha subido una firma digital.</p>
-    <% end %>
   </div>
-
-  <hr>
-
-  <!-- Acciones -->
-  <div class="actions">
-    <%= link_to 'Aceptar', edit_admin_user_path(@user), class: "btn btn-primary btn-lg me-2" %>
-    <%= link_to 'Volver', admin_users_path, class: "btn btn-secondary btn-lg" %>
+  <div class="card-body">
+    <!-- Detalles del Usuario -->
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Nombre:</strong> <%= @user.name %></p>
+        <p><strong>Email:</strong> <%= @user.email %></p>
+        <p><strong>Teléfono:</strong> <%= @user.phone %></p>
+        <p><strong>CUIL:</strong> <%= @user.cuil.present? ? @user.cuil : "No especificado" %></p>
+        <p><strong>Negocio:</strong> <%= @user.bussiness %></p>
+        <p><strong>Posición:</strong> <%= @user.position %></p>
+      </div>
+    </div>
+    <hr>
+    <div class="attachments">
+      <!-- Firma Digital -->
+      <h3>Firma Digital</h3>
+      <% if @user.signature_file.attached? %>
+        <div>
+          <%= image_tag @user.signature_file, alt: "Firma Digital", class: "img-fluid rounded" %>
+        </div>
+      <% else %>
+        <p>No se ha subido una firma digital.</p>
+      <% end %>
+    </div>
+    <hr>
+    <!-- Acciones -->
+    <div class="actions">
+      <%= link_to 'Aceptar', edit_admin_user_path(@user), class: "btn btn-primary me-2" %>
+      <%= link_to 'Volver', admin_users_path, class: "btn btn-secondary" %>
+    </div>
   </div>
 </div>
