@@ -105,7 +105,7 @@ Rails.application.configure do
     address: 'smtp.sendgrid.net',
     port: 587,
     #domain: 'qar.com.ar', # Reemplaza con tu dominio cuando este ok
-    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com'
+    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com',
     authentication: :plain,
     user_name: 'apikey', # Esto debe ser literalmente 'apikey'
     password: ENV['SENDGRID_API_KEY'],
