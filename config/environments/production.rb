@@ -44,7 +44,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -104,7 +104,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.sendgrid.net',
     port: 587,
-    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com', # Reemplaza con tu dominio
+    domain: 'qar.com.ar', # Reemplaza con tu dominio
     authentication: :plain,
     user_name: 'apikey', # Esto debe ser literalmente 'apikey'
     password: ENV['SENDGRID_API_KEY'],
