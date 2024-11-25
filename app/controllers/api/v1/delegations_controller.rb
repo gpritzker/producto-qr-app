@@ -36,6 +36,9 @@ module Api
             company_id: company.id,
             role: delegations_params[:role].to_i
           })
+          
+          rol = Role::role_name(delegations_params[:role])
+          DelegationMailer.delegation_email(rol, delegations_params[:email], company.name, current_user.name).deliver_now
           render json: {message: "Delegación creada."}, status: :ok
         rescue ActiveRecord::RecordNotUnique => e
           render json: {message: "Esta delegación fué realizada previamente"}, status: :unprocessable_entity
