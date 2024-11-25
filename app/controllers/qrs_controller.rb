@@ -5,9 +5,9 @@ class QrsController < ApplicationController
   # GET /qrs
   def index
     if current_user.admin?
-      @qrs = Qr.all
+      @qrs = Qr.all.order(id: :desc)
     else
-      @qrs = Qr.joins(company: :roles).where(roles: { user_id: current_user.id })
+      @qrs = Qr.joins(company: :roles).where(roles: { user_id: current_user.id }).order(id: :desc)
     end
   end
 
