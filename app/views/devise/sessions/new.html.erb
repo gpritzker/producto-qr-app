@@ -1,8 +1,12 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
+      <div class="text-center mb-4">
+        <h2 style="color: #2E6A9C;">¡Bienvenido a QAR!</h2>
+        <p style="color: #8BAAC6;">Es la gestión de los QRs para sus productos.</p>
+      </div>
       <div class="card shadow-sm border-light">
-        <div class="card-header text-center bg-primary text-white">
+        <div class="card-header text-center" style="background-color: #2E6A9C; color: #FFFFFF;">
           <h4 class="mb-0">Iniciar sesión</h4>
         </div>
         <div class="card-body">
@@ -10,35 +14,60 @@
             <!-- Email Field -->
             <div class="form-group mb-3">
               <%= f.label :email, class: "form-label" %>
-              <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Correo electrónico" %>
+              <div class="input-group">
+                <span class="input-group-text" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
+                  <i class="bi bi-envelope"></i>
+                </span>
+                <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Correo electrónico", style: "border: 1px solid #D1E3F2;" %>
+              </div>
             </div>
 
             <!-- Password Field -->
             <div class="form-group mb-3">
               <%= f.label :password, class: "form-label" %>
-              <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Contraseña" %>
+              <div class="input-group">
+                <span class="input-group-text" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
+                  <i class="bi bi-lock"></i>
+                </span>
+                <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Contraseña", style: "border: 1px solid #D1E3F2;" %>
+              </div>
             </div>
 
             <!-- Remember Me -->
             <div class="form-check mb-3">
               <%= f.check_box :remember_me, class: "form-check-input" %>
-              <%= f.label :remember_me, class: "form-check-label" %>
+              <%= f.label :remember_me, "Recuérdame", class: "form-check-label" %>
             </div>
 
             <!-- Submit Button -->
             <div class="d-grid">
-              <%= f.submit "Iniciar sesión", class: "btn btn-primary btn-lg" %>
+              <%= f.submit "Iniciar sesión", class: "btn btn-lg", style: "background-color: #2E6A9C; color: #FFFFFF; border: none;" %>
             </div>
           <% end %>
 
           <!-- Links for Sign Up and Forgot Password -->
           <div class="text-center mt-3">
-            <%= link_to "¿No tienes cuenta? Regístrate", new_registration_path(resource_name), class: "btn btn-link" %>
+            <%= link_to "¿No tienes cuenta? Regístrate", new_registration_path(resource_name), class: "btn btn-link", style: "color: #2E6A9C;" %>
             <br>
-            <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "btn btn-link" %>
+            <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "btn btn-link", style: "color: #2E6A9C;" %>
           </div>
+        </div>
+      </div>
+
+      <!-- Why Use QAR -->
+      <div class="card mt-4 shadow-sm">
+        <div class="card-body" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
+          <h5 class="card-title" style="color: #2E6A9C;">¿Por qué usar QAR?</h5>
+          <ul style="color: #2E6A9C;">
+            <li>Gestión eficiente de tus datos.</li>
+            <li>Acceso desde cualquier dispositivo.</li>
+            <li>Soporte técnico 24/7.</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
+  <footer class="text-center mt-5" style="color: #8BAAC6;">
+    © 2024 QAR. Todos los derechos reservados. <a href="#" style="color: #2E6A9C;">Términos</a> | <a href="#" style="color: #2E6A9C;">Política de privacidad</a>
+  </footer>
 </div>
