@@ -105,13 +105,13 @@ Rails.application.configure do
     address: 'smtp.sendgrid.net',
     port: 587,
     #domain: 'qar.com.ar', # Reemplaza con tu dominio cuando este ok
-    domain: 'product-qr-app-c0b80da9a0c6.herokuapp.com',
+    domain: 'qar.com.ar',
     authentication: :plain,
     user_name: 'apikey', # Esto debe ser literalmente 'apikey'
     password: ENV['SENDGRID_API_KEY'],
     enable_starttls_auto: true
   }
-#config.action_mailer.default_url_options = { host: ENV['APP_HOST'], protocol: 'https' }
-config.action_mailer.default_url_options = { host: ENV['APP_HOST_HEROKU'], protocol: 'https' }
+config.action_mailer.default_url_options = { host: ENV['APP_HOST'], protocol: 'https' }
+#config.action_mailer.default_url_options = { host: ENV['APP_HOST_HEROKU'], protocol: 'https' }
 
 end
