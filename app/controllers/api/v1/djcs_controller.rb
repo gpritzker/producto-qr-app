@@ -8,7 +8,7 @@ module Api
       def sign
         if @role.apoderado? 
           if @djc.update(signed_by: current_user, signed_at: Time.current)
-            render json: {message: "Se firmo exitosamente."}, status: :ok
+            render json: {message: "Se firmo exitosamente.", data: @djc}, status: :ok
           else
             messages = @djc.errors.map do |err|
               err.options&.[](:message) || "Error message not available"
@@ -24,7 +24,7 @@ module Api
       def approve
         if @role.apoderado? || @role.supervisor?
           if @djc.update(approved_by: current_user, approved_at: Time.current)
-            render json: {message: "Se aprobó exitosamente."}, status: :ok
+            render json: {message: "Se aprobó exitosamente.", data: @djc}, status: :ok
           else
             messages = @djc.errors.map do |err|
               err.options&.[](:message) || "Error message not available"
@@ -46,7 +46,7 @@ module Api
             end
             return render json: {messages: messages}, status: :unprocessable_entity
           end
-          render json: {message: "DJC creada exitosamente"}, status: :ok
+          render json: {message: "DJC creada exitosamente", data: @djc}, status: :ok
         rescue => e
           logger.error e.message
           render json: {message: "No se pudo crear la DJC"}, status: :unprocessable_entity

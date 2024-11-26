@@ -20,7 +20,7 @@ module Api
             end
             return render json: {messages: messages}, status: :unprocessable_entity
           else
-            render json: {message: "Qr creado exitosamente", data: qr.reload}, status: :ok
+            render json: {message: "Qr creado exitosamente", data: qr}, status: :ok
           end
         rescue => e
           logger.error e.message

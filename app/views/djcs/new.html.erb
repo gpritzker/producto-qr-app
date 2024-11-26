@@ -422,5 +422,9 @@ async function enviar(data) {
   djc = await doPost("<%= api_v1_djcs_url %>", objetoDatos);
   if(djc == null)
     $("#djc-card").show();
+  else {
+    url = "<%= certificados_djc_url(id: "__ID__")%>"
+    location.href = url.replace('__ID__', djc.id);
+  }
 }
 </script>
