@@ -23,8 +23,25 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
+    @user = User.new(user_params.except(:signature_file))
     if @user.save
+      if user_params[:signature_file].present?
+        # Extraer la parte Base64
+        encoded_image = user_params[:signature_file].split(',')[1]
+        decoded_image = Base64.decode64(encoded_image)
+  
+        # Crear un archivo temporal para adjuntar
+        temp_file = Tempfile.new(['signature', '.png'])
+        temp_file.binmode
+        temp_file.write(decoded_image)
+        temp_file.rewind
+  
+        # Adjuntar la firma al usuario
+        @user.signature_file.attach(io: temp_file, filename: 'signature.png', content_type: 'image/png')
+  
+        temp_file.close
+        temp_file.unlink
+      end
       redirect_to admin_users_path, notice: "Usuario creado exitosamente."
     else
       render :new, alert: "Error al crear el usuario."
@@ -72,7 +89,24 @@ class Admin::UsersController < ApplicationController
         render :password
       end
     else # Actualización general del usuario (sin contraseña)
-      filtered_params = user_params.except(:password, :password_confirmation, :current_password)
+      filtered_params = user_params.except(:password, :password_confirmation, :current_password, :signature_file)
+      if user_params[:signature_file].present?
+        # Extraer la parte Base64
+        encoded_image = user_params[:signature_file].split(',')[1]
+        decoded_image = Base64.decode64(encoded_image)
+  
+        # Crear un archivo temporal para adjuntar
+        temp_file = Tempfile.new(['signature', '.png'])
+        temp_file.binmode
+        temp_file.write(decoded_image)
+        temp_file.rewind
+  
+        # Adjuntar la firma al usuario
+        @user.signature_file.attach(io: temp_file, filename: 'signature.png', content_type: 'image/png')
+  
+        temp_file.close
+        temp_file.unlink
+      end
       if @user.update(filtered_params)
         redirect_to admin_user_url(@user), notice: "Usuario actualizado exitosamente."
       else

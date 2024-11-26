@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-header bg-light">
+    <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Firma Digital</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <canvas id="signatureCanvas" class="signatureCanvas"></canvas>
+        <input type="hidden" name="user[signature_file]" id="signature_file"/>
+      </div>
+      <div class="col-md-6" id="signature-info">
+        <p>Genere su firma y luego presione el botón GUARDAR</p>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-sm btn-primary" type="button" id="signature-clear">Borrar</button>
+    <button class="btn btn-sm btn-secondary" type="button" id="signature-save">Guardar</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Inicializar Signature Pad
+    const canvas = document.getElementById('signatureCanvas');
+    const signaturePad = new SignaturePad(canvas);
+
+    // Ajustar el tamaño del lienzo
+    const resizeCanvas = function () {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext('2d').scale(ratio, ratio);
+      signaturePad.clear();
+    };
+
+    resizeCanvas();
+    $(window).on('resize', resizeCanvas);
+
+    // Borrar firma
+    $("#signature-clear").click(function() {
+      signaturePad.clear();
+      $('#signature_file').val("");
+      $("#signature-info").html("<p>La firma se ha borrado</p><p>Genere su firma y luego presione el botón GUARDAR</p>");
+    });
+
+    // Guardar firma como Base64
+    $("#signature-save").click(function() {
+      if (! signaturePad.isEmpty()) {
+        const dataURL = signaturePad.toDataURL('image/png');
+        $('#signature_file').val(dataURL); // Asigna la imagen codificada en Base64 al input oculto
+        $("#signature-info").html("<p>La firma se ha cargado exitosamente</p>");
+      }
+    });
+  });
+
+  
+  
+</script>

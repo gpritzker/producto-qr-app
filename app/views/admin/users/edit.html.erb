@@ -30,11 +30,9 @@
       <% end %>
 
       <!-- Firma -->
-      <div class="form-group mt-4">
-        <%= form.label :signature_file, "Firma", class: "form-label" %>
-        <%= form.file_field :signature_file, accept: 'image/png', class: "form-control" %>
-        <small class="form-text text-muted">Cargue una imagen PNG de su firma con fondo transparente</small>
-      </div>
+      <% unless @user.signature_file.attached? %>
+        <%= render 'signature' %>
+      <% end %>
 
       <!-- Botones de Acción -->
       <div class="actions mt-4">

@@ -89,15 +89,7 @@
         </div>
       </div>
       <!-- Firma -->
-      <div class="row mb-2">
-        <div class="col-md-12" colspan="2">
-          <div class="form-group mt-4">
-            <%= form.label :signature_file, "Firma", class: "form-label" %>
-            <%= form.file_field :signature_file, accept: 'image/png', class: 'form-control' %>
-            <small class="form-text text-muted">Cargue imagen PNG de su firma con fondo transparente</small>
-          </div>
-        </div>
-      </div>
+      <%= render 'signature' %>
       <!-- Acciones -->
       <div class="row">
         <div class="col-md-12" colspan="2">

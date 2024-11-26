@@ -114,3 +114,9 @@ table td,
 table th {
   font-size: 0.85rem; /* Reduce el tamaño de la fuente */
 }
+.signatureCanvas {
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+}
