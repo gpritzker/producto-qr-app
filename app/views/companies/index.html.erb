@@ -32,7 +32,7 @@
         <tbody>
           <% if @companies.size > 0 %>
             <% @companies.each do |company| %>
-              <tr>
+              <tr id="company-<%= company.id %>">
                 <td><%= company.name %></td>
                 <td><%= company.cuit %></td>
                 <td><%= company.address %></td>
@@ -56,6 +56,9 @@
                   <%= link_to company_path(company), class: "btn btn-success btn-sm me-1" do %>
                     <i class="bi bi-eye"></i>
                   <% end %>
+                  <button class="btn btn-danger btn-sm me-1" onclick="borrar(<%= company.id %>)">
+                    <i class="bi bi-trash"></i>
+                  </button>
                   <div class="btn btn-primary btn-sm me-1" onclick="delegar(<%= company.id %>, <%= current_user.admin ? -1 : company.user_role  %>)">
                     <i class="bi bi-person-add"></i>
                   </div>
@@ -129,5 +132,15 @@
     $("#qrCreate").show();
     $("#qr_company_id").val(company_id);
     $('#qr_company_name').text(company_name);
+  }
+  
+  async function borrar(company_id) {
+    if (confirm("¿Estás seguro de que deseas eliminar esta compañía?")) {
+      url = "<%= api_v1_company_url(id: "__ID__") %>"
+      result = await doDelete(url.replace('__ID__', company_id));
+      if(result) {
+        $(`#company-${company_id}`).remove();
+      }
+    }
   }
 </script>

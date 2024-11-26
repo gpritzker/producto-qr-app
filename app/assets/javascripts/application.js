@@ -86,6 +86,29 @@ async function doPut(url, body = {}, headers = {}) {
     createApiResponse("error", "No se pudo procesar la solicitud");
   }
 }
+async function doDelete(url, headers = {}) {
+  if(!headers.hasOwnProperty('Content-Type')) 
+    headers['Content-Type'] = 'application/json';
+
+  try {
+    response = await fetch(url, {
+      method: "DELETE",
+      headers: headers
+    });
+    r = await response.json();
+    if (!response.ok) {
+      createApiResponse("warning", r);
+      return false;
+    }
+    else {
+      createApiResponse("success", r);
+      return true;
+    }
+  } catch(error) {
+    console.error(error);
+    createApiResponse("error", "No se pudo procesar la solicitud");
+  }
+}
 
 function createApiResponse(status, response) {
   cleanApiResponse();

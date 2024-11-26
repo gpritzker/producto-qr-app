@@ -31,10 +31,10 @@ class Company < ApplicationRecord
             size: { less_than: 12.megabytes, message: "El archivo no puede exceder los 12 MB" },
             if: -> { estatuto_file.present? }
 
-  has_many :delegations
-  has_many :roles
-  has_many :authorizations
-  has_many :qrs
+  has_many :delegations, dependent: :destroy
+  has_many :roles, dependent: :destroy
+  has_many :authorizations, dependent: :destroy
+  has_many :qrs, dependent: :destroy
   has_many :users, through: :roles
 
   before_validation :normalize_attributes

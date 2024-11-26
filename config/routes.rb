@@ -28,7 +28,7 @@ Rails.application.routes.draw do
           post "rechazar", to: "delegations#rechazar", as: "rechazar"
         end
       end
-      resources :companies, only: [:index, :show] do
+      resources :companies, only: [:index, :show, :destroy] do
         member do
           get :qrs
         end

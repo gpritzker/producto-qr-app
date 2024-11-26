@@ -3,7 +3,7 @@ class Qr < ApplicationRecord
   has_one_attached :qr_small_image, service: :qrs
 
   belongs_to :company
-  has_many :djcs
+  has_many :djcs, dependent: :destroy
   
   # Validaciones
   validates :code, presence: true

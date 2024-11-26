@@ -30,6 +30,25 @@ module Api
         render json: {data: qrs}, status: :ok
       end 
 
+      def destroy
+        begin
+          unless current_user.admin?
+            unless current_user.roles.where(company_id: params[:id]).exists?
+              raise "No tiene permisos para borrar esta compañia"
+            end
+          end
+
+          company = Company.find params[:id]
+          if company.qrs.size.positive?
+            raise "No se puede borrar una compañia que tiene QRs asociados"
+          end
+          company.destroy
+          render json: {message: "Compañía borrada exitosamente..."}, status: :ok
+        rescue => e
+          render json: {message: e.message}, status: :forbidden
+        end
+      end
+
       private
 
       def company_params
