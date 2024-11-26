@@ -12,31 +12,9 @@
         <!-- Correo Electrónico (Deshabilitado) -->
         <div class="col-md-6 mb-3">
           <%= form.label :email, "Correo Electrónico", class: "form-label" %>
-          <%= form.email_field :email, class: "form-control", placeholder: "Ingrese el email del usuario" %>
+          <%= form.email_field :email, class: "form-control", readonly: true, placeholder: "Ingrese el email del usuario" %>
         </div>
 
-        <!-- Contraseña Actual -->
-        <div class="col-md-6 mb-3">
-          <%= form.label :current_password, "Contraseña Actual", class: "form-label" %>
-          <%= form.password_field :current_password, class: "form-control", placeholder: "Ingrese su contraseña actual" %>
-        </div>
-      </div>
-
-      <div class="row">
-        <!-- Nueva Contraseña -->
-        <div class="col-md-6 mb-3">
-          <%= form.label :new_password, "Nueva Contraseña", class: "form-label" %>
-          <%= form.password_field :new_password, class: "form-control", placeholder: "Ingrese la nueva contraseña" %>
-        </div>
-
-        <!-- Confirmación de Nueva Contraseña -->
-        <div class="col-md-6 mb-3">
-          <%= form.label :new_password_confirmation, "Confirmación de Nueva Contraseña", class: "form-label" %>
-          <%= form.password_field :new_password_confirmation, class: "form-control", placeholder: "Confirme la nueva contraseña" %>
-        </div>
-      </div>
-
-      <div class="row">
         <!-- CUIL/CUIT con guiones automáticamente -->
         <div class="col-md-6 mb-3">
           <%= form.label :cuil, "CUIL/CUIT", class: "form-label" %>

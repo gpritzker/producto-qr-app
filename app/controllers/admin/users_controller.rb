@@ -31,6 +31,14 @@ class Admin::UsersController < ApplicationController
     end
   end
 
+  def password
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
+  end
+
   def edit
     if current_user.admin?
       @user = User.find(params[:id])
@@ -39,48 +47,29 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  # def update
-  #   if current_user.admin?
-  #     @user = User.find(params[:id])
-  #   else
-  #     @user = current_user
-  #   end
-    
-  #   filtered_params = user_params
-  #   if filtered_params[:password].blank?
-  #     filtered_params = filtered_params.except(:password, :password_confirmation)
-  #   end
-    
-  #   if @user.update(filtered_params)
-  #     redirect_to admin_user_url(@user), notice: "Usuario actualizado exitosamente."
-  #   else
-  #     render :edit, alert: "Error al actualizar el usuario."
-  #   end
-  # end
-
   def update
     if current_user.admin?
       @user = User.find(params[:id])
     else
       @user = current_user
     end
-  
-    if params[:current_password].present? # Cambio de contraseña
-      if @user.authenticate(params[:current_password]) # Verificar contraseña actual
-        if params[:password] == params[:password_confirmation]
-          if @user.update(password: params[:password])
+    
+    if user_params[:current_password].present? # Cambio de contraseña
+      if @user.valid_password?(user_params[:current_password])
+        if user_params[:password] == user_params[:password_confirmation]
+          if @user.update(password: user_params[:password])
             redirect_to admin_user_url(@user), notice: "Contraseña actualizada exitosamente."
           else
             flash.now[:alert] = "Hubo un problema al actualizar la contraseña."
-            render :edit
+            render :password
           end
         else
           flash.now[:alert] = "La nueva contraseña y su confirmación no coinciden."
-          render :edit
+          render :password
         end
       else
         flash.now[:alert] = "La contraseña actual no es correcta."
-        render :edit
+        render :password
       end
     else # Actualización general del usuario (sin contraseña)
       filtered_params = user_params.except(:password, :password_confirmation, :current_password)
@@ -98,14 +87,6 @@ class Admin::UsersController < ApplicationController
   def admin_only
     redirect_to root_path, alert: "No tienes permisos para acceder a esta sección." unless current_user.admin?
   end
-
-  # def user_params
-  #   params.require(:user).permit(
-  #     :email, :password, :password_confirmation, :admin, 
-  #     :name, :bussiness, :position, :phone, :cuil, :signature_file,
-  #     dni_files: []      
-  #   )
-  # end
 
   def user_params
     params.require(:user).permit(

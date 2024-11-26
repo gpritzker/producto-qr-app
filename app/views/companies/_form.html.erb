@@ -4,10 +4,10 @@
   <!-- Nombre de la empresa -->
   <div class="row mb-2">
     <div class="col-md-5">
-      <%= f.label :name, "Nombre de la Empresa", class: "form-label" %>
+      <%= f.label :name, "Razón Social", class: "form-label" %>
     </div>
     <div class="col-md-7">
-      <%= f.text_field :name, class: "form-control", required: true, placeholder: "Ingrese el nombre de la empresa" %>
+      <%= f.text_field :name, class: "form-control", required: true, placeholder: "Ingrese la razón social" %>
     </div>
   </div>
 
@@ -64,7 +64,7 @@
   <!-- Estatuto de la compañía -->
   <div class="row mb-2">
     <div class="col-md-5">
-      <%= f.label :estatuto_file, "Estatuto de la Compañía", class: "form-label" %>
+      <%= f.label :estatuto_file, "Estatuto de la Empresa", class: "form-label" %>
     </div>
     <div class="col-md-7">
       <%= f.file_field :estatuto_file, accept: 'application/pdf', class: "form-control" %>

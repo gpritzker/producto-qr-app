@@ -8,8 +8,8 @@
     <% end %>
     <li><%= link_to 'Empresas', companies_path, class: 'sidebar-link' %></li>
     <li class="d-flex align-items-center">
-      <%= link_to 'Delegaciones', delegations_path, class: 'sidebar-link' %>
-      <span class="badge badge-info ml-2"><%= Delegation.with_email(current_user.email).count %></span>
+      <%= link_to 'Delegaciones pendientes', delegations_path, class: 'sidebar-link' %>
+      <span class="badge badge-info"><%= Delegation.with_email(current_user.email).count %></span>
     </li>
     <li><%= link_to 'QRs', qrs_path, class: 'sidebar-link' %></li>
     <li><%= link_to 'Declaraciones de Conformidad', djcs_path, class: 'sidebar-link' %></li>
@@ -21,7 +21,7 @@
 
   <!-- Sidebar Footer -->
   <div class="sidebar-footer mt-5 text-center">
-    <small>Bienvenido, <%= current_user.name %></small>
+    <small>Bienvenido, <%= current_user.name %></small><br/>
     <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'btn btn-danger btn-sm mt-2' %>
   </div>
 </aside>

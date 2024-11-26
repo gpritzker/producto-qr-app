@@ -5,7 +5,7 @@
   <div class="card-body">
     <div class="row mb-1">
       <div class="col-md-4 text-md-end">
-        <label class="mr-2">Selecciona la Compañía</label>
+        <label class="mr-2">Selecciona la Razón Social</label>
       </div>
       <div class="col-md-8">
         <select class="form-control" id="company" style=""></select>
@@ -228,14 +228,29 @@ $(document).ready(function() {
 });
 
 async function loadCompanies() {
-  data = await doGet("<%= api_v1_companies_url %>");
+  <% if @company_id %>
+    data = await doGet("<%= api_v1_company_url(@company_id) %>");
+  <% else %>
+    data = await doGet("<%= api_v1_companies_url %>");
+  <% end %>
+  
   cleanApiResponse();
   
-  $('#company').empty().append('<option value="">Seleccione una compañía</option>');      
-  // Iterar sobre la lista de compañías y agregar cada una como opción
-  $.each(data, (index, company) => {
-    $('#company').append('<option value="' + company.id + '">' + company.name + '</option>');
-  });
+  <% if @company_id %>
+    if(data != null) {
+      $('#company').empty().append('<option value="' + data.id + '">' + data.name + '</option>');
+      $('#company').change();
+    }
+    else {
+      createApiResponse("warning",{message: "No puede crear DJC sobre esta empresa"});
+    }
+  <% else %>
+    $('#company').empty().append('<option value="">Seleccione una Razón Social</option>');      
+    // Iterar sobre la lista de compañías y agregar cada una como opción
+    $.each(data, (index, company) => {
+      $('#company').append('<option value="' + company.id + '">' + company.name + '</option>');
+    });
+  <% end %>
 }
 async function loadQRs() {
   createApiResponse("info",{message: "Cargando QRs..."});

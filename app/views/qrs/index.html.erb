@@ -19,7 +19,7 @@
         <thead class="table-dark">
           <tr>
             <th>Código</th>
-            <th>Empresa</th>
+            <th>Razón Social</th>
             <th>Descripción</th>
             <th>DJCs</th>
             <th class="text-center">Acciones</th>
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 async function loadCompanies() {
   // Mostrar el mensaje de "Cargando compañías..." al inicio
-  createApiResponse("info", {message: "Cargando compañias..."})
+  createApiResponse("info", {message: "Cargando Razones Sociales..."})
 
   r = await doGet("<%= api_v1_companies_url %>");
   if(r != null) {
@@ -75,7 +75,7 @@ async function loadCompanies() {
       $("#companies").append(`<option value="${r[0].id}" selected="true">${r[0].name}</option>`);
     }
     else {
-      $("#companies").append('<option value="">Seleccione una compañía</option>')
+      $("#companies").append('<option value="">Seleccione una Razón Social</option>')
       // Iterar sobre la lista de compañías y agregar cada una como opción
       $.each(r, (index, company) => {
         $("#companies").append('<option value="' + company.id + '">' + company.name + '</option>');
@@ -91,7 +91,7 @@ async function loadCompanies() {
 async function create() {
   const company_id = $("#companies").val();
   if(company_id == "") {
-    createApiResponse("warning", {message: "Debe seleccionar una compañia"});
+    createApiResponse("warning", {message: "Debe seleccionar una Razón Social"});
     return;
   }
   const description = $("#qr_description").val();

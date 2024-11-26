@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users 
+  
   resources :companies, except: [:destroy]
   resources :delegations, only: [:index] do
     member do
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
           post "rechazar", to: "delegations#rechazar", as: "rechazar"
         end
       end
-      resources :companies, only: [:index] do
+      resources :companies, only: [:index, :show] do
         member do
           get :qrs
         end
@@ -45,7 +46,11 @@ Rails.application.routes.draw do
   
   # Namespace para administración de usuarios, accesible solo por administradores
   namespace :admin do
-    resources :users, only: [:index, :new, :create, :edit, :update, :show]
+    resources :users, only: [:index, :new, :create, :edit, :update, :show] do
+      member do
+        get "change_password", to: "users#password"
+      end
+    end
   end
 
   # Redirigir la raíz al inicio de sesión

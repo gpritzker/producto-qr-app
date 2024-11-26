@@ -22,6 +22,9 @@ class DjcsController < ApplicationController
   # GET /djcs/new
   def new
     @djc = Djc.new
+    if params[:company_id].present?
+      @company_id = params[:company_id]
+    end
   end
 
   # GET /djcs/:id/edit
