@@ -40,7 +40,7 @@ Rails.application.routes.draw do
           put :sign
         end
       end
-      resources :qrs, only: [:create]
+      resources :qrs, only: [:create, :show]
     end
   end
   

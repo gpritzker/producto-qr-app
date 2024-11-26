@@ -60,9 +60,6 @@ admin.position = "ninguno"
 admin.phone = "1123452345"
 admin.admin = false
 admin.save
-
-admin.reload
-
 admin.update(
   confirmed_at: Time.current # Marca el email como confirmado
 )
@@ -76,9 +73,45 @@ admin.position = "ninguno"
 admin.phone = "1123452345"
 admin.admin = false
 admin.save
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
 
-admin.reload
+admin = User.new
+admin.email = "diego.groll@gmail.com"
+admin.name = "Diego Groll"
+admin.password = 'Admin123'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = false
+admin.save
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
 
+admin = User.new
+admin.email = "gbergese@gmail.com"
+admin.name = "Guillermo"
+admin.password = 'Admin123'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = false
+admin.save
+admin.update(
+  confirmed_at: Time.current # Marca el email como confirmado
+)
+
+admin = User.new
+admin.email = "angelimardbp@gmail.com"
+admin.name = "ANGELIMAR"
+admin.password = 'Admin123'
+admin.bussiness = "ninguno"
+admin.position = "ninguno"
+admin.phone = "1123452345"
+admin.admin = false
+admin.save
 admin.update(
   confirmed_at: Time.current # Marca el email como confirmado
 )

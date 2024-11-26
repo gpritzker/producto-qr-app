@@ -28,6 +28,20 @@ module Api
         end
       end
 
+      def show
+        begin
+          qr = Qr.find params[:id]
+          unless current_user.admin?
+            unless current_user.roles.where(company_id: qr.company_id).exists?
+              raise "No tiene permisos para generar DJC sobre está compañia"
+            end
+          end
+          render json: {data: qr}, status: :ok
+        rescue => e
+          render json: {message: e.message}, status: :forbidden
+        end
+      end
+
       private
 
       def qr_params

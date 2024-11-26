@@ -26,8 +26,6 @@
             <th>Dirección</th>
             <th>Contacto</th>
             <th>Rol</th>
-            <th>Estatuto</th>
-            <th>Verificada</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -53,24 +51,6 @@
                       <%= Role::role_name(company.user_role).upcase %>
                     <% end %>
                   </span>
-                </td>
-                <td class="text-center">
-                  <% if company.estatuto_file.attached? %>
-                    <a href="<%= url_for(company.estatuto_file) %>" 
-                      target="_blank" 
-                      class="btn btn-primary btn-sm d-inline-flex align-items-center">
-                      <i class="bi bi-file-earmark-text me-1"></i> Ver Estatuto
-                    </a>
-                  <% else %>
-                    <span class="badge bg-danger">NO</span>
-                  <% end %>
-                </td>
-                <td class="text-center">
-                  <% if company.verified %>
-                    <span class="badge bg-success">SI</span>
-                  <% else %>
-                    <span class="badge bg-danger">NO</span>
-                  <% end %>
                 </td>
                 <td class="text-center">
                   <%= link_to company_path(company), class: "btn btn-success btn-sm me-1" do %>

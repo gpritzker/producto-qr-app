@@ -39,7 +39,7 @@
                   <%= link_to qr_path(qr), class: "btn btn-info btn-sm me-1", target: "_blank" do %>
                     <i class="bi bi-download"></i>
                   <% end %>
-                  <%= link_to new_djc_path(company_id: qr.company_id), class: "btn btn-success btn-sm me-1" do %>
+                  <%= link_to new_djc_path(company_id: qr.company_id, qr_id: qr.id), class: "btn btn-success btn-sm me-1" do %>
                     <i class="bi bi-file-earmark-plus"></i>
                   <% end %>
                 </td>

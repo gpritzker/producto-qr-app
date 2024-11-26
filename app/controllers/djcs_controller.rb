@@ -25,6 +25,9 @@ class DjcsController < ApplicationController
     if params[:company_id].present?
       @company_id = params[:company_id]
     end
+    if params[:qr_id].present?
+      @qr_id = params[:qr_id]
+    end
   end
 
   # GET /djcs/:id/edit

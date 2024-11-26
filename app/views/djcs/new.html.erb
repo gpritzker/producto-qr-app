@@ -254,14 +254,24 @@ async function loadCompanies() {
 }
 async function loadQRs() {
   createApiResponse("info",{message: "Cargando QRs..."});
-  $('#qr').empty().append('<option value="">Seleccione un QR</option>');
-  url = "<%= qrs_api_v1_company_url(id: "__ID__") %>"
-  data = await doGet(url.replace('__ID__', $('#company').val()));
+
+  <% if @qr_id %>
+    qr = await doGet("<%= api_v1_qr_url(@qr_id) %>");
+  <% else %>
+    $('#qr').empty().append('<option value="">Seleccione un QR</option>');
+    url = "<%= qrs_api_v1_company_url(id: "__ID__") %>"
+    data = await doGet(url.replace('__ID__', $('#company').val()));
+  <% end %>
 
   cleanApiResponse();
-  $.each(data, (index, qr) => {
-    $('#qr').append('<option value="' + qr.id + '">' + qr.description + '</option>');
-  });
+  
+  <% if @qr_id %>
+    $('#qr').empty().append('<option value="' + qr.id + '">' + qr.description + '</option>');
+  <% else %>
+    $.each(data, (index, qr) => {
+      $('#qr').append('<option value="' + qr.id + '">' + qr.description + '</option>');
+    });
+  <% end %>
 }
 
 function addProductAttributes() {

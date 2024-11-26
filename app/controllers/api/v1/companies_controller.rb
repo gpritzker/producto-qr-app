@@ -14,7 +14,7 @@ module Api
       def show
         begin
           unless current_user.admin?
-            unless user.roles.where(company_id: params[:id]).exists?
+            unless current_user.roles.where(company_id: params[:id]).exists?
               raise "No tiene permisos para generar DJC sobre está compañia"
             end
           end
