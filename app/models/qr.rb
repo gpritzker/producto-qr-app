@@ -1,6 +1,6 @@
 class Qr < ApplicationRecord
-  has_one_attached :qr_image, service: :qrs
-  has_one_attached :qr_small_image, service: :qrs
+  has_one_attached :qr_image
+  has_one_attached :qr_small_image
 
   belongs_to :company
   has_many :djcs, dependent: :destroy

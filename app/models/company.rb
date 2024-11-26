@@ -1,5 +1,5 @@
 class Company < ApplicationRecord
-  has_one_attached :estatuto_file, service: :estatutos
+  has_one_attached :estatuto_file
 
   validates :cuit,
             presence: { message: "El CUIT es obligatorio" },

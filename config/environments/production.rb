@@ -35,7 +35,8 @@ Rails.application.configure do
   # yet still be able to expire them through the digest params.
   config.assets.digest = true
 
-  config.active_storage.service = :local
+  #config.active_storage.service = :local
+  config.active_storage.service = :amazon
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 

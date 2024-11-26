@@ -1,5 +1,5 @@
 class Djc < ApplicationRecord
-  has_many_attached :crs_files, service: :crs
+  has_many_attached :crs_files
 
   belongs_to :company
   belongs_to :qr

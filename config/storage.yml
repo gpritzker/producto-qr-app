@@ -1,24 +1,34 @@
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
-estatutos:
-  service: Disk
-  root: <%= Rails.root.join("storage/estatutos") %>
-dnis:
-  service: Disk
-  root: <%= Rails.root.join("storage/dnis") %>
-signatures:
-  service: Disk
-  root: <%= Rails.root.join("storage/signatures") %>
-authorizations:
-  service: Disk
-  root: <%= Rails.root.join("storage/authorizations") %>
-crs:
-  service: Disk
-  root: <%= Rails.root.join("storage/crs") %>
-djcs:
-  service: Disk
-  root: <%= Rails.root.join("storage/djcs") %>
-qrs:
-  service: Disk
-  root: <%= Rails.root.join("public/storage/qrs") %>
+# estatutos:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/estatutos") %>
+# dnis:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/dnis") %>
+# signatures:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/signatures") %>
+# authorizations:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/authorizations") %>
+# crs:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/crs") %>
+# djcs:
+#   service: Disk
+#   root: <%= Rails.root.join("storage/djcs") %>
+# qrs:
+#   service: Disk
+#   root: <%= Rails.root.join("public/storage/qrs") %>
+
+# config/storage.yml
+amazon:
+  service: S3
+  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  region: <%= ENV['AWS_REGION'] %>
+  bucket: <%= ENV['AWS_BUCKET'] %>
+  #upload:
+    #acl: 'public-read' # Cambia a 'public-read' si deseas que los archivos sean públicos

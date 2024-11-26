@@ -1,5 +1,5 @@
 class Authorization < ApplicationRecord
-  has_one_attached :authorization_file, service: :authorizations
+  has_one_attached :authorization_file
 
   belongs_to :company
   belongs_to :user

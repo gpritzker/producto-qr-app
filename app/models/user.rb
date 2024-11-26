@@ -2,8 +2,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
 
-  has_many_attached :dni_files, service: :dnis
-  has_one_attached :signature_file, service: :signatures
+  has_many_attached :dni_files
+  has_one_attached :signature_file
 
   # Relaciones
   has_many :roles
