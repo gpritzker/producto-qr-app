@@ -55,11 +55,11 @@
                   <% end %>                  
 
                   <!-- Botón Eliminar con Icono -->
-                  <% if current_user.admin? %>
-                    <%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' do %>
-                      <i class="bi bi-trash"></i> 
-                    <% end %>
-                  <% end %>
+                  <%# <% if current_user.admin? %> 
+                    <%# <%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Estás seguro?' }, class: 'btn btn-danger btn-sm' do %> 
+                      <%# <i class="bi bi-trash"></i>  %>
+                    <%# <% end %> 
+                  <%# <% end %> 
                 </td>
               </tr>
             <% end %>
