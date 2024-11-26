@@ -35,83 +35,28 @@ tipos_procedimiento.each do |nombre|
   TipoProcedimiento.find_or_create_by(nombre: nombre)
 end
 
-admin = User.new
-admin.email = "admin@admin.com"
-admin.name = "ADMINISTRADOR"
-admin.password = 'Admin123'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = true
-admin.save
+users = [
+  {email: "admin@admin.com", name: "ADMINISTRADOR"},
+  {email: "pablo.paganini@gmail.com", name: "Pablo"},
+  {email: "gjpritzker@gmail.com", name: "Gonzalo"},
+  {email: "diego.groll@gmail.com", name: "Diego Groll"},
+  {email: "gbergese@gmail.com", name: "Guillermo"},
+  {email: "angelimardbp@gmail.com", name: "ANGELIMAR"},
+]
+users.each do |u|
+  admin = User.new
+  admin.email = u[:email]
+  admin.name = u[:name]
+  admin.password = 'Admin123'
+  admin.bussiness = "ninguno"
+  admin.position = "ninguno"
+  admin.phone = "1123452345"
+  admin.admin = true
 
-admin.reload
+  admin.skip_confirmation!
+  admin.save
 
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
-
-admin = User.new
-admin.email = "pablo.paganini@gmail.com"
-admin.name = "Pablo"
-admin.password = 'Admin123'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = false
-admin.save
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
-
-admin = User.new
-admin.email = "gjpritzker@gmail.com"
-admin.name = "Gonzalo"
-admin.password = 'Milo3009#'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = false
-admin.save
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
-
-admin = User.new
-admin.email = "diego.groll@gmail.com"
-admin.name = "Diego Groll"
-admin.password = 'Admin123'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = false
-admin.save
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
-
-admin = User.new
-admin.email = "gbergese@gmail.com"
-admin.name = "Guillermo"
-admin.password = 'Admin123'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = false
-admin.save
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
-
-admin = User.new
-admin.email = "angelimardbp@gmail.com"
-admin.name = "ANGELIMAR"
-admin.password = 'Admin123'
-admin.bussiness = "ninguno"
-admin.position = "ninguno"
-admin.phone = "1123452345"
-admin.admin = false
-admin.save
-admin.update(
-  confirmed_at: Time.current # Marca el email como confirmado
-)
+  admin.update(
+    confirmed_at: Time.current # Marca el email como confirmado
+  )
+end

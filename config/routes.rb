@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get ":id", to: "qrs#details", constraints: { id: /[a-fA-F0-9]{10}/ }
+
   devise_for :users 
   
   resources :companies, except: [:destroy]
@@ -8,10 +10,10 @@ Rails.application.routes.draw do
       post :apoderar, to: "delegations#completar_apoderamiento"
     end
   end
-  get "d/:id", to: "qrs#details"
+  
   resources :qrs, only: [:index, :show]
-  resources :tipo_procedimientos, except: [:destroy]
-  resources :reglamento_tecnicos, except: [:destroy]
+  resources :tipo_procedimientos, only: [:index]
+  resources :reglamento_tecnicos, only: [:index]
   resources :djcs, only: [:index, :new, :edit, :update, :show] do
     member do
       get :certificados
@@ -41,6 +43,8 @@ Rails.application.routes.draw do
         end
       end
       resources :qrs, only: [:create, :show]
+      resources :tipo_procedimientos, only: [:create, :index, :destroy]
+      resources :reglamento_tecnicos, only: [:create, :index, :destroy]
     end
   end
   

@@ -1,29 +1,65 @@
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Reglamento tecnicos</h1>
-    <%= link_to 'Crear reglamento técnico', new_reglamento_tecnico_path, class: 'btn btn-primary' %>
+<div class="card">
+  <div class="card-header bg-light">
+      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Reglamento tecnicos</h4>
+      </div>
   </div>
+  <div class="card-body">
+    <div class="justify-content-between align-items-center mb-3">
+      <div class="input-group">
+        <input type="text" id="reglamento_tecnico-nombre" class="form-control" placeholder="Ingrese el Reglamento técnico">
+        <button class="btn btn-primary" type="button" onclick="crear()">Crear</button>
+      </div>
+    </div>
 
-  <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Reglamento</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if @reglamento_tecnicos.present? %>
-          <% @reglamento_tecnicos.each do |reglamento_tecnico| %>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th colspan="2">Reglamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @reglamento_tecnicos.present? %>
+            <% @reglamento_tecnicos.each do |reglamento_tecnico| %>
+              <tr id="reglamento-tecnico-<%= reglamento_tecnico.id %>">
+                <td><%= reglamento_tecnico.nombre %></td>    
+                <td>
+                  <button type="button" class="btn btn-sm btn-danger text-center" onclick="borrar(<%= reglamento_tecnico.id %>)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>           
+              </tr>
+            <% end %>
+          <% else %>
             <tr>
-              <td><%= reglamento_tecnico.nombre %></td>              
+              <td colspan="2" class="text-center text-muted">No hay reglamentos técnicos cargados.</td>
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td class="text-center text-muted">No hay reglamentos técnicos cargados.</td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<script>
+  async function crear() {
+    createApiResponse("info",{message: "Creando reglamento técnico..."});
+
+    const data = {
+      nombre: $("#reglamento_tecnico-nombre").val()
+    };
+
+    doPost("<%= api_v1_reglamento_tecnicos_url %>", data);
+  }
+  async function borrar(reglamentoTecnicoId) {
+    if (confirm("¿Estás seguro de que deseas eliminar este reglamento técnico?")) {
+      createApiResponse("info",{message: "Borrando reglamento técnico..."});
+      url = "<%= api_v1_reglamento_tecnico_url(id: "__ID__") %>"
+      result = await doDelete(url.replace('__ID__', reglamentoTecnicoId));
+      if(result) {
+        $(`#reglamento-tecnico-${reglamentoTecnicoId}`).remove();
+      }
+    }
+  }
+</script>

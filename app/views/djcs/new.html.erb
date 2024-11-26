@@ -85,7 +85,7 @@
           <div class="col-md-8">
             <select class="form-control" id="reglamento_tecnico">
               <option value="">Seleccione un reglamento técnico</option>
-              <% ReglamentoTecnico.all.each do |r| %>
+              <% ReglamentoTecnico.where(visible: true).each do |r| %>
                 <option value="<%= r.id %>"><%= r.nombre %></option>
               <% end %>
             </select>
@@ -99,7 +99,7 @@
           <div class="col-md-8">
             <select class="form-control" id="tipo_procedimiento">
               <option value="">Seleccione un tipo de procedimiento</option>
-              <% TipoProcedimiento.all.each do |r| %>
+              <% TipoProcedimiento.where(visible: true).each do |r| %>
                 <option value="<%= r.id %>"><%= r.nombre %></option>
               <% end %>
             </select>
