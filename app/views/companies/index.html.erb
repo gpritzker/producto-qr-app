@@ -48,7 +48,11 @@
                     <% if current_user.admin? %>  
                       ADMINISTRADOR
                     <% else %>
-                      <%= Role::role_name(company.user_role).upcase %>
+                      <% if company.user_role == Role::ROL_DELEGADO && !company.roles.apoderado.exists? %> 
+                        DELEGADO SIN AUTORIZAR
+                      <% else %>
+                        <%= Role::role_name(company.user_role).upcase %>
+                      <% end %>
                     <% end %>
                   </span>
                 </td>
