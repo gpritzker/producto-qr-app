@@ -1,7 +1,4 @@
 class Qr < ApplicationRecord
-  has_one_attached :qr_image
-  has_one_attached :qr_small_image
-
   belongs_to :company
   has_many :djcs, dependent: :destroy
   
@@ -17,29 +14,18 @@ class Qr < ApplicationRecord
             }
   
   before_validation :generate_code, :normalize_attributes
-  before_create :generate_images
 
   def url
     ENV['QR_DOMAIN']+self.code
   end
 
-  def generate_svg_big
-    RQRCode::QRCode.new(url).as_svg(
-      offset: 0,
-      color: '000',
-      shape_rendering: 'crispEdges',
+  def generate_svg
+    RQRCode::QRCode.new(url, size: 4).as_svg(
+      viewbox: true,
+      use_path: true,
+      standalone: false,
       border_modules: 0, # borde del QR
-      module_size: 3.62
-    )
-  end
-
-  def generate_svg_small
-    RQRCode::QRCode.new(url).as_svg(
-      offset: 0,
-      color: '000',
-      shape_rendering: 'crispEdges',
-      border_modules: 0, # borde del QR
-      module_size: 1.43
+      module_size: 1 # tamaño del módulo
     )
   end
 
@@ -53,81 +39,6 @@ class Qr < ApplicationRecord
     if self.code.nil?
       data = "#{Time.now.to_i}#{self.description}"
       self.code = Digest::SHA256.new.update(data).hexdigest.slice(1,10)
-    end
-  end
-
-  def generate_images
-    
-    images = [{
-        type: "big", 
-        size: 114, 
-        module_px_size: 2, 
-        image_path: "qr_big.png",
-        desplazamiento: '+17+15', 
-        qr_size: 10
-      },{
-        type: "small", 
-        size: 49, 
-        module_px_size: 1, 
-        image_path: "qr_small.png",
-        desplazamiento: '+9+9', 
-        qr_size: 8
-      }
-    ]
-    images.each do |image|
-      # 1. Generar el QR con RQRCode
-      qr_code = RQRCode::QRCode.new(url, size: image[:qr_size])
-      # 2. Convertir el QR a una imagen PNG
-      png = qr_code.as_png(
-        resize_gte_to: false,
-        resize_exactly_to: true,
-        fill: 'white',
-        color: 'black',
-        size: image[:size], # tamaño en píxeles
-        border_modules: 0, # borde del QR
-        module_px_size: image[:module_px_size] # tamaño del módulo
-      )
-
-      # 3. Guardar temporalmente el PNG
-      temp_file = Tempfile.new(['qr_code', '.png'])
-      temp_file.binmode
-      temp_file.write(png.to_s)
-      temp_file.rewind
-
-      # 4. Superponer el QR en la imagen base
-      base_image_path = Rails.root.join("app", "assets", "images", image[:image_path])
-      final_image = Tempfile.new(['final_image', '.png'])
-
-      MiniMagick::Tool::Composite.new do |composite|
-        composite.gravity 'NorthWest'   # Posición del QR (puedes cambiarlo: NorthWest, Center, etc.)
-        composite.geometry image[:desplazamiento] # Ajusta desplazamiento en X (+50) e Y (+50)
-        composite << temp_file.path     # QR (superior)
-        composite << base_image_path    # Imagen base (inferior)
-        composite << final_image.path   # Resultado final
-      end
-
-      # 5. Enviar la imagen como descarga
-      #send_data File.read(final_image.path), type: 'image/png', filename: 'final_image.png'
-      # 5. Adjuntar al modelo
-      if image[:type] == "big"
-        self.qr_image.attach(
-          io: File.open(final_image.path),
-          filename: 'final_image.png',
-          content_type: 'image/png'
-        )
-      else
-        self.qr_small_image.attach(
-          io: File.open(final_image.path),
-          filename: 'final_image.png',
-          content_type: 'image/png'
-        )
-      end
-
-      # Opcional: Limpiar archivos temporales
-      temp_file.close!
-      temp_file.unlink
-      final_image.close!
-      final_image.unlink
     end
   end
 end
