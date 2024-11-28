@@ -177,7 +177,6 @@ class Djc < ApplicationRecord
     custom_changes = {}
   
     # Cambios en `djc_file`
-    debugger
     if djc_file.attached?
       custom_changes[:djc_file] = {
         status: "Archivo adjunto",
