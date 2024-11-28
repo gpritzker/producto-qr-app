@@ -2,7 +2,6 @@ class Djc < ApplicationRecord
   has_many_attached :crs_files
   has_one_attached :djc_file
 
-  has_paper_trail
   belongs_to :company
   belongs_to :qr
   belongs_to :tipo_procedimiento
@@ -48,6 +47,25 @@ class Djc < ApplicationRecord
   validate :technical_normatives_must_be_an_array #[normativa, ...]
 
   before_validation :normalize_attributes
+  
+  has_paper_trail
+  has_paper_trail on: [:create, :update], save_changes: true
+  has_paper_trail save_changes: true
+
+  after_save :track_file_changes, if: :attachments_changed?
+
+  before_save :set_attachment_flags
+
+  attr_accessor :djc_file_changed, :crs_files_changed
+
+  def set_attachment_flags
+    self.djc_file_changed = djc_file.attached? && !djc_file.blob.nil?
+    self.crs_files_changed = crs_files.attached? && !crs_files.empty?
+  end
+
+  def attachments_changed?
+    djc_file.attached? || crs_files.attached?
+  end
   #after_save :generate_pdf
 
   # def generate_pdf
@@ -150,7 +168,65 @@ class Djc < ApplicationRecord
   end
 
   private
+
+  def track_file_changes
+    custom_changes = {}
   
+    if djc_file_changed
+      custom_changes[:djc_file] = {
+        filename: djc_file.filename.to_s,
+        content_type: djc_file.content_type,
+        byte_size: djc_file.byte_size
+      }
+    end
+  
+    if crs_files_changed
+      custom_changes[:crs_files] = crs_files.map do |file|
+        {
+          filename: file.filename.to_s,
+          content_type: file.content_type,
+          byte_size: file.byte_size
+        }
+      end
+    end
+  
+    if custom_changes.any?
+      latest_version = versions.last
+      if latest_version
+        existing_changes = latest_version.object_changes || {}
+        latest_version.update_columns(object_changes: existing_changes.merge(custom_changes).to_json)
+      end
+    end
+  end
+  
+
+  def djc_file_changes
+    if djc_file.attached?
+      {
+        status: "Archivo adjunto",
+        filename: djc_file.filename.to_s,
+        content_type: djc_file.content_type,
+        byte_size: djc_file.byte_size
+      }
+    else
+      { status: "Archivo eliminado" }
+    end
+  end
+
+  def crs_files_changes
+    if crs_files.attached?
+      crs_files.map do |file|
+        {
+          filename: file.filename.to_s,
+          content_type: file.content_type,
+          byte_size: file.byte_size
+        }
+      end
+    else
+      "Archivos eliminados"
+    end
+  end 
+   
   def product_attributes_must_be_an_array_of_hashes
     unless product_attributes.is_a?(Array) && product_attributes.size.positive?
       errors.add(:product_attributes, :invalid, message: "Debe cargar al menos una marca, modelo y características técnicas")
