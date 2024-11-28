@@ -29,7 +29,7 @@
             <label class="mr-2">Origen</label>
           </div>
           <div class="col-md-8">
-            <input class="form-control" type="text" id="origin">
+            <%= render 'origins' %>
           </div>
         </div>
         <%# Marca Registrada %>
@@ -215,6 +215,9 @@ $(document).ready(function() {
   });
   $('#qr').change(function() {
     $('#qr option[value=""]').remove();
+  });
+  $('#origin').change(function() {
+    $('#origin option[value=""]').remove();
   });
    $('#tipo_procedimiento').change(function() {
     $('#tipo_procedimiento option[value=""]').remove();

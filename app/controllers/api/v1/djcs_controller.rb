@@ -8,6 +8,7 @@ module Api
       def sign
         if @role.apoderado? 
           if @djc.update(signed_by: current_user, signed_at: Time.current)
+            @djc.generate_pdf
             render json: {message: "Se firmo exitosamente.", data: @djc}, status: :ok
           else
             messages = @djc.errors.map do |err|
@@ -24,6 +25,7 @@ module Api
       def approve
         if @role.apoderado? || @role.supervisor?
           if @djc.update(approved_by: current_user, approved_at: Time.current)
+            @djc.generate_pdf
             render json: {message: "Se aprobó exitosamente.", data: @djc}, status: :ok
           else
             messages = @djc.errors.map do |err|

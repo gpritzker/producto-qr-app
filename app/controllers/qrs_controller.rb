@@ -24,7 +24,7 @@ class QrsController < ApplicationController
   end
 
   def show
-    # render :svgs2, layout: nil
+    # render :svgs, layout: nil
 
     # Generar los dos PDFs a partir de las vistas con render_to_string
     pdf_content = render_to_string(
@@ -33,8 +33,8 @@ class QrsController < ApplicationController
       encoding: "UTF-8",
       margin: { top: 2, bottom: 0, left: 0, right: 0 },
       locals: { qr: @qr },
-      page_height: '35mm',          # Altura personalizada
-      page_width: '28mm'            # Ancho personalizado
+      page_height: '42mm',          # Altura personalizada
+      page_width: '38mm'            # Ancho personalizado
     )
   
     # Enviar el PDF como archivo descargable
