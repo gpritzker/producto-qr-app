@@ -3,6 +3,7 @@
   <ul class="list-unstyled">
     <% if current_user.admin? %>
       <li><%= link_to 'Gestión de Usuarios', admin_users_path, class: 'sidebar-link' %></li>
+      <li><%= link_to 'Auditoría de QRs', audits_qrs_path, class: 'sidebar-link' %></li>
     <% else %>
       <li><%= link_to 'Mis datos', admin_users_path, class: 'sidebar-link' %></li>
     <% end %>

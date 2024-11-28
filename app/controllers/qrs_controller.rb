@@ -1,6 +1,10 @@
 class QrsController < ApplicationController
   before_action :authenticate_user!, except: [:details]
-  before_action :set_qr, only: %i[show edit update download]
+  before_action :set_qr, only: %i[show edit update download audit_logs]
+
+  before_action do
+    PaperTrail.request.whodunnit = current_user&.id
+  end
 
   # GET /qrs
   def index
@@ -9,6 +13,14 @@ class QrsController < ApplicationController
     else
       @qrs = Qr.joins(company: :roles).where(roles: { user_id: current_user.id }).order(id: :desc)
     end
+  end
+
+  def audits
+    @qrs = Qr.joins(:versions).distinct
+  end
+
+  def audit_logs
+    @logs = @qr.versions.presence || []
   end
 
   def show

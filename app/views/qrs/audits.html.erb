@@ -1,0 +1,24 @@
+<h1>Auditoría de QRs</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Descripción</th>
+      <th>Código</th>
+      <th>Auditoría</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @qrs.each do |qr| %>
+      <tr>
+        <td><%= qr.id %></td>
+        <td><%= qr.description %></td>
+        <td><%= qr.code %></td>
+        <td>
+          <%= link_to 'Ver Auditoría', audit_logs_qr_path(qr), class: 'btn btn-primary btn-sm' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,6 +1,7 @@
 class Qr < ApplicationRecord
   belongs_to :company
   has_many :djcs, dependent: :destroy
+  has_paper_trail
   
   # Validaciones
   validates :code, presence: true

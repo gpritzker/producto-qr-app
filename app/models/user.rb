@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   has_many_attached :dni_files
   has_one_attached :signature_file
+  has_many :versions, foreign_key: :whodunnit
 
   # Relaciones
   has_many :roles
