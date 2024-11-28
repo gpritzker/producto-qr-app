@@ -48,7 +48,7 @@ class Djc < ApplicationRecord
   validate :technical_normatives_must_be_an_array #[normativa, ...]
 
   before_validation :normalize_attributes
-  after_save :generate_pdf
+  #after_save :generate_pdf
 
   # def generate_pdf
   #   nombre = "djc-#{qr.code}-#{id}"
