@@ -1,0 +1,49 @@
+<div class="card">
+  <div class="card-header bg-light">
+    <div class="card-title mb-0 d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Auditoría de DJCs</h4>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Descripción del Producto</th>
+            <th>Origen</th>
+            <th>Fabricante</th>
+            <th>Razón Social</th>
+            <th>CRs</th>
+            <th>Fecha de Creación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @djcs.empty? %>
+            <tr>
+              <td colspan="8" class="text-center text-muted">Aún no hay auditorías de DJCs.</td>
+            </tr>
+          <% else %>
+            <% @djcs.each do |djc| %>
+              <tr>
+                <td><%= djc.id %></td>
+                <td><%= djc.product_description %></td>
+                <td><%= djc.origin %></td>
+                <td><%= djc.manufacturer %></td>
+                <td><%= djc.company.name %></td>
+                <td><%= djc.crs_files.count %></td>
+                <td><%= djc.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <%= link_to audit_logs_djc_path(djc), class: 'btn btn-primary btn-sm' do %>
+                    <i class="bi bi-journal-text"></i> Ver Auditoría
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

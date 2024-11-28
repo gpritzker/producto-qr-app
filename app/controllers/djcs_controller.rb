@@ -11,6 +11,15 @@ class DjcsController < ApplicationController
     end
   end
 
+  def audits
+    @djcs = Djc.all
+  end
+
+  def audit_logs
+    @djc = Djc.find(params[:id]) # Esto debe buscar el registro con el ID proporcionado
+    @logs = @djc.versions # Obtener las versiones (auditorías) del registro
+  end
+
   def show
     if @djc.djc_file.attached?
       # Descargar el archivo adjunto desde S3

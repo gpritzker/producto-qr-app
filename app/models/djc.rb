@@ -2,6 +2,7 @@ class Djc < ApplicationRecord
   has_many_attached :crs_files
   has_one_attached :djc_file
 
+  has_paper_trail
   belongs_to :company
   belongs_to :qr
   belongs_to :tipo_procedimiento
