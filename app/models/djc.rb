@@ -210,33 +210,6 @@ class Djc < ApplicationRecord
       end
     end
   end
-  
-  # def djc_file_changes
-  #   if djc_file.attached?
-  #     {
-  #       status: "Archivo adjunto",
-  #       filename: djc_file.filename.to_s,
-  #       content_type: djc_file.content_type,
-  #       byte_size: djc_file.byte_size
-  #     }
-  #   else
-  #     { status: "Archivo eliminado" }
-  #   end
-  # end
-
-  # def crs_files_changes
-  #   if crs_files.attached?
-  #     crs_files.map do |file|
-  #       {
-  #         filename: file.filename.to_s,
-  #         content_type: file.content_type,
-  #         byte_size: file.byte_size
-  #       }
-  #     end
-  #   else
-  #     "Archivos eliminados"
-  #   end
-  # end 
    
   def product_attributes_must_be_an_array_of_hashes
     unless product_attributes.is_a?(Array) && product_attributes.size.positive?

@@ -1,5 +1,3 @@
-<h1>Auditoría de DJC: <%= @djc.product_description %></h1>
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -10,43 +8,51 @@
     </tr>
   </thead>
   <tbody>
-    <% @logs.each do |log| %>
-      <tr>
-        <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
-        <td>
-          <%= User.find_by(id: log.whodunnit)&.email || 'Usuario desconocido' %>
-        </td>
-        <td><%= log.event.capitalize %></td>
-        <td>
-          <% if log.object_changes.present? %>
-            <% safe_load_yaml(log.object_changes).each do |field, values| %>
-              <strong><%= field.to_s.humanize %>:</strong><br>
-              <% if field == "djc_file" && values.is_a?(Hash) %>
-                Estado: <%= values[:status] %><br>
-                Nombre: <%= values[:filename] %><br>
-                Tipo: <%= values[:content_type] %><br>
-                Tamaño: <%= number_to_human_size(values[:byte_size]) %><br>
-              <% elsif field == "crs_files" && values.is_a?(Array) %>
-                <% values.each do |file| %>
-                  <strong>Archivo:</strong><br>
-                  Nombre: <%= file[:filename] %><br>
-                  Tipo: <%= file[:content_type] %><br>
-                  Tamaño: <%= number_to_human_size(file[:byte_size]) %><br>
-                  <hr>
-                <% end %>
-              <% else %>
-                <% if values.is_a?(Array) %>
-                  <%= values[0] || 'N/A' %> → <%= values[1] || 'N/A' %>
+    <% if @logs.present? %>
+      <% @logs.each do |log| %>
+        <tr>
+          <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          <td><%= User.find_by(id: log.whodunnit)&.email || "Usuario desconocido" %></td>
+          <td><%= log.event.capitalize %></td>
+          <td>
+            <% if log.object_changes.present? %>
+              <% changes = JSON.parse(log.object_changes) %>
+              <% changes.each do |field, values| %>
+                <% if field == "djc_file" %>
+                  <strong>Archivo DJC:</strong><br>
+                  Estado: <%= values["status"] %><br>
+                  Nombre: <%= values["filename"].presence || "N/A" %><br>
+                  Tipo: <%= values["content_type"].presence || "N/A" %><br>
+                  Tamaño: <%= values["byte_size"].present? ? number_to_human_size(values["byte_size"]) : "N/A" %><br><br>
+                <% elsif field == "crs_files" %>
+                  <strong>Archivos CRS:</strong><br>
+                  <% if values.is_a?(Array) %>
+                    <% values.each do |file| %>
+                      Nombre: <%= file["filename"].presence || "N/A" %><br>
+                      Tipo: <%= file["content_type"].presence || "N/A" %><br>
+                      Tamaño: <%= file["byte_size"].present? ? number_to_human_size(file["byte_size"]) : "N/A" %><br><br>
+                    <% end %>
+                  <% else %>
+                    <em><%= values %></em>
+                  <% end %>
                 <% else %>
-                  <%= values %>
+                  <strong><%= field.to_s.humanize %>:</strong>
+                  <% if values.is_a?(Array) %>
+                    <%= values[0].presence || "N/A" %> → <%= values[1].presence || "N/A" %><br>
+                  <% else %>
+                    <%= values.presence || "N/A" %><br>
+                  <% end %>
                 <% end %>
               <% end %>
-              <br>
+            <% else %>
+              <em>No hay cambios registrados</em>
             <% end %>
-          <% else %>
-            Sin cambios registrados
-          <% end %>
-        </td>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4" class="text-center text-muted">No hay registros de auditoría</td>
       </tr>
     <% end %>
   </tbody>
