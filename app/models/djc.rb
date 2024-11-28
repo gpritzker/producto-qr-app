@@ -1,5 +1,6 @@
 class Djc < ApplicationRecord
   has_many_attached :crs_files
+  has_one_attached :djc_file
 
   belongs_to :company
   belongs_to :qr
@@ -48,44 +49,94 @@ class Djc < ApplicationRecord
   before_validation :normalize_attributes
   after_save :generate_pdf
 
+  # def generate_pdf
+  #   nombre = "djc-#{qr.code}-#{id}"
+  #   # Generar el PDF como un string binario
+  #   controller = ActionController::Base.new
+  #   pdf_content = controller.render_to_string(
+  #     pdf: nombre, # Nombre del archivo
+  #     template: "djcs/show",       # Vista para el PDF
+  #     encoding: "UTF-8",
+  #     margin: { top: 10, bottom: 10, left: 10, right: 10 },
+  #     locals: { djc: self },
+  #     page_size: "A4" # Usa un tamaño de página estándar
+  #   )
+    
+  #   # Definir el path donde se guardará el archivo
+  #   if signed_by.present?
+  #     file_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
+  #   else  
+  #     file_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
+  #   end  
+
+  #   # Crear el directorio si no existe
+  #   FileUtils.mkdir_p(File.dirname(file_path))
+
+  #   # Guardar el contenido del PDF en un archivo
+  #   File.open(file_path, 'ab') do |file|
+  #     file.write(pdf_content)
+  #   end
+
+  #   # Agrego la marca de agua
+  #   unless signed_by.present?
+  #     watermark_pdf_path = Rails.root.join("app", "assets", "watermark.pdf")
+  #     main_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
+  #     output_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
+  #     system("rm #{output_pdf_path}")
+  #     system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{main_pdf_path} #{output_pdf_path}")
+  #     system("rm #{main_pdf_path}")
+  #   end    
+  # end
+
   def generate_pdf
     nombre = "djc-#{qr.code}-#{id}"
+    
     # Generar el PDF como un string binario
     controller = ActionController::Base.new
     pdf_content = controller.render_to_string(
-      pdf: nombre, # Nombre del archivo
-      template: "djcs/show",       # Vista para el PDF
+      pdf: nombre,               # Nombre del archivo
+      template: "djcs/show",      # Vista para el PDF
       encoding: "UTF-8",
       margin: { top: 10, bottom: 10, left: 10, right: 10 },
       locals: { djc: self },
-      page_size: "A4" # Usa un tamaño de página estándar
+      page_size: "A4"            # Usa un tamaño de página estándar
     )
-    
-    # Definir el path donde se guardará el archivo
-    if signed_by.present?
-      file_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
-    else  
-      file_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
-    end  
-
-    # Crear el directorio si no existe
-    FileUtils.mkdir_p(File.dirname(file_path))
-
-    # Guardar el contenido del PDF en un archivo
-    File.open(file_path, 'ab') do |file|
-      file.write(pdf_content)
-    end
-
-    # Agrego la marca de agua
+  
+    # Definir el nombre del archivo
+    file_name = "#{nombre}.pdf"
+  
+    # Agrego la marca de agua si es necesario
     unless signed_by.present?
       watermark_pdf_path = Rails.root.join("app", "assets", "watermark.pdf")
-      main_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}-tmp.pdf")
-      output_pdf_path = Rails.root.join("public", "pdfs", "#{nombre}.pdf")
-      system("rm #{output_pdf_path}")
+      main_pdf_path = Rails.root.join("tmp", "#{file_name}-tmp.pdf")
+      output_pdf_path = Rails.root.join("tmp", file_name)
+  
+      # Guardar el contenido en un archivo temporal
+      File.open(main_pdf_path, 'wb') do |file|
+        file.write(pdf_content)
+      end
+  
+      # Aplicar marca de agua
       system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{main_pdf_path} #{output_pdf_path}")
       system("rm #{main_pdf_path}")
-    end    
-  end
+    else
+      # Si ya está firmado, solo guardamos el PDF sin marca de agua
+      output_pdf_path = Rails.root.join("tmp", file_name)
+      File.open(output_pdf_path, 'wb') do |file|
+        file.write(pdf_content)
+      end
+    end
+  
+    # Subir el archivo PDF a ActiveStorage (Amazon S3)
+    file = File.open(output_pdf_path)
+  
+    # Crear el attachment en ActiveStorage
+    self.djc_file.attach(io: file, filename: file_name, content_type: 'application/pdf')
+  
+    # Eliminar el archivo temporal después de cargarlo a S3
+    file.close
+    File.delete(output_pdf_path) if File.exist?(output_pdf_path)
+  end 
 
   def can_approve?
     return true if approved_by.nil?

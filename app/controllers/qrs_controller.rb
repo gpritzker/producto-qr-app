@@ -1,6 +1,6 @@
 class QrsController < ApplicationController
   before_action :authenticate_user!, except: [:details]
-  before_action :set_qr, only: %i[show edit update download audit_logs]
+  before_action :set_qr, only: %i[show audit_logs]
 
   before_action do
     PaperTrail.request.whodunnit = current_user&.id
@@ -24,16 +24,17 @@ class QrsController < ApplicationController
   end
 
   def show
-    # render :qrbig, layout: nil
+    # render :svgs2, layout: nil
 
     # Generar los dos PDFs a partir de las vistas con render_to_string
     pdf_content = render_to_string(
       pdf: @qr.description,         # Nombre del archivo
       template: "qrs/svgs",        # Vista para el PDF
       encoding: "UTF-8",
+      margin: { top: 2, bottom: 0, left: 0, right: 0 },
       locals: { qr: @qr },
-      page_height: '50mm',          # Altura personalizada
-      page_width: '40mm'            # Ancho personalizado
+      page_height: '35mm',          # Altura personalizada
+      page_width: '28mm'            # Ancho personalizado
     )
   
     # Enviar el PDF como archivo descargable
@@ -42,20 +43,6 @@ class QrsController < ApplicationController
               type: "application/pdf",
               disposition: "attachment" # Forzar descarga
     
-  end
-
-  # GET /qrs/1/edit
-  def edit
-  end
-
-  # PATCH/PUT /qrs/1
-  def update
-    if @qr.update(qr_params)
-      redirect_to qrs_url, notice: "QR actualizado exitosamente."
-    else
-      format.html { render :edit, status: :unprocessable_entity }
-      format.json { render json: @qr.errors, status: :unprocessable_entity }
-    end
   end
 
   def details

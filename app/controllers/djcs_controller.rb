@@ -12,18 +12,14 @@ class DjcsController < ApplicationController
   end
 
   def show
-    file_path = Rails.root.join("public", "pdfs", "djc-#{@djc.qr.code}-#{@djc.id}.pdf")
-
-    if File.exist?(file_path)
-      send_file(
-        file_path,
-        type: 'application/pdf',
-        disposition: 'inline'
-      )
+    if @djc.djc_file.attached?
+      # Descargar el archivo adjunto desde S3
+      redirect_to rails_blob_url(@djc.djc_file, disposition: "attachment")
     else
+      # Si no hay archivo adjunto, manejar el error
       logger.warn "Archivo PDF faltante para DJC con ID #{@djc.id} y código #{@djc.qr.code}"
       flash[:alert] = "El documento solicitado no está disponible en este momento."
-      redirect_to djcs_path # Redirecciona al índice de DJCs en la misma pestaña
+      redirect_to djcs_path
     end
   end
 
