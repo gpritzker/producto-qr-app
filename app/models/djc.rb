@@ -48,11 +48,11 @@ class Djc < ApplicationRecord
 
   before_validation :normalize_attributes
   
-  has_paper_trail
+  
   has_paper_trail on: [:create, :update], save_changes: true
-  has_paper_trail save_changes: true
 
   after_save :track_file_changes, if: :attachments_changed?
+  
 
   before_save :set_attachment_flags
 
@@ -64,7 +64,7 @@ class Djc < ApplicationRecord
   end
 
   def attachments_changed?
-    djc_file.attached? || crs_files.attached?
+    crs_files.attached?
   end
   #after_save :generate_pdf
 
@@ -174,6 +174,7 @@ class Djc < ApplicationRecord
   end
 
   def track_file_changes
+    return unless attachments_changed?
     custom_changes = {}
   
     # Cambios en `djc_file`
