@@ -1,66 +1,53 @@
-<div class="card">
-  <div class="card-header bg-light">
-    <div class="card-title mb-0 d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">Auditoría de DJC: <%= @djc.id %></h4>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered table-hover align-middle">
-        <thead class="table-dark">
-          <tr>
-            <th>Fecha</th>
-            <th>Usuario</th>
-            <th>Evento</th>
-            <th>Cambios</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if @logs.empty? %>
-            <tr>
-              <td colspan="4" class="text-center text-muted">Aún no hay registros de auditoría.</td>
-            </tr>
-          <% else %>
-            <% @logs.each do |log| %>
-              <tr>
-                <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
-                <td>
-                  <%= User.find_by(id: log.whodunnit)&.email || "Usuario desconocido" %>
-                </td>
-                <td><%= log.event.capitalize %></td>
-                <td>
-                  <% if log.object_changes.present? %>
-                    <% JSON.parse(log.object_changes).each do |field, values| %>
-                      <strong><%= field.to_s.humanize %>:</strong>
-                      <% if field == "djc_file" && values.is_a?(Hash) %>
-                        <br>
-                        <strong>Estado:</strong> <%= values["status"] %><br>
-                        <strong>Nombre:</strong> <%= values["filename"] %><br>
-                        <strong>Tipo:</strong> <%= values["content_type"] %><br>
-                        <strong>Tamaño:</strong> <%= number_to_human_size(values["byte_size"]) %><br>
-                      <% elsif field == "crs_files" && values.is_a?(Array) %>
-                        <% values.each do |file| %>
-                          <br>
-                          <strong>Nombre:</strong> <%= file["filename"] %><br>
-                          <strong>Tipo:</strong> <%= file["content_type"] %><br>
-                          <strong>Tamaño:</strong> <%= number_to_human_size(file["byte_size"]) %><br>
-                        <% end %>
-                      <% elsif values.is_a?(Array) %>
-                        <%= values[0] || 'N/A' %> → <%= values[1] || 'N/A' %>
-                      <% else %>
-                        <%= values %>
-                      <% end %>
-                      <br>
-                    <% end %>
-                  <% else %>
-                    <em>No hay cambios registrados</em>
-                  <% end %>
-                </td>
-              </tr>
+<h1>Auditoría de DJC: <%= @djc.product_description %></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Usuario</th>
+      <th>Evento</th>
+      <th>Cambios</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @logs.each do |log| %>
+      <tr>
+        <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+        <td>
+          <%= User.find_by(id: log.whodunnit)&.email || 'Usuario desconocido' %>
+        </td>
+        <td><%= log.event.capitalize %></td>
+        <td>
+          <% if log.object_changes.present? %>
+            <% safe_load_yaml(log.object_changes).each do |field, values| %>
+              <strong><%= field.to_s.humanize %>:</strong><br>
+              <% if field == "djc_file" && values.is_a?(Hash) %>
+                Estado: <%= values[:status] %><br>
+                Nombre: <%= values[:filename] %><br>
+                Tipo: <%= values[:content_type] %><br>
+                Tamaño: <%= number_to_human_size(values[:byte_size]) %><br>
+              <% elsif field == "crs_files" && values.is_a?(Array) %>
+                <% values.each do |file| %>
+                  <strong>Archivo:</strong><br>
+                  Nombre: <%= file[:filename] %><br>
+                  Tipo: <%= file[:content_type] %><br>
+                  Tamaño: <%= number_to_human_size(file[:byte_size]) %><br>
+                  <hr>
+                <% end %>
+              <% else %>
+                <% if values.is_a?(Array) %>
+                  <%= values[0] || 'N/A' %> → <%= values[1] || 'N/A' %>
+                <% else %>
+                  <%= values %>
+                <% end %>
+              <% end %>
+              <br>
             <% end %>
+          <% else %>
+            Sin cambios registrados
           <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
