@@ -1,7 +1,15 @@
 class DjcsController < ApplicationController
   before_action :authenticate_user!  # Asegura que el usuario esté autenticado
   before_action :set_djc, only: %i[show edit update destroy certificados save_certificados]
+  before_action :set_paper_trail_user
 
+  def set_paper_trail_user
+    PaperTrail.request.whodunnit = current_user&.id
+  end
+  
+  before_action do
+    PaperTrail.request.whodunnit = current_user&.id
+  end
   # GET /djcs
   def index
     if current_user.admin?
@@ -9,6 +17,15 @@ class DjcsController < ApplicationController
     else
       @djcs = User.djcs_with_role(current_user.id)
     end
+  end
+
+  def audits
+    @djcs = Djc.all
+  end
+
+  def audit_logs
+    @djc = Djc.find(params[:id]) # Esto debe buscar el registro con el ID proporcionado
+    @logs = @djc.versions # Obtener las versiones (auditorías) del registro
   end
 
   def show

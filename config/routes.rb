@@ -8,6 +8,15 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :djcs do
+    collection do
+      get :audits # Ruta para la vista de auditoría
+    end
+    member do
+      get :audit_logs # Ruta para la auditoría de un registro específico
+    end
+  end
+
   get ":id", to: "qrs#details", constraints: { id: /[a-fA-F0-9]{10}/ }
 
   devise_for :users 

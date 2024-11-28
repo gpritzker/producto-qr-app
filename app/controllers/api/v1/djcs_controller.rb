@@ -38,6 +38,7 @@ module Api
 
       def create
         begin
+          PaperTrail.request.whodunnit = current_user.id if current_user.present?
           @djc = Djc.new(djcs_params)
           @djc.creator = current_user
           unless @djc.save
@@ -46,6 +47,7 @@ module Api
             end
             return render json: {messages: messages}, status: :unprocessable_entity
           end
+          @djc.generate_pdf
           render json: {message: "DJC creada exitosamente", data: @djc}, status: :ok
         rescue => e
           logger.error e.message

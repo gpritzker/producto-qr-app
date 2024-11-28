@@ -1,0 +1,30 @@
+<h1>Auditoría de DJC: <%= @djc.id %></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Usuario</th>
+      <th>Evento</th>
+      <th>Cambios</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @logs.each do |log| %>
+      <tr>
+        <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+        <td><%= User.find_by(id: log.whodunnit)&.email || 'Usuario desconocido' %></td>
+        <td><%= log.event.capitalize %></td>
+        <td>
+          <% if log.changeset.present? %>
+            <% log.changeset.each do |field, values| %>
+              <strong><%= field %>:</strong> <%= values[0] || 'N/A' %> → <%= values[1] || 'N/A' %><br>
+            <% end %>
+          <% else %>
+            <em>Sin cambios registrados</em>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

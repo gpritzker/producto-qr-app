@@ -2,6 +2,7 @@ class Djc < ApplicationRecord
   has_many_attached :crs_files
   has_one_attached :djc_file
 
+  has_paper_trail
   belongs_to :company
   belongs_to :qr
   belongs_to :tipo_procedimiento
@@ -47,7 +48,7 @@ class Djc < ApplicationRecord
   validate :technical_normatives_must_be_an_array #[normativa, ...]
 
   before_validation :normalize_attributes
-  after_save :generate_pdf
+  #after_save :generate_pdf
 
   # def generate_pdf
   #   nombre = "djc-#{qr.code}-#{id}"
