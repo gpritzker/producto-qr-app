@@ -4,6 +4,7 @@ module Api
       
       def create
         begin
+          PaperTrail.request.whodunnit = current_user.id if current_user.present?
           # Primero hay que verificar que pueda crear un QR para esta compañia
           unless current_user.admin?
             unless  User.joins(:roles => :company).

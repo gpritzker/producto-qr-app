@@ -1,0 +1,38 @@
+<h1>Auditoría de QR: <%= @qr.description %></h1>
+
+<table class="table table-bordered table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th>Fecha</th>
+      <th>Usuario</th>
+      <th>Evento</th>
+      <th>Cambios</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @logs.any? %>
+      <% @logs.each do |log| %>
+        <tr>
+          <td><%= log.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+          <td><%= User.find_by(id: log.whodunnit)&.email || 'Sistema' %></td>
+          <td><%= log.event.capitalize %></td>
+          <td>
+            <% if log.changeset.present? %>
+              <ul>
+                <% log.changeset.each do |field, values| %>
+                  <li><strong><%= field %>:</strong> <%= values[0] || 'N/A' %> → <%= values[1] || 'N/A' %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <em>Sin cambios registrados</em>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4" class="text-center">No hay registros de auditoría para este QR.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

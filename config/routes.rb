@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  resources :qrs, only: [:index, :show] do
+    collection do
+      get :audits
+    end
+    member do
+      get :audit_logs
+    end
+  end
+  
   get ":id", to: "qrs#details", constraints: { id: /[a-fA-F0-9]{10}/ }
 
   devise_for :users 
