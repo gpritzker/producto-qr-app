@@ -16,7 +16,7 @@ class QrsController < ApplicationController
   end
 
   def audits
-    @qrs = Qr.joins(:versions).distinct
+    @qrs = Qr.joins(:versions).distinct.order(id: :desc)
   end
 
   def audit_logs

@@ -20,7 +20,7 @@ class DjcsController < ApplicationController
   end
 
   def audits
-    @djcs = Djc.all
+    @djcs = Djc.joins(:versions).distinct.order(id: :desc)
   end
 
   def audit_logs
