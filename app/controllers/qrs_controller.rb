@@ -31,10 +31,10 @@ class QrsController < ApplicationController
       pdf: @qr.description,         # Nombre del archivo
       template: "qrs/svgs",        # Vista para el PDF
       encoding: "UTF-8",
-      margin: { top: 2, bottom: 0, left: 0, right: 0 },
+      margin: { top: 10, bottom: 0, left: 10, right: 0 },
       locals: { qr: @qr },
-      page_height: '42mm',          # Altura personalizada
-      page_width: '38mm'            # Ancho personalizado
+      page_height: '62mm',          # Altura personalizada
+      page_width: '58mm'            # Ancho personalizado
     )
   
     # Enviar el PDF como archivo descargable
