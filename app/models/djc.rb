@@ -168,13 +168,57 @@ class Djc < ApplicationRecord
   end
 
   private
+
+  def crs_files_attachments_changed?
+    saved_change_to_association?(:crs_files)
+  end
   
   def safe_load_yaml(yaml_data)
     YAML.safe_load(yaml_data, [ActiveSupport::TimeWithZone], aliases: true) || {}
   end
 
+  # def track_file_changes
+  #   return unless attachments_changed?
+  #   custom_changes = {}
+  
+  #   # Cambios en `djc_file`
+  #   if djc_file.attached?
+  #     custom_changes[:djc_file] = {
+  #       status: "Archivo adjunto",
+  #       filename: djc_file.filename.to_s,
+  #       content_type: djc_file.content_type,
+  #       byte_size: djc_file.byte_size
+  #     }
+  #   else
+  #     custom_changes[:djc_file] = { status: "Archivo eliminado" }
+  #   end
+  
+  #   # Cambios en `crs_files`
+  #   if crs_files.attached?
+  #     custom_changes[:crs_files] = crs_files.map do |file|
+  #       {
+  #         filename: file.filename.to_s,
+  #         content_type: file.content_type,
+  #         byte_size: file.byte_size
+  #       }
+  #     end
+  #   else
+  #     custom_changes[:crs_files] = "Archivos eliminados"
+  #   end
+  
+  #   # Guarda los cambios personalizados en `object_changes`
+  #   if custom_changes.any?
+  #     latest_version = versions.last
+  #     if latest_version
+  #       existing_changes = latest_version.object_changes.present? ? YAML.safe_load(latest_version.object_changes, permitted_classes: [ActiveSupport::TimeWithZone], aliases: true) : {}
+  #       latest_version.update_columns(object_changes: existing_changes.merge(custom_changes).to_json)
+  #     end
+  #   end
+  # end
+
   def track_file_changes
     return unless attachments_changed?
+  
     custom_changes = {}
   
     # Cambios en `djc_file`
@@ -191,15 +235,14 @@ class Djc < ApplicationRecord
   
     # Cambios en `crs_files`
     if crs_files.attached?
-      custom_changes[:crs_files] = crs_files.map do |file|
-        {
-          filename: file.filename.to_s,
-          content_type: file.content_type,
-          byte_size: file.byte_size
-        }
-      end
+      latest_file = crs_files.last
+      custom_changes[:crs_files] = {
+        filename: latest_file.filename.to_s,
+        content_type: latest_file.content_type,
+        byte_size: latest_file.byte_size
+      }
     else
-      custom_changes[:crs_files] = "Archivos eliminados"
+      custom_changes[:crs_files] = { status: "Archivos eliminados" }
     end
   
     # Guarda los cambios personalizados en `object_changes`
@@ -211,6 +254,7 @@ class Djc < ApplicationRecord
       end
     end
   end
+   
    
   def product_attributes_must_be_an_array_of_hashes
     unless product_attributes.is_a?(Array) && product_attributes.size.positive?
