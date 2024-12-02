@@ -20,6 +20,9 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary' # Incluye el binario para wkhtmltopdf
 gem 'aws-sdk-s3', require: false
 gem 'paper_trail', '~> 12.0'
+gem 'elasticsearch', '~> 7.17'
+gem 'elasticsearch-model', '~> 7.1'
+gem 'elasticsearch-rails', '~> 7.1'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views

@@ -25,3 +25,7 @@ public/assets/*
 
 # Ignore database files
 db/*.sqlite3
+# Ignore vendor bundle
+vendor/bundle
+
+
