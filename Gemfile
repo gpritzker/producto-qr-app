@@ -17,12 +17,12 @@ gem 'rails', '~> 7.0.6'
 gem 'sassc-rails', '>= 2.1.0'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary' # Incluye el binario para wkhtmltopdf
 gem 'aws-sdk-s3', require: false
 gem 'paper_trail', '~> 12.0'
 gem 'elasticsearch', '~> 7.17'
 gem 'elasticsearch-model', '~> 7.1'
 gem 'elasticsearch-rails', '~> 7.1'
+gem 'wkhtmltopdf-binary-edge'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views

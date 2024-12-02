@@ -44,6 +44,7 @@ class QrsController < ApplicationController
               disposition: "attachment" # Forzar descarga
     
   end
+  
 
   def details
     @qr = Qr.find_by_code(params[:id])
