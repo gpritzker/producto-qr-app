@@ -273,7 +273,7 @@ GEM
     wicked_pdf (2.8.2)
       activesupport
       ostruct
-    wkhtmltopdf-binary-edge (0.12.6.0)
+    wkhtmltopdf-binary (0.12.6.8)
     zeitwerk (2.6.18)
 
 PLATFORMS
@@ -304,7 +304,7 @@ DEPENDENCIES
   sprockets-rails
   web-console (~> 4.0)
   wicked_pdf
-  wkhtmltopdf-binary-edge
+  wkhtmltopdf-binary
 
 RUBY VERSION
    ruby 3.1.2p20

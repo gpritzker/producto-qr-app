@@ -1,3 +1,3 @@
 WickedPdf.config ||= {
-  exe_path: Gem.bin_path('wkhtmltopdf-binary-edge', 'wkhtmltopdf')
+  exe_path: Gem.bin_path('wkhtmltopdf-binary', 'wkhtmltopdf')
 }
