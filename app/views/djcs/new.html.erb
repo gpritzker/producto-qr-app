@@ -110,6 +110,14 @@
         <div class="card-header bg-light">
           <div class="card-title mb-0 d-flex justify-content-between align-items-center">
             <h6 class="mb-0">Características Técnicas</h6>
+            <!-- Los botones alineados a la derecha -->
+            <div class="ms-auto d-flex">
+              <%= link_to 'Descargar Ejemplo', '/Marca Modelo Caracteristicas Tecnicas.xlsx', class: 'btn btn-secondary btn-sm me-2 mb-0', download: 'Marca Modelo Caracteristicas Tecnicas.xlsx' %>
+              <input type="file" id="product_attributes_fileInput" accept=".xlsx, .xls" class="form-control d-none">
+              <button class="btn btn-primary btn-sm mb-0"  onclick="cargarCaracteristicasTecnicas()">
+                <i class="bi bi-upload me-2"></i>Cargar Excel
+              </button>
+            </div>
           </div>
         </div>
         <div class="card-body p-2">
@@ -199,8 +207,6 @@
   </div>
 </div>
 
-
-
 <script>
 $(document).ready(function() {
   // Mostrar el mensaje de "Cargando compañías..." al inicio
@@ -224,6 +230,57 @@ $(document).ready(function() {
   });
    $('#reglamento_tecnico').change(function() {
     $('#reglamento_tecnico option[value=""]').remove();
+  });
+  $("#product_attributes_fileInput").change(function(event){
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+            
+      // Leer la primera hoja
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+
+      // Convertir hoja a JSON
+      let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      $('#product_attributes_fileInput').val('');
+      // Analizo la cabecera
+      if(jsonData[0].length != 3) {
+        createApiResponse("warning",{messages: [
+          "La cabecera del excel no es válida! Debe contener unicamente Marca, Modelo y Característica Técnica",
+          "Descargue el excel de ejemplo para tener una referencia de como cargar los datos"
+        ]});
+        return;
+      }
+      // Saco la cabecera
+      jsonData.shift();
+      // Tomo solo las columnas que tengan 3 items
+      jsonData = $.grep(jsonData, function(subArray) {
+        if(subArray.length === 3)
+          return subArray;
+      });
+      $.each(jsonData, (index, values) => {
+        // Crear una nueva fila con los valores
+        const id = `product-attribute-${$('#product_attributes tbody tr').length}`
+        const newRow = `
+          <tr id="${id}">
+            <td class="align-middle">${values[0]}</td>
+            <td class="align-middle">${values[1]}</td>
+            <td class="align-middle">${values[2]}</td>
+            <td class="d-flex justify-content-end">
+              <button type="button" class="btn btn-danger" onclick="delTableRow('${id}')">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+        // Agregar la fila al cuerpo de la tabla
+        $("#product_attributes tbody").append(newRow);
+      });
+    };
+    reader.readAsArrayBuffer(file);
   });
 
   // Hacer la solicitud fetch a la API para obtener las compañías
@@ -429,5 +486,8 @@ async function enviar(data) {
     url = "<%= certificados_djc_url(id: "__ID__")%>"
     location.href = url.replace('__ID__', djc.id);
   }
+}
+function cargarCaracteristicasTecnicas() {
+  $("#product_attributes_fileInput").click();
 }
 </script>
