@@ -2,26 +2,24 @@ source 'https://rubygems.org'
 ruby '3.1.2'
 
 gem 'active_storage_validations'
-
+gem 'aws-sdk-s3', require: false
 gem 'devise'
 gem 'dotenv-rails' # Variables de entorno locales
-gem 'jquery-rails'
-gem 'hexapdf'
-gem 'pg', '>= 1.1'
-gem 'sprockets-rails'
-gem 'rqrcode'
-gem "puma"
-gem 'json', '>= 2.0'
-gem 'mini_magick'
-gem 'rails', '~> 7.0.6'
-gem 'sassc-rails', '>= 2.1.0'
-gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
-gem 'wicked_pdf'
-gem 'aws-sdk-s3', require: false
-gem 'paper_trail', '~> 12.0'
 gem 'elasticsearch', '~> 7.17'
 gem 'elasticsearch-model', '~> 7.1'
 gem 'elasticsearch-rails', '~> 7.1'
+gem 'hexapdf'
+gem 'jquery-rails'
+gem 'json', '>= 2.0'
+gem 'mini_magick'
+gem 'paper_trail', '~> 12.0'
+gem 'pg', '>= 1.1'
+gem "puma"
+gem 'rails', '~> 7.0.6'
+gem 'rqrcode'
+gem 'sprockets-rails'
+gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
+gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
 group :development do
