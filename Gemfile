@@ -20,11 +20,11 @@ gem 'rqrcode'
 gem 'sprockets-rails'
 gem 'spring', '>= 3.1.0' # Asegura una versión compatible de Spring
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'byebug'
-  gem 'web-console', '~> 4.0'
   gem 'letter_opener'
+  gem 'web-console', '~> 4.0'
+  gem 'wkhtmltopdf-binary'
 end
