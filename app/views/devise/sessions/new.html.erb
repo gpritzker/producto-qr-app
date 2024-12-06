@@ -1,73 +1,109 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="text-center mb-4">
-        <h2 style="color: #2E6A9C;">¡Bienvenido a QAR!</h2>
-        <p style="color: #8BAAC6;">Es la gestión de los QRs para sus productos.</p>
-      </div>
-      <div class="card shadow-sm border-light">
-        <div class="card-header text-center" style="background-color: #2E6A9C; color: #FFFFFF;">
-          <h4 class="mb-0">Iniciar sesión</h4>
+<div class="login-body">
+  <main class="login-main">
+    <div class="login-container">
+      <%= image_tag "logo-qar.svg", class: "login-logo" %>
+      <h2>
+          Gestión de QRs para tus proyectos
+      </h2>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <%= f.email_field :email, id: "email", autofocus: true, required: true %>
         </div>
-        <div class="card-body">
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <!-- Email Field -->
-            <div class="form-group mb-3">
-              <%= f.label :email, class: "form-label" %>
-              <div class="input-group">
-                <span class="input-group-text" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
-                  <i class="bi bi-envelope"></i>
-                </span>
-                <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Correo electrónico", style: "border: 1px solid #D1E3F2;" %>
-              </div>
-            </div>
-
-            <!-- Password Field -->
-            <div class="form-group mb-3">
-              <%= f.label :password, class: "form-label" %>
-              <div class="input-group">
-                <span class="input-group-text" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
-                  <i class="bi bi-lock"></i>
-                </span>
-                <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Contraseña", style: "border: 1px solid #D1E3F2;" %>
-              </div>
-            </div>
-
-            <!-- Remember Me -->
-            <div class="form-check mb-3">
-              <%= f.check_box :remember_me, class: "form-check-input" %>
-              <%= f.label :remember_me, "Recuérdame", class: "form-check-label" %>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="d-grid">
-              <%= f.submit "Iniciar sesión", class: "btn btn-lg", style: "background-color: #2E6A9C; color: #FFFFFF; border: none;" %>
-            </div>
-          <% end %>
-
-          <!-- Links for Sign Up and Forgot Password -->
-          <div class="text-center mt-3">
-              <%= link_to "¿No tienes cuenta? Regístrate", new_registration_path(resource_name), class: "btn btn-link", style: "color: #2E6A9C;" %>
-              <br>
-              <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "btn btn-link", style: "color: #2E6A9C;" %>
-          </div>
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <%= f.password_field :password, id: "password", autocomplete: "off", required: true %>
         </div>
-      </div>
-
-      <!-- Why Use QAR -->
-      <div class="card mt-4 shadow-sm">
-        <div class="card-body" style="background-color: #EFF6FB; border: 1px solid #D1E3F2;">
-          <h5 class="card-title" style="color: #2E6A9C;">¿Por qué usar QAR?</h5>
-          <ul style="color: #2E6A9C;">
-            <li>Gestión eficiente de tus datos.</li>
-            <li>Acceso desde cualquier dispositivo.</li>
-            <li>Soporte técnico 24/7.</li>
-          </ul>
+        <div class="remember-me">
+            <input class="checkbox" type="checkbox" id="remember"><!-- añadir cookies de recuerdo -->
+            <label>Recuérdame</label>
         </div>
-      </div>
+        <button type="submit">Iniciar sesión</button> <!-- ejecutar accion y redireccionamiento a mis datos -->
+        <div class="links">
+            <span class="login-normal">¿No tienes cuenta?</span>
+            <%= link_to "Regístrate", new_registration_path(resource_name), class: "register" %>
+            <br>
+            <%= link_to "He olvidado mi contraseña", new_password_path(resource_name), class: "forgot-password" %>
+        </div>
+      <% end %>
     </div>
-  </div>
-  <footer class="text-center mt-5" style="color: #8BAAC6;">
-    © 2024 QAR. Todos los derechos reservados. <a href="#" style="color: #2E6A9C;">Términos</a> | <a href="#" style="color: #2E6A9C;">Política de privacidad</a>
+  </main>
+  <footer class="footer">
+      <div class="footer-content">
+          <div class="swiper mySwiper">
+              <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <%= image_tag "apartment-outlined.svg" %>
+                    <p>Esquema de firmas y delegaciones <br><strong>dinámico, robusto y trazable.</strong></p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "qrcode-outlined.svg" %>
+                    <p><strong> Generación simple e inmediata</strong><br>de QRs.</p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "Grupo 4.svg" %>
+                    <p><strong>Acceso 24/7</strong> a tus <br>declaraciones juradas.</p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "cloud.svg" %>
+                    <p>Gestiona tus QRs y declaraciones <br><strong>en un solo lugar.</strong></p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "038-shield.svg" %>
+                    <p><strong>Seguridad total</strong> en la emisión,<br> firma y fecha de tus declaraciones.</p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "arrow-clockwise.svg" %>
+                    <p><strong>Actualiza tus declaraciones</strong> juradas<br> de forma simple y rápida.</p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "node-index-outlined.svg" %>
+                    <p>Modelo robusto de gestión y <br><strong>seguimiento de cambios.</strong></p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "040-startup.svg" %>
+                    <p>Adaptación rápida a <strong> nuevas <br> normativas y resoluciones.</strong></p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "select-multiple.svg" %>
+                    <p><strong>Usa un único QR </strong><br>para todos los reglamentos <br>técnicos de tu producto.
+                    </p>
+                  </div>
+                  <div class="swiper-slide">
+                    <%= image_tag "server.svg" %>
+                    <p>Centraliza toda tu documentación <br>técnica y certificaciones <strong> en <br>un solo
+                        sistema.</strong></p>
+                  </div>
+              </div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+          </div>
+      </div>
+      <div class="footer-bottom">
+          <p>&copy; <%= Time.current.year %> QAR. Todos los derechos reservados. 
+            <a href="#">Términos</a> <!-- añadir link a terminos -->
+            <a href="#">Política de privacidad</a>
+          </p> <!-- añadir link a politicas -->
+      </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+      var swiper = new Swiper(".mySwiper", {
+          slidesPerView: 5,
+          rewind: true,
+          spaceBetween: 50,
+          autoplay: {
+              delay: 2500,
+              disableOnInteraction: false,
+          },
+          navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+          },
+          pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+          },
+      });
+  </script>
 </div>

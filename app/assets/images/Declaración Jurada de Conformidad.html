@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)http://127.0.0.1:5500/views/DJC.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Declaración Jurada de Conformidad</title>
+    
+    
+<link rel="icon" type="image/x-icon" href="http://127.0.0.1:5500/img/icon.ico"><link href="./Declaración Jurada de Conformidad_files/all.min.css" rel="stylesheet"><link href="./Declaración Jurada de Conformidad_files/styles.css" rel="stylesheet"></head>
+<body class="body-djc">
+    <div class="container-djc">
+        <header class="header-djc">
+            <div class="header-djc-left">
+                <img src="./Declaración Jurada de Conformidad_files/logo-qar.svg" alt="Logo QAR" class="logo-djc">
+                <div>QAR.AR/000001</div> <!--traer numero-->
+            </div>
+            <div class="header-djc-center">
+                <h1>DECLARACIÓN JURADA DE CONFORMIDAD</h1>
+                <h2>NOMBRE_DE_REGLAMENTO_TÉCNICO</h2> <!--traer nombre-->
+                <p class="numero-djc">N° 000001</p> <!--traer numero-->
+            </div>
+            <div class="header-djc-right">
+                <div class="qr-djc">
+                    <img src="./Declaración Jurada de Conformidad_files/qr-example.png" alt="Código QR">
+                    <div>AR<i class="fa-regular fa-check-double"></i></div>
+                    
+                </div>
+            </div>
+        </header>
+
+        <!-- Información de la empresa -->
+        <section class="info-empresa-djc">
+            <p><strong>Nosotros:</strong></p>
+            <p><strong>Razón Social:</strong> [Nombre de la empresa]</p>
+            <p><strong>CUIT:</strong> [CUIT]</p>
+            <p><strong>Nombre comercial o Marca registrada:</strong> [Marca]</p>
+            <p><strong>Dirección:</strong> [Dirección]</p>
+            <p><strong>Teléfono:</strong> [Teléfono]</p>
+            <p><strong>Mail:</strong> [Correo electrónico]</p>
+        </section>
+
+        <!-- Declaración -->
+        <section class="declaracion-djc">
+            <p>Emitimos la presente declaración de conformidad con relación a los siguientes productos:</p>
+            <table class="tabla-productos-djc">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Características</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>[Marca]</td>
+                        <td>[Modelo]</td>
+                        <td>[Características]</td>
+                    </tr>
+                    <!-- Agrega más filas según sea necesario -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Cumplimiento -->
+        <section class="cumplimiento-djc">
+            <p><strong>Cumplen con las siguientes normas técnicas:</strong></p>
+            <p>[Normas Técnicas]</p>
+            <p><strong>Habiendo sido sometidos al siguiente procedimiento de evaluación de la conformidad:</strong></p>
+            <p>[Procedimiento]</p>
+        </section>
+
+        <!-- Firma -->
+        <footer class="footer-djc">
+            <div class="firma-djc">
+                <p>Confeccionada por</p>
+            </div>
+            <div class="firma-djc">
+                <p>Aprobada por</p>
+            </div>
+            <div class="firma-djc">
+                <p>Responsable Legal/Apoderado</p>
+            </div>
+        </footer>
+    </div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>

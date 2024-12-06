@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="33" viewBox="0 0 40 33">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#4b81de"/>
+      <stop offset="1" stop-color="#4baade"/>
+    </linearGradient>
+  </defs>
+  <g id="Grupo_152" data-name="Grupo 152" transform="translate(-1722 -272)">
+    <rect id="Rectángulo_34" data-name="Rectángulo 34" width="40" height="33" rx="6" transform="translate(1722 272)" fill="url(#linear-gradient)"/>
+    <g id="eye" transform="translate(1727.613 275)">
+      <path id="Trazado_268" data-name="Trazado 268" d="M26.32,12.562a2.147,2.147,0,0,1,0,2.633c-1.894,2.472-6.437,7.562-11.741,7.562s-9.847-5.09-11.741-7.562a2.146,2.146,0,0,1,0-2.633C4.732,10.09,9.275,5,14.579,5S24.426,10.09,26.32,12.562Z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <circle id="Elipse_4" data-name="Elipse 4" cx="3.805" cy="3.805" r="3.805" transform="translate(10.774 10.073)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

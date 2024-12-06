@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="40" viewBox="0 0 36 40">
+  <g id="logout_exit_sign_out" data-name="logout, exit, sign, out" transform="translate(-6 -4)">
+    <path id="Trazado_236" data-name="Trazado 236" d="M29,34a1,1,0,0,0-1,1v4a3,3,0,0,1-3,3H11a3,3,0,0,1-3-3V9a3,3,0,0,1,3-3H25a3,3,0,0,1,3,3v4a1,1,0,0,0,2,0V9a5.005,5.005,0,0,0-5-5H11A5.006,5.006,0,0,0,6,9V39a5.006,5.006,0,0,0,5,5H25a5.005,5.005,0,0,0,5-5V35A1,1,0,0,0,29,34Z" fill="#fff"/>
+    <path id="Trazado_237" data-name="Trazado 237" d="M41.707,23.293l-6-6a1,1,0,1,0-1.414,1.414L38.586,23H17a1,1,0,0,0,0,2H38.586l-4.293,4.293a1,1,0,1,0,1.414,1.414l6-6a1,1,0,0,0,0-1.414Z" fill="#fff"/>
+  </g>
+</svg>

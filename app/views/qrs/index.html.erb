@@ -1,61 +1,50 @@
 
-<div class="card">
-  <div class="card-header bg-light">
-      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Gestión de QRs</h4>
+<div class="content-container">
+  <section class="mis-datos">
+      <div class="header-qr">
+        <h2>Gestión de QRs</h2>
+        <div class="header-qr-buttons">
+          <input type="text" id="qr_description" placeholder="Ingrese la descripción para crear nuevo QR" class="qr-input">
+          <select id="companies" class="razon-social"></select>
+          <button class="crear-qr-btn" onclick="create();">Crear</button> <!--Añadir accion para crear el QR-->
+        </div>
       </div>
-  </div>
-  <div class="card-body">
-    <div id="qrCreate" class="justify-content-between align-items-center mb-3" style="display: none;">
-      <div class="input-group">
-        <input type="text" id="qr_description" class="form-control" placeholder="Ingrese la descripción para crear un nuevo QR">
-        <select id="companies"></select>
-        <button class="btn btn-success" type="button" onclick="create();">Crear</button>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered table-hover align-middle">
-        <thead class="table-dark">
+      <table class="table table-mis-datos ">
+        <thead>
           <tr>
-            <th>Código</th>
+            <th class="mis-datos-first-th">Codigo</th>
             <th>Razón Social</th>
             <th>Descripción</th>
             <th>DJCs</th>
-            <th class="text-center">Acciones</th>
+            <th class="mis-datos-last-th qrs-last-th">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <% if @qrs.size > 0 %>
             <% @qrs.each do |qr| %>
-              <tr id="qr_id_<%= qr.id %>">
-                <td><%= qr.code %></td>
-                <td><%= qr.company.name %></td>
-                <td><%= qr.description %></td>
+              <tr id="qr_id_<%= qr.id %>"><!--variar la cantidad de QRs segun cantidad existente-->
+                <td><%= qr.code %></td> <!-- traer codigo de QR-->
+                <td><%= qr.company.name %></td><!-- traer Razon social de QR-->
+                <td class="table_small_QRs"><%= qr.description %></td><!-- traer descripcion de QR-->
+                <td><%= qr.djcs.count %></td><!-- traer los datos de cantidad de DJCs-->
                 <td>
-                  <span class="badge bg-info"><%= qr.djcs.count %></span>
-                </td>
-                <td class="text-center">
-                  <%= link_to qr_path(qr), class: "btn btn-info btn-sm me-1", target: "_blank" do %>
-                    <i class="bi bi-download"></i>
-                  <% end %>
-                  <%= link_to new_djc_path(company_id: qr.company_id, qr_id: qr.id), class: "btn btn-success btn-sm me-1" do %>
-                    <i class="bi bi-file-earmark-plus"></i>
-                  <% end %>
+                  <div class="acciones-buttons">
+                    <%= link_to 'Crear Nueva DJC', new_djc_path(company_id: qr.company_id, qr_id: qr.id), class: "btn btn-primary" %>
+                    <%= link_to 'Descargar QR', qr_path(qr), class: "btn btn-secondary", target: "_blank" %>
+                  </div>
                 </td>
               </tr>
             <% end %>
           <% else %>
             <tr>
-              <td colspan="7" class="text-center text-muted">
+              <td colspan="5">
                 Aún no hay QRs.
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
-    </div>
-  </div>
+  </section>
 </div>
 
 <script>
@@ -84,7 +73,6 @@ async function loadCompanies() {
         $('#companies option[value=""]').remove();
       });
     }
-    $('#qrCreate').show();
     cleanApiResponse();
   }
 }
@@ -106,7 +94,6 @@ async function create() {
     company_id: company_id
   });
   if(qr != null) {
-    $("#qrCreate").hide();
     $("#qr_description").val("");
   }
 }

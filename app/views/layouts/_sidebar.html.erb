@@ -1,29 +1,53 @@
-<aside class="sidebar bg-dark text-white" id="sidebar">
-  <h3 class="text-center mb-4">QAR</h3>
-  <ul class="list-unstyled">
-    <% if current_user.admin? %>
-      <li><%= link_to 'Gestión de Usuarios', admin_users_path, class: 'sidebar-link' %></li>
-      <li><%= link_to 'Auditoría de QRs', audits_qrs_path, class: 'sidebar-link' %></li>
-      <li><%= link_to 'Auditoría de DJCs', audits_djcs_path, class: 'sidebar-link' %></li>
-    <% else %>
-      <li><%= link_to 'Mis datos', admin_users_path, class: 'sidebar-link' %></li>
-    <% end %>
-    <li><%= link_to 'Empresas', companies_path, class: 'sidebar-link' %></li>
-    <li class="d-flex align-items-center">
-      <%= link_to 'Delegaciones pendientes', delegations_path, class: 'sidebar-link' %>
-      <span class="badge badge-info"><%= Delegation.with_email(current_user.email).count %></span>
-    </li>
-    <li><%= link_to 'QRs', qrs_path, class: 'sidebar-link' %></li>
-    <li><%= link_to 'Declaraciones de Conformidad', djcs_path, class: 'sidebar-link' %></li>
-    <% if current_user.admin? %>
-      <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path, class: 'sidebar-link' %></li>
-      <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path, class: 'sidebar-link' %></li>
-    <% end %>
-  </ul>
-
-  <!-- Sidebar Footer -->
-  <div class="sidebar-footer mt-5 text-center">
-    <small>Bienvenido, <%= current_user.name %></small><br/>
-    <%= link_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'btn btn-danger btn-sm mt-2' %>
-  </div>
-</aside>
+<nav class="sidebar">
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <label for="menu-toggle" class="menu-btn">
+    <i class="fas fa-bars"></i>
+  </label>
+    <%= image_tag "logo-qar-blanco.svg", class: "mis-datos-menu-logo" %>
+    <div class="mis-datos-menu">
+      <ul class="nav-links">
+        <% if current_user.admin? %>
+          <li><%= link_to 'Gestión de Usuarios', admin_users_path, class: 'menu-item' %></li>
+          <li><%= link_to 'Auditoría de QRs', audits_qrs_path, class: 'menu-item' %></li>
+          <li><%= link_to 'Auditoría de DJCs', audits_djcs_path, class: 'menu-item' %></li>
+        <% else %>
+          <li>
+            <a href="<%= admin_users_path %>" class="menu-item menu-item-selected">
+              <%= image_tag "person.svg", class: "menu-img" %>
+              <span class="menu-text">Mis Datos</span>
+            </a>
+          </li>
+        <% end %>
+        <li>
+          <a href="<%= companies_path %>" class="menu-item">
+            <%= image_tag "009-briefcase.svg", class: "menu-img" %>
+            <span class="menu-text">Empresas</span>
+          </a>
+        </li>
+        <li>
+          <a href="<%= qrs_path %>" class="menu-item">
+            <%= image_tag "qr-code.svg", class: "menu-img" %>
+            <span class="menu-text">QRs</span>
+          </a>
+        </li>
+        <li>
+          <a href="<%= djcs_path %>" class="menu-item">
+            <%= image_tag "file (1).svg", class: "menu-img" %>
+            <span class="menu-text">Declaraciones de Conformidad</span>
+          </a>
+        </li>
+        <li class="d-flex align-items-center">
+          <%= link_to 'Delegaciones pendientes', delegations_path, class: 'menu-item' %>
+          <span class="badge badge-info"><%= Delegation.with_email(current_user.email).count %></span>
+        </li>
+        <% if current_user.admin? %>
+          <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path, class: 'menu-img' %></li>
+          <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path, class: 'menu-img' %></li>
+        <% end %>
+      </ul>
+      <div class="menu-logout">
+        <%= image_tag "logout, exit, sign, out.svg", class: "mis-datos-exit" %>
+        <%= link_to 'Salir', destroy_user_session_path, method: :delete, class: 'menu-text' %>
+      </div>
+    </div>
+</nav>

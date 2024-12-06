@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="73.467" height="59.173" viewBox="0 0 73.467 59.173">
+  <g id="devices" transform="translate(1 1)">
+    <path id="Trazado_1" data-name="Trazado 1" d="M30.587,43.307H9.147V11.147A7.147,7.147,0,0,1,16.293,4h42.88a7.147,7.147,0,0,1,7.147,7.147v7.147M2,54.027H44.88" transform="translate(-2 -4)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Trazado_2" data-name="Trazado 2" d="M14,12.288A4.544,4.544,0,0,1,18.763,8h19.06a4.544,4.544,0,0,1,4.763,4.288v34.3a4.544,4.544,0,0,1-4.763,4.288H18.763A4.544,4.544,0,0,1,14,46.592ZM28.293,40.16h.036" transform="translate(28.88 6.293)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg>
