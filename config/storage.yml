@@ -25,10 +25,12 @@ local:
 
 # config/storage.yml
 amazon:
-  service: S3
-  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
-  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-  region: <%= ENV['AWS_REGION'] %>
-  bucket: <%= ENV['AWS_BUCKET'] %>
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+  # service: S3
+  # access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  # secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  # region: <%= ENV['AWS_REGION'] %>
+  # bucket: <%= ENV['AWS_BUCKET'] %>
   #upload:
     #acl: 'public-read' # Cambia a 'public-read' si deseas que los archivos sean públicos

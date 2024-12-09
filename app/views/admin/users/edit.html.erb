@@ -1,44 +1,104 @@
-<div class="card">
-  <div class="card-header bg-light">
-      <div class="card-title mb-0 d-flex justify-content-between align-items-center">
-        <h4 class="mb-0"><%= @user.new_record? ? 'Nuevo Usuario' : 'Editar Usuario' %></h4>
+<div class="container-mis-datos">
+  <section class="mis-datos editar-mis-datos">
+    <h2>Editar Datos</h2>
+    <%= form_with model: [:admin, @user], local: true, id: "user_edit_form", html: { class: "form-editar-datos" } do |form| %>
+      <div class="form-group form-group-edit">
+        <label for="nombre">Nombre:</label>
+        <%= form.text_field :name %>
       </div>
-  </div>
-  <div class="card-body">
-    <%= form_with model: [:admin, @user], local: true do |form| %>
-      <%= render 'layouts/errors', entity: @user %>
-
-      <div class="row">
-        <!-- Correo Electrónico (Deshabilitado) -->
-        <div class="col-md-6 mb-3">
-          <%= form.label :email, "Correo Electrónico", class: "form-label" %>
-          <%= form.email_field :email, class: "form-control", readonly: true, placeholder: "Ingrese el email del usuario" %>
-        </div>
-
-        <!-- CUIL/CUIT con guiones automáticamente -->
-        <div class="col-md-6 mb-3">
-          <%= form.label :cuil, "CUIL/CUIT", class: "form-label" %>
-          <%= form.text_field :cuil, class: "form-control", placeholder: "Ingrese el CUIL o CUIT", data: { cuil_autocomplete: true } %>
-        </div>
+      <div class="form-group form-group-edit">
+        <label for="email">Email:</label>
+        <%= form.email_field :email, readonly: !@user.admin? %>
       </div>
-
-      <% if @user.admin %>
-        <div class="form-check mt-4">
-          <%= form.check_box :admin, class: "form-check-input" %>
-          <%= form.label :admin, "Administrador", class: "form-check-label" %>
+      <div class="form-group form-group-edit">
+        <label for="telefono">Teléfono:</label>
+        <%= form.text_field :phone %>
+      </div>
+      <div class="form-group form-group-edit">
+        <label for="cuil">CUIL:</label>
+        <%= form.text_field :cuil, data: { cuil_autocomplete: true } %>
+      </div>
+      <div class="form-group form-group-edit">
+        <label for="negocio">Negocio:</label>
+        <%= form.text_field :bussiness %>
+      </div>
+      <div class="form-group form-group-edit">
+        <label for="posicion">Posición:</label>
+        <%= form.text_field :position %>
+      </div>
+      <div class="form-group form-group-edit canvas-container">
+        <label class="firma" for="signature">Firma digital</label>
+        <small id="signature_description">No se ha subido una firma digital</small>
+        <input type="hidden" name="user[signature_file]" id="signature_file"/>
+        <canvas id="signature"></canvas> <!-- traer canvas si es que ya existe-->
+        <div class="botones-canvas">
+          <div>
+              <button type="button" class="borrar-canvas" id="clearBtn">Borrar</button>
+          </div>
+          <div>
+              <button type="button" class="guardar-canvas" onclick="saveDrawing()">Guardar</button>
+          </div>
         </div>
-      <% end %>
-
-      <!-- Firma -->
-      <% unless @user.signature_file.attached? %>
-        <%= render 'signature' %>
-      <% end %>
-
-      <!-- Botones de Acción -->
-      <div class="actions mt-4">
-        <%= form.submit @user.new_record? ? "Crear" : "Actualizar", class: "btn btn-primary" %>
-        <%= link_to 'Cancelar', admin_users_path, class: 'btn btn-secondary' %>
       </div>
     <% end %>
-  </div>
+    <div class="form-actions">
+      <button type="button" class="btn-submit" onclick="onSubmit()">Guardar Cambios</button> <!--añadir accion de guardado-->
+      <%= link_to 'Cancelar', admin_users_path, class: 'volver' %>
+    </div>
+  </section>
 </div>
+<script>
+  $(document).ready(function () {
+    const canvas = document.getElementById("signature");
+    const ctx = canvas.getContext("2d");
+
+    let isDrawing = false;
+
+    canvas.addEventListener("mousedown", (event) => {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(event.offsetX, event.offsetY);
+    });
+    canvas.addEventListener("mousemove", (event) => {
+        if (isDrawing) {
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+        }
+    });
+    canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      $("#signature_description").text("No se ha subido una firma digital")
+    });
+  });
+
+  function saveDrawing() {
+    const canvas = document.getElementById("signature")
+    if (isCanvasEmpty(canvas)) {
+      $("#signature_description").text("Dibuje su firma antes de guardarla")
+    } else {
+      const drawingData = canvas.toDataURL("image/png");
+      $('#signature_file').val(drawingData);
+      $("#signature_description").text("Firma digital guardada")
+    }
+  }
+  function onSubmit() {
+    $("#user_edit_form").submit();
+  }
+  function isCanvasEmpty(canvas) {
+    const context = canvas.getContext('2d');
+    const canvasData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = canvasData.data;
+
+    // Verificamos si todos los píxeles tienen el canal alfa igual a 0 (completamente transparente)
+    for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] !== 0) { // Canales RGBA: Alpha está en [i+3]
+            return false; // Si encontramos un píxel no transparente
+        }
+    }
+    return true; // Todos los píxeles son transparentes
+  }
+</script>

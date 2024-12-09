@@ -5,7 +5,7 @@
       <h2>
           Gestión de QRs para tus proyectos
       </h2>
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |f| %>
         <div class="form-group">
             <label for="email">Correo electrónico</label>
             <%= f.email_field :email, id: "email", autofocus: true, required: true %>
