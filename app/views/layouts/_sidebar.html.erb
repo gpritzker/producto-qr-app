@@ -7,47 +7,61 @@
     <div class="mis-datos-menu">
       <ul class="nav-links">
         <% if current_user.admin? %>
-          <li><%= link_to 'Gestión de Usuarios', admin_users_path, class: 'menu-item' %></li>
-          <li><%= link_to 'Auditoría de QRs', audits_qrs_path, class: 'menu-item' %></li>
-          <li><%= link_to 'Auditoría de DJCs', audits_djcs_path, class: 'menu-item' %></li>
+          <li>
+            <%= link_to 'Gestión de Usuarios', admin_users_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" %>
+          </li>
+          <li>
+            <%= link_to 'Auditoría de QRs', audits_qrs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(audits_qrs_path)}" %>
+          </li>
+          <li>
+            <%= link_to 'Auditoría de DJCs', audits_djcs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(audits_djcs_path)}" %>
+          </li>
         <% else %>
           <li>
-            <a href="<%= admin_users_path %>" class="menu-item menu-item-selected">
+            <%= link_to admin_users_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" do %>
               <%= image_tag "person.svg", class: "menu-img" %>
               <span class="menu-text">Mis Datos</span>
-            </a>
+            <% end %>
           </li>
         <% end %>
         <li>
-          <a href="<%= companies_path %>" class="menu-item">
+          <%= link_to companies_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(companies_path) || current_page?(authenticated_root_path)}" do %>
             <%= image_tag "009-briefcase.svg", class: "menu-img" %>
             <span class="menu-text">Empresas</span>
-          </a>
+          <% end %>
         </li>
         <li>
-          <a href="<%= qrs_path %>" class="menu-item">
+          <%= link_to qrs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(qrs_path)}" do %>
             <%= image_tag "qr-code.svg", class: "menu-img" %>
             <span class="menu-text">QRs</span>
-          </a>
+          <% end %>
         </li>
         <li>
-          <a href="<%= djcs_path %>" class="menu-item">
+          <%= link_to djcs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(djcs_path)}" do %>
             <%= image_tag "file (1).svg", class: "menu-img" %>
             <span class="menu-text">Declaraciones de Conformidad</span>
-          </a>
+          <% end %>
         </li>
-        <li class="d-flex align-items-center">
-          <%= link_to 'Delegaciones pendientes', delegations_path, class: 'menu-item' %>
-          <span class="badge badge-info"><%= Delegation.with_email(current_user.email).count %></span>
+        <li>
+          <%= link_to delegations_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(delegations_path)}" do %>
+            <%= image_tag "file (1).svg", class: "menu-img" %>
+            <span class="menu-text">Delegaciones pendientes</span>
+          <% end %>
         </li>
         <% if current_user.admin? %>
-          <li><%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path, class: 'menu-img' %></li>
-          <li><%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path, class: 'menu-img' %></li>
+          <li>
+            <%= link_to 'Reglamentos Técnicos', reglamento_tecnicos_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(reglamento_tecnicos_path)}" %>
+          </li>
+          <li>
+            <%= link_to 'Tipos de Procedimiento', tipo_procedimientos_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(tipo_procedimientos_path)}" %>
+          </li>
         <% end %>
       </ul>
       <div class="menu-logout">
-        <%= image_tag "logout, exit, sign, out.svg", class: "mis-datos-exit" %>
-        <%= link_to 'Salir', destroy_user_session_path, method: :delete, class: 'menu-text' %>
+        <%= link_to destroy_user_session_path, method: :delete, class: 'menu-item' do %>
+          <%= image_tag "logout, exit, sign, out.svg", class: "mis-datos-exit" %>
+          <button class="menu-text">Salir</button>
+        <% end %>
       </div>
-    </div>
+  </div>
 </nav>
