@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   
   # Namespace para administración de usuarios, accesible solo por administradores
   namespace :admin do
+    get "users/me", to: "users#me"
     resources :users, only: [:index, :new, :create, :edit, :update, :show] do
       member do
         get "change_password", to: "users#password"

@@ -116,6 +116,10 @@ class Admin::UsersController < ApplicationController
     end
   end
 
+  def me
+    @user = current_user
+  end
+
   private
 
   def admin_only

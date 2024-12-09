@@ -18,7 +18,7 @@
           </li>
         <% else %>
           <li>
-            <%= link_to admin_users_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" do %>
+            <%= link_to admin_users_me_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" do %>
               <%= image_tag "person.svg", class: "menu-img" %>
               <span class="menu-text">Mis Datos</span>
             <% end %>

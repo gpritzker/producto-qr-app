@@ -1,0 +1,33 @@
+<div class="content-container">
+  <section class="mis-datos">
+    <h2>Mis Datos</h2>
+      <table class="table-mis-datos">
+        <thead>
+          <tr>
+            <th class="mis-datos-first-th">Email</th>
+            <th>Nombre</th>
+            <th>Empresa</th>
+            <th>Teléfono</th>
+            <th class="mis-datos-last-th">CUIL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= @user.email %></td>
+            <td><%= @user.name %></td>
+            <td><%= @user.bussiness.presence || '-' %></td>
+            <td><%= @user.phone.presence || '-' %></td>
+            <td><%= @user.cuil.presence || '-' %></td>
+          </tr>          
+        </tbody>
+      </table>
+      <div class="acciones"><a href="modificar-datos" class="btn-modificar">
+        <a href="<%= edit_admin_user_path(@user) %>" class="btn-modificar">
+          <button class="mis-datos-modificar">Modificar datos</button>
+        </a>
+        <a href="<%= change_password_admin_user_path(@user)%>" class="btn-change-pwd">
+          <button class="mis-datos-change-pwd">Cambiar contraseña</button>
+        </a>
+      </div>
+  </section>
+</div>
