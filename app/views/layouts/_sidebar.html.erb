@@ -8,7 +8,7 @@
       <ul class="nav-links">
         <% if current_user.admin? %>
           <li>
-            <%= link_to 'Gestión de Usuarios', admin_users_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" %>
+            <%= link_to 'Gestión de Usuarios', admin_users_path, class: "menu-item #{'menu-item-selected' if menu_user?}" %>
           </li>
           <li>
             <%= link_to 'Auditoría de QRs', audits_qrs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(audits_qrs_path)}" %>
@@ -18,26 +18,26 @@
           </li>
         <% else %>
           <li>
-            <%= link_to admin_users_me_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(admin_users_path)}" do %>
+            <%= link_to admin_users_me_path, class: "menu-item #{'menu-item-selected' if menu_user?}" do %>
               <%= image_tag "person.svg", class: "menu-img" %>
               <span class="menu-text">Mis Datos</span>
             <% end %>
           </li>
         <% end %>
         <li>
-          <%= link_to companies_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(companies_path) || current_page?(authenticated_root_path)}" do %>
+          <%= link_to companies_path, class: "menu-item #{'menu-item-selected' if menu_company?}" do %>
             <%= image_tag "009-briefcase.svg", class: "menu-img" %>
             <span class="menu-text">Empresas</span>
           <% end %>
         </li>
         <li>
-          <%= link_to qrs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(qrs_path)}" do %>
+          <%= link_to qrs_path, class: "menu-item #{'menu-item-selected' if menu_qrs?}" do %>
             <%= image_tag "qr-code.svg", class: "menu-img" %>
             <span class="menu-text">QRs</span>
           <% end %>
         </li>
         <li>
-          <%= link_to djcs_path, class: "menu-item #{'menu-item-selected' if request.path.start_with?(djcs_path)}" do %>
+          <%= link_to djcs_path, class: "menu-item #{'menu-item-selected' if menu_djc?}" do %>
             <%= image_tag "file (1).svg", class: "menu-img" %>
             <span class="menu-text">Declaraciones de Conformidad</span>
           <% end %>
