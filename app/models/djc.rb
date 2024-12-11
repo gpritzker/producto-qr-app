@@ -129,33 +129,27 @@ class Djc < ApplicationRecord
     else
       system("mv #{temporal_base_body_path} #{pdf_path}")
     end
+    
     # Agrego la marca de agua si es necesario
-    # unless signed_by.present?
-    #   watermark_pdf_path = Rails.root.join("app", "assets", "watermark.pdf")
-    #   main_pdf_path = Rails.root.join("tmp", "#{file_name}-tmp.pdf")
-    #   output_pdf_path = Rails.root.join("tmp", file_name)
+    unless signed_by.present?
+      watermark_pdf_path = Rails.root.join("app", "assets", "watermark.pdf")
+      output_pdf_path = Rails.root.join("tmp", "#{nombre}-watermark.pdf")
+        
+      # Aplicar marca de agua
+      if system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{pdf_path} #{output_pdf_path}")
+        # Subir el archivo PDF a ActiveStorage (Amazon S3)
+        file = File.open(output_pdf_path)
+        self.djc_file.attach(io: file, filename: nombre, content_type: 'application/pdf')
+        file.close
+      end
+    else
+      # Si ya está firmado, solo guardamos el PDF sin marca de agua
+      # Subir el archivo PDF a ActiveStorage (Amazon S3)
+      file = File.open(pdf_path)
+      self.djc_file.attach(io: file, filename: nombre, content_type: 'application/pdf')
+      file.close
+    end
   
-    #   # Guardar el contenido en un archivo temporal
-    #   File.open(main_pdf_path, 'wb') do |file|
-    #     file.write(pdf_content)
-    #   end
-  
-    #   # Aplicar marca de agua
-    #   system("hexapdf watermark -w #{watermark_pdf_path} -t stamp #{main_pdf_path} #{output_pdf_path}")
-    #   system("rm #{main_pdf_path}")
-    # else
-    #   # Si ya está firmado, solo guardamos el PDF sin marca de agua
-    #   output_pdf_path = Rails.root.join("tmp", file_name)
-    #   File.open(output_pdf_path, 'wb') do |file|
-    #     file.write(pdf_content)
-    #   end
-    # end
-  
-    # Subir el archivo PDF a ActiveStorage (Amazon S3)
-    file = File.open(pdf_path)
-    self.djc_file.attach(io: file, filename: nombre, content_type: 'application/pdf')
-    file.close
-
     # Borro temporales
     File.delete(temporal_static_path) if File.exist?(temporal_static_path)
     File.delete(temporal_base_path) if File.exist?(temporal_base_path)
@@ -163,6 +157,7 @@ class Djc < ApplicationRecord
     File.delete(temporal_base_body_path) if File.exist?(temporal_base_body_path)
     File.delete(temporal_anexo_path) if File.exist?(temporal_anexo_path)
     File.delete(temporal_anexo_base_path) if File.exist?(temporal_anexo_base_path)
+    File.delete(output_pdf_path) if File.exist?(output_pdf_path)
     File.delete(pdf_path) if File.exist?(pdf_path)
   end 
 
