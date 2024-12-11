@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    .barlow-regular {
+      font-family: "Barlow", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
+</head>
+<body class="barlow-regular" style="color: #707070; line-height: 1.6; font-size: 1.1rem;">
+  <p><strong>Nosotros</strong></p>
+  <p>
+    <strong>Razón Social:</strong> <%= djc.company.name %><br/>
+    <strong>CUIT:</strong> <%= djc.company.cuit %><br/>
+    <strong>Nombre comercial o Marca registrada:</strong> <%= djc.trade_mark %><br/>
+    <strong>Dirección:</strong> <%= djc.company.address %><br/>
+    <strong>Teléfono:</strong> <%= djc.company.contact_phone %><br/>
+    <strong>Mail:</strong> <%= djc.company.contact_email %>
+  </p>
+  <p>
+    Emitimos la presente declaración de conformidad con relación a los siguientes productos:
+  </p>
+  <p>
+    <strong>Descripción:</strong> <%= djc.product_description %><br/>
+    <strong>Fabricante:</strong> <%= djc.manufacturer %><br/>
+    <strong>Domicilio:</strong> <%= djc.manufacturer_address %>
+    <% if djc.product_attributes.size > Djc::DJC_MAX_PRODUCT_ATTRIBUTES_IN_PDF %>
+      <br/><strong>Modelos:</strong> Ver anexo
+    <% end %>
+  </p>
+  <% if djc.product_attributes.size <= Djc::DJC_MAX_PRODUCT_ATTRIBUTES_IN_PDF %>
+    <p>
+      <table width="100%" style="border-collapse: collapse;">
+        <tr>
+          <th width="33%" style="text-align: center; border: 1px solid">MARCA</th>
+          <th width="33%" style="text-align: center; border: 1px solid">MODELO</th>
+          <th width="33%" style="text-align: center; border: 1px solid">CARACTERÍSTICAS</th>
+        </tr>
+        <% djc.product_attributes.each do |pa| %>
+          <tr>
+            <td width="33%" style="text-align: center; border: 1px solid"><%= pa["brand"] %></td>
+            <td width="33%" style="text-align: center; border: 1px solid"><%= pa["model"] %></td>
+            <td width="33%" style="text-align: center; border: 1px solid"><%= pa["characteristic"] %></td>
+          </tr>
+        <% end %>
+      </table>
+    </p>
+  <% end %>
+  <p>
+    Cumplen con las siguientes normas técnicas:
+  </p>
+  <p>
+    <table width="100%" style="border-collapse: collapse;">
+      <% djc.technical_normatives.each do |item| %>
+        <tr>
+          <td width="100%" style="text-align: center; border: 1px solid"><%= item %></td>
+        </tr>
+      <% end %>
+    </table>
+  </p>
+  <p>
+    Habiendo sido sometidos al siguiente procedimiento de evaluación de la conformidad:
+  </p>
+  <p>
+    <table width="100%" style="border-collapse: collapse;">
+      <tr>
+        <th width="50%" style="text-align: center; border: 1px solid">NÚMERO</th>
+        <th width="50%" style="text-align: center; border: 1px solid">EMISOR</th>        
+      </tr>
+      <% djc.reports.each do |item| %>
+        <tr>
+          <td width="50%" style="text-align: center; border: 1px solid"><%= item["number"] %></td>
+          <td width="50%" style="text-align: center; border: 1px solid"><%= item["emitter"] %></td>
+        </tr>
+      <% end %>
+    </table>
+  </p>
+  <p>
+    La presente declaración jurada de conformidad se emite, en todo de acuerdo con el/los<br/>
+    Reglamentos Técnicos aludidos precedentemente, asumiendo la responsabilidad directa<br/>
+    por los datos declarados, así como por la conformidad del producto.
+  </p>
+</body>

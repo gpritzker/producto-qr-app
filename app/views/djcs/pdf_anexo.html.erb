@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    .barlow-regular {
+      font-family: "Barlow", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
+</head>
+<body class="barlow-regular" style="color: #707070; line-height: 1.6; font-size: 1.1rem;">
+  <p><strong>Anexo</strong></p>
+  <p>
+    <table width="100%" style="border-collapse: collapse;">
+      <tr>
+        <th width="33%" style="text-align: center; border: 1px solid">MARCA</th>
+        <th width="33%" style="text-align: center; border: 1px solid">MODELO</th>
+        <th width="33%" style="text-align: center; border: 1px solid">CARACTERÍSTICAS</th>
+      </tr>
+      <% djc.product_attributes.each do |pa| %>
+        <tr>
+          <td width="33%" style="text-align: center; border: 1px solid"><%= pa["brand"] %></td>
+          <td width="33%" style="text-align: center; border: 1px solid"><%= pa["model"] %></td>
+          <td width="33%" style="text-align: center; border: 1px solid"><%= pa["characteristic"] %></td>
+        </tr>
+      <% end %>
+    </table>
+  </p>
+</body>
