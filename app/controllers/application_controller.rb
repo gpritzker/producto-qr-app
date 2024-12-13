@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
     rescue JWT::ExpiredSignature => e
       render json: { errors: ['Expired token'] }, status: :unauthorized
     rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
-      render json: { errors: ['Invalid token'] }, status: :unauthorized
+      render json: { errors: ['Invalid token', e.message, "token: #{@auth_token}"] }, status: :unauthorized
     end
   end
 
