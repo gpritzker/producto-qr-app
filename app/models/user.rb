@@ -64,6 +64,20 @@ class User < ApplicationRecord
     false
   end
 
+  def generate_signature_qr
+    #secret_key = SecureRandom.hex(32)
+    encryptor = ActiveSupport::MessageEncryptor.new([ENV['SIGNATURE_KEY']].pack("H*"))
+    encrypted_message = encryptor.encrypt_and_sign({user_id: id, valid_until: Time.now + 1.hour}.to_json)
+
+    RQRCode::QRCode.new(ENV['SIGNATURE_DOMAIN'] + encrypted_message).as_svg(
+      viewbox: true,
+      use_path: true,
+      standalone: false,
+      border_modules: 0, # borde del QR
+      module_size: 1 # tamaño del módulo
+    )
+  end
+
   private
 
   def normalize_attributes
