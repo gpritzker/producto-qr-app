@@ -25,6 +25,12 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
+  # config.hosts << "qar.ar"
+  # config.hosts << "www.qar.ar"
+  # config.hosts << "qar.com.ar"
+  # config.hosts << "www.qar.com.ar"
+  # config.hosts << "product-qr-app-c0b80da9a0c6.herokuapp.com"
+  config.hosts.clear
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
