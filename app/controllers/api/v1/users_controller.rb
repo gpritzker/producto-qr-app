@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :authenticate_user_from_token!, only: [
-        :sign_out, :refresh_token, :index, :show, :create, :update
+        :sign_out, :refresh_token, :index, :show, :create, :update, :delegations
       ]
       before_action :admin_only!, only: [:create]
 
@@ -200,6 +200,10 @@ module Api
             render json: {errors: ["Hubo un problema al actualizar el usuario."]}, status: :unprocessable_entity
           end
         end
+      end
+
+      def delegations
+        render json: {data: Delegation.with_email(@current_user.email)}, status: :ok
       end
 
       private

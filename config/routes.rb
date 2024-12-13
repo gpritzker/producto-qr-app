@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+
+      resources :users, only: [:index, :show, :create, :update]
       namespace :users do
         post :sign_in
         delete :sign_out
@@ -9,15 +11,29 @@ Rails.application.routes.draw do
         post :resend_confirmation
         put :refresh_token
         put :reset_password
+        get :delegations
       end
-
-      resources :users, only: [:index, :show, :create, :update]
-        
+      
       resources :companies, only: [:index, :show, :destroy, :create, :update] do
         member do
           get :qrs
         end
       end
+
+      resources :delegations, only: [:create] do
+        member do
+          put :accept
+          put :decline
+          put :accept_with_auth
+        end
+      end
+
+      resources :qrs, only: [:index] do
+        member do
+          get :download
+        end
+      end
+
     end
   end
 end
