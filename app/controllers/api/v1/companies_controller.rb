@@ -1,43 +1,42 @@
 module Api
   module V1
     class CompaniesController < ApplicationController
+      before_action :authenticate_user_from_token!
       
       def index
-        if current_user.admin?
+        if @current_user.admin?
           companies = Company.all.order(name: :asc)
         else
-          companies = User.companies_with_role(current_user.id).order(name: :asc)
+          companies = User.companies_with_role(@current_user.id).order(name: :asc)
         end
         render json: {data: companies}, status: :ok
       end
 
       def show
         begin
-          unless current_user.admin?
-            unless current_user.roles.where(company_id: params[:id]).exists?
-              raise "No tiene permisos para generar DJC sobre está compañia"
-            end
-          end
+          has_role?
           company = Company.find params[:id]
           render json: {data: company}, status: :ok
+        rescue ActiveRecord::RecordNotFound
+          render json: {errors: ["La compañia solicitada no existe"]}, status: :not_found
         rescue => e
-          render json: {message: e.message}, status: :forbidden
+          render json: {errors: [e.message]}, status: :unauthorized
         end
       end
 
       def qrs
-        qrs = Qr.where(company_id: params[:id])
-        render json: {data: qrs}, status: :ok
+        begin
+          has_role?
+          qrs = Qr.where(company_id: params[:id])
+          render json: {data: qrs}, status: :ok
+        rescue => e
+          render json: {errors: [e.message]}, status: :unauthorized
+        end
       end 
 
       def destroy
         begin
-          unless current_user.admin?
-            unless current_user.roles.where(company_id: params[:id]).exists?
-              raise "No tiene permisos para borrar esta compañia"
-            end
-          end
-
+          has_role?
           company = Company.find params[:id]
           if company.qrs.size.positive?
             raise "No se puede borrar una compañia que tiene QRs asociados"
@@ -45,11 +44,61 @@ module Api
           company.destroy
           render json: {message: "Compañía borrada exitosamente..."}, status: :ok
         rescue => e
-          render json: {message: e.message}, status: :forbidden
+          render json: {errors: [e.message]}, status: :unauthorized
+        end
+      end
+
+      def create
+        begin
+          company = Company.new(company_params.except(:id))
+          company.transaction do
+            company.save!
+            Role.create(
+              user_id: current_user.id,
+              company_id: company.id,
+              role: Role::ROL_DELEGADO
+            )
+          end
+          render json: {message: 'La empresa fué creada exitosamente' }, status: :ok
+        rescue => e
+          unless company.errors.empty?
+            errors = []
+            company.errors.each do |error|
+              errors.push({"attribute" => error.attribute.to_s, "message" => error.options.dig(:message)})
+            end              
+            render json: { errors: errors }, status: :unprocessable_entity and return
+          end
+          render json: {errors: [e.message]}, status: :unprocessable_entity
+        end 
+      end
+
+      def update
+        begin
+          has_role?
+          company = Company.find params[:id]
+          company.update(company_params.except(:id))
+          unless company.errors.empty?
+            errors = []
+            company.errors.each do |error|
+              errors.push({"attribute" => error.attribute.to_s, "message" => error.options.dig(:message)})
+            end              
+            render json: { errors: errors }, status: :unprocessable_entity and return
+          end
+          render json: {message: 'La empresa fué actualizada.', data: company}, status: :ok
+        rescue => e
+          render json: {errors: [e.message]}, status: :unauthorized
         end
       end
 
       private
+
+      def has_role?
+        unless @current_user.admin?
+          unless @current_user.roles.where(company_id: params[:id]).exists?
+            raise "No tiene permisos para operar sobre esta compañia"
+          end
+        end
+      end
 
       def company_params
         params.require(:company).permit(

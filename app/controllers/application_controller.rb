@@ -1,28 +1,23 @@
-class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-  before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :set_paper_trail_whodunnit
-
-  def set_paper_trail_whodunnit
-    super
-    Rails.logger.info("PaperTrail whodunnit set to: #{PaperTrail.request.whodunnit}")
-  end
+class ApplicationController < ActionController::API
   
-  before_action do
-    Rails.logger.info "Current User: #{current_user.inspect}"
-    PaperTrail.request.whodunnit = current_user.present? ? current_user.id : "Sistema"
+  private
+
+  def authenticate_user_from_token!
+    @auth_token = request.headers['Authorization'].to_s.split(' ').last
+    begin
+      decoded_token = JWT.decode(@auth_token, Rails.application.secret_key_base, true, { algorithm: 'HS256', leeway: 10 })
+      user_id = decoded_token[0]['user_id']
+      @current_user = User.find(user_id)
+    rescue JWT::ExpiredSignature => e
+      render json: { errors: ['Expired token'] }, status: :unauthorized
+    rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
+      render json: { errors: ['Invalid token'] }, status: :unauthorized
+    end
   end
 
-  protected
-
-  def set_paper_trail_whodunnit
-    PaperTrail.request.whodunnit = current_user&.id
-  end
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :password_confirmation, :name, :bussiness, :position, :phone])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:email, :password, :password_confirmation, :name, :bussiness, :position, :phone])
+  def admin_only!
+    unless @current_user.admin?
+      render json: { errors: ['Acceso denegado'] }, status: :unauthorized
+    end
   end
 end

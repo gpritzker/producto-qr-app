@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable
 
   has_many_attached :dni_files
   has_one_attached :signature_file
@@ -58,6 +58,7 @@ class User < ApplicationRecord
   
   # Normalizaciones
   before_validation :normalize_attributes
+  before_create :set_confirmation_token
 
   def can_by_apoderado?
     return true if !cuil.nil? && signature_file.attached?
@@ -78,6 +79,29 @@ class User < ApplicationRecord
     )
   end
 
+  def generate_jwt
+    payload = {
+      exp: Time.now.to_i + 1.hour.to_i,
+      user_id: id
+    }
+    auth_token = JWT.encode(payload, Rails.application.secrets.secret_key_base, 'HS256')
+    refresh_token = JWT.encode(auth_token, Rails.application.secrets.secret_key_base, 'HS256')
+    return {
+      auth_token: auth_token,
+      refresh_token: refresh_token,
+      exp: payload[:exp]
+    }
+  end
+
+  def confirmed?
+    return !confirmed_at.nil?
+  end
+
+  def confirm
+    self.confirmed_at = Time.current
+    save
+  end
+
   private
 
   def normalize_attributes
@@ -94,4 +118,8 @@ class User < ApplicationRecord
     end
   end
   
+  def set_confirmation_token
+    self.confirmation_token = SecureRandom.urlsafe_base64(20)
+    self.confirmation_sent_at = Time.current
+  end
 end
