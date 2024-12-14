@@ -17,8 +17,7 @@ module Api
             data: user, 
             token: jwt[:auth_token],
             refresh_token: jwt[:refresh_token],
-            exp: jwt[:exp],
-            sec: jwt[:sec]
+            exp: jwt[:exp]
           }, status: :ok
         else
           render json: {errors: ['Email o contraseña inválidos']}, status: :unauthorized

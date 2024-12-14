@@ -89,8 +89,7 @@ class User < ApplicationRecord
     return {
       auth_token: auth_token,
       refresh_token: refresh_token,
-      exp: payload[:exp],
-      sec: Rails.application.secret_key_base
+      exp: payload[:exp]
     }
   end
 
