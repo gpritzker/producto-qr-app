@@ -84,13 +84,13 @@ class User < ApplicationRecord
       exp: Time.now.to_i + 1.hour.to_i,
       user_id: id
     }
-    secret_key = "ePFj4GrQiJdVzyzgdFJiCKWEVWe+UT1mMZGzUM+kqSpZJf2nnecwljT15dTC1EWlJs9iDAHEfPWZlRohm0hruXDtR+Npl9x0Izjj5KqVAhE4sikD/cBmbgex7u8hAg/ruY+xtziRMutdNXOqioXCE2hOe0xTGcvIjL7rUcoSle+Q3ssEu/q9Q05eDnOxC76axpEgBlmDInLtQPVA+f2RBK3DdJ4Pa11Euv9R6wKj5IPl8rsI03K1ITPK6yuwkQZVdQjyfzlbfVmy/w+4nNooDs1KNfcaUqG/OOLg36oyfeIVnQn5IV5OunCFhlrubQEpviuxgBle3hP8FnbtFbqGVj0lfpYtrV+a/3axXnRWZhh7niX5Vx66fdD+cr6+DJ8CL6ENAwtSsD4XEcKcfDEG1fl8Hb95/omYQwbI--wo5CrzwMW95rZ2JD--CajgSL4Jk76CsgI509JiEw=="
-    auth_token = JWT.encode(payload, secret_key, 'HS256')
-    refresh_token = JWT.encode(auth_token, secret_key, 'HS256')
+    auth_token = JWT.encode(payload, Rails.application.secret_key_base, 'HS256')
+    refresh_token = JWT.encode(auth_token, Rails.application.secret_key_base, 'HS256')
     return {
       auth_token: auth_token,
       refresh_token: refresh_token,
-      exp: payload[:exp]
+      exp: payload[:exp],
+      sec: Rails.application.secret_key_base
     }
   end
 

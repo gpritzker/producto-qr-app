@@ -166,7 +166,7 @@ module Api
           send_data pdf,
                     filename: "#{@qr.description.gsub(" ","_")}.pdf", # Nombre del archivo
                     type: "application/pdf",
-                    disposition: "inline" # Forzar descarga attachment
+                    disposition: "attachment" # Forzar descarga attachment
         rescue => e
           Rails.logger.error "Error generating PDF: #{e.message}"
           render json: { errors: ["Error generating PDF: #{e.message}"] }, status: :internal_server_error
