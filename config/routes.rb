@@ -34,6 +34,15 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :djcs, only: [:index, :show, :create, :update] do
+        member do
+          put :sign
+          put :approve
+          get :download
+          put :certificados
+        end
+      end
+
     end
   end
 end

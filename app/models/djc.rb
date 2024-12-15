@@ -80,26 +80,22 @@ class Djc < ApplicationRecord
     
     # Generar el PDF base temporal (con datos estáticos como QR, Firma, Nombres y Titulo)
     controller = ActionController::Base.new
-    pdf_content = controller.render_to_string(
-      pdf: nombre,
-      template: "djcs/pdf_base",
-      encoding: "UTF-8",
+    pdf_content = WickedPdf.new.pdf_from_string(
+      template_base,
+      page_size: "A4",
       margin: { top: 10, bottom: 10, left: 10, right: 10 },
-      locals: { djc: self },
-      page_size: "A4"
+      encoding: 'UTF-8'
     )
     File.open(temporal_static_path, "wb") do |file|
       file.write(pdf_content)
     end
     
     # Generar el PDF Body, con los datos de la DJC
-    pdf_content = controller.render_to_string(
-      pdf: nombre,
-      template: "djcs/pdf_body",
-      encoding: "UTF-8",
+    pdf_content = WickedPdf.new.pdf_from_string(
+      template_body,
+      page_size: "A4",
       margin: { top: 45, bottom: 65, left: 15, right: 10 },
-      locals: { djc: self },
-      page_size: "A4"
+      encoding: 'UTF-8'
     )
     File.open(temporal_body_path, "wb") do |file|
       file.write(pdf_content)
@@ -112,13 +108,11 @@ class Djc < ApplicationRecord
     
     # Si tiene mas de DJC_MAX_PRODUCT_ATTRIBUTES_IN_PDF caracteristicas se crea un anexo
     if product_attributes.size > DJC_MAX_PRODUCT_ATTRIBUTES_IN_PDF
-      pdf_content = controller.render_to_string(
-        pdf: nombre,
-        template: "djcs/pdf_anexo",
-        encoding: "UTF-8",
+      pdf_content = WickedPdf.new.pdf_from_string(
+        template_anexo,
+        page_size: "A4",
         margin: { top: 45, bottom: 65, left: 15, right: 10 },
-        locals: { djc: self },
-        page_size: "A4"
+        encoding: 'UTF-8'
       )
       File.open(temporal_anexo_path, "wb") do |file|
         file.write(pdf_content)
@@ -142,6 +136,7 @@ class Djc < ApplicationRecord
         self.djc_file.attach(io: file, filename: nombre, content_type: 'application/pdf')
         file.close
       end
+      File.delete(output_pdf_path) if File.exist?(output_pdf_path)
     else
       # Si ya está firmado, solo guardamos el PDF sin marca de agua
       # Subir el archivo PDF a ActiveStorage (Amazon S3)
@@ -157,7 +152,6 @@ class Djc < ApplicationRecord
     File.delete(temporal_base_body_path) if File.exist?(temporal_base_body_path)
     File.delete(temporal_anexo_path) if File.exist?(temporal_anexo_path)
     File.delete(temporal_anexo_base_path) if File.exist?(temporal_anexo_base_path)
-    File.delete(output_pdf_path) if File.exist?(output_pdf_path)
     File.delete(pdf_path) if File.exist?(pdf_path)
   end 
 
@@ -282,4 +276,244 @@ class Djc < ApplicationRecord
     self.deposit_address = deposit_address.strip unless deposit_address.nil?
     self.manufacturer = manufacturer.strip unless manufacturer.nil?
   end
+
+  def template_base
+    pdf_content = <<~BASE
+      <?xml version="1.0" encoding="UTF-8"?>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <style>
+          .barlow-bold {
+            font-family: "Barlow", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+          }
+          .span-reglamento-tecnico {
+            width: 500px;
+            height: 20px;
+            position: fixed;
+            top: 77px;
+            left: 200px;
+            font-size: 1rem;
+            text-align: center;
+            color: #21467A;
+          }
+          .span-djc-number {
+            width: 500px;
+            height: 20px;
+            position: fixed;
+            top: 102px;
+            left: 200px;
+            font-size: 1rem;
+            text-align: center;
+            color: #21467A;
+          }
+          .span-djc-confeccion {
+            width: 190px;
+            height: 15px;
+            position: fixed;
+            top: 1197px;
+            left: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: black;
+          }
+          .span-djc-signed {
+            width: 190px;
+            height: 15px;
+            position: fixed;
+            top: 1197px;
+            left: 355px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: black;
+          }
+          .span-djc-approved {
+            width: 190px;
+            height: 15px;
+            position: fixed;
+            top: 1197px;
+            left: 680px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: black;
+          }
+          .signature {
+            width: 300px;
+            height: 150px;
+            position: fixed;
+            top: 1047px;
+            left: 600px;
+          }
+        </style>
+      </head>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44.2 59.59" width="139" height="139" style="position: fixed; top: 1px; right: -20px;">
+        <!-- Movimiento del SVG a la posición X=300mm, Y=10mm -->
+        <g>
+          #{qr.generate_svg}
+        </g>
+      </svg>
+      <span class="barlow-bold" style="color: white; position: fixed; top: 77px; left: 19px; font-size: 0.8rem;">
+        QAR.AR/#{qr.code.upcase}
+      </span>
+      <span class="span-reglamento-tecnico barlow-bold">
+        #{reglamento_tecnico.nombre.upcase}
+      </span>
+      <span class="span-djc-number barlow-bold">
+        N° #{id.to_s.rjust(8, '0')}
+      </span>
+      <span class="span-djc-confeccion barlow-bold">
+        #{creator.name}
+      </span>
+    BASE
+
+    unless approved_by.nil?
+      pdf_content += "<span class='span-djc-signed barlow-bold'>#{approved_by.name}</span>"
+    end
+    unless signed_by.nil?
+      pdf_content += "<image src='#{signed_by.signature_file.url}' class='signature' /><span class='span-djc-approved barlow-bold'>#{signed_by.name}</span>"
+    end
+
+    return pdf_content
+  end
+
+  def template_body
+    product_attributes_table = if product_attributes.size > Djc::DJC_MAX_PRODUCT_ATTRIBUTES_IN_PDF
+      "<br/><strong>Modelos:</strong> Ver anexo"
+    else 
+      '<p>
+        <table width="100%" style="border-collapse: collapse;">
+          <tr>
+            <th width="33%" style="text-align: center; border: 1px solid">MARCA</th>
+            <th width="33%" style="text-align: center; border: 1px solid">MODELO</th>
+            <th width="33%" style="text-align: center; border: 1px solid">CARACTERÍSTICAS</th>
+          </tr>' +
+          (product_attributes.map do |pa|
+            "<tr>
+              <td width='33%' style='text-align: center; border: 1px solid'>#{pa["brand"]}</td>
+              <td width='33%' style='text-align: center; border: 1px solid'>#{pa["model"]}</td>
+              <td width='33%' style='text-align: center; border: 1px solid'>#{pa["characteristic"]}</td>
+            </tr>"
+          end).join +
+        "</table>
+      </p>"
+    end
+
+    pdf_content = <<~HEREDOC
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <style>
+          .barlow-regular {
+            font-family: "Barlow", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+          }
+        </style>
+      </head>
+      <body class="barlow-regular" style="color: #707070; line-height: 1.6; font-size: 1.1rem;">
+        <p><strong>Nosotros</strong></p>
+        <p>
+          <strong>Razón Social:</strong> #{company.name}<br/>
+          <strong>CUIT:</strong> #{company.cuit}<br/>
+          <strong>Nombre comercial o Marca registrada:</strong> #{trade_mark}<br/>
+          <strong>Dirección:</strong> #{company.address}<br/>
+          <strong>Teléfono:</strong> #{company.contact_phone}<br/>
+          <strong>Mail:</strong> #{company.contact_email}
+        </p>
+        <p>
+          Emitimos la presente declaración de conformidad con relación a los siguientes productos:
+        </p>
+        <p>
+          <strong>Descripción:</strong> #{product_description}<br/>
+          <strong>Fabricante:</strong> #{manufacturer}<br/>
+          <strong>Domicilio:</strong> #{manufacturer_address}
+          #{product_attributes_table}
+        </p>
+        <p>
+          Cumplen con las siguientes normas técnicas:
+        </p>
+        <p>
+          <table width="100%" style="border-collapse: collapse;">
+            #{(technical_normatives.map do |item|
+              "<tr>
+                <td width='100%' style='text-align: center; border: 1px solid'>#{item}</td>
+              </tr>"
+            end).join}
+          </table>
+        </p>
+        <p>
+          Habiendo sido sometidos al siguiente procedimiento de evaluación de la conformidad:
+        </p>
+        <p>
+          <table width="100%" style="border-collapse: collapse;">
+            <tr>
+              <th width="50%" style="text-align: center; border: 1px solid">NÚMERO</th>
+              <th width="50%" style="text-align: center; border: 1px solid">EMISOR</th>        
+            </tr>
+            #{(reports.map do |item|
+              "<tr>
+                <td width='50%' style='text-align: center; border: 1px solid'>#{item["number"]}</td>
+                <td width='50%' style='text-align: center; border: 1px solid'>#{item["emitter"]}</td>
+              </tr>"
+            end).join}
+          </table>
+        </p>
+        <p>
+          La presente declaración jurada de conformidad se emite, en todo de acuerdo con el/los<br/>
+          Reglamentos Técnicos aludidos precedentemente, asumiendo la responsabilidad directa<br/>
+          por los datos declarados, así como por la conformidad del producto.
+        </p>
+      </body>
+    HEREDOC
+
+    return pdf_content
+  end
+
+  def template_anexo
+    product_attributes_table = product_attributes.map do |pa|
+      "<tr>
+        <td width='33%' style='text-align: center; border: 1px solid'>#{pa["brand"]}</td>
+        <td width='33%' style='text-align: center; border: 1px solid'>#{pa["model"]}</td>
+        <td width='33%' style='text-align: center; border: 1px solid'>#{pa["characteristic"]}</td>
+      </tr>"
+    end
+    pdf_content = <<~HEREDOC
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <style>
+          .barlow-regular {
+            font-family: "Barlow", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+          }
+        </style>
+      </head>
+      <body class="barlow-regular" style="color: #707070; line-height: 1.6; font-size: 1.1rem;">
+        <p><strong>Anexo</strong></p>
+        <p>
+          <table width="100%" style="border-collapse: collapse;">
+            <tr>
+              <th width="33%" style="text-align: center; border: 1px solid">MARCA</th>
+              <th width="33%" style="text-align: center; border: 1px solid">MODELO</th>
+              <th width="33%" style="text-align: center; border: 1px solid">CARACTERÍSTICAS</th>
+            </tr>
+            #{product_attributes_table.join}
+          </table>
+        </p>
+      </body>
+    HEREDOC
+
+    return pdf_content
+  end
+
 end
