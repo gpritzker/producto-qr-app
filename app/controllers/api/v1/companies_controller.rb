@@ -47,14 +47,18 @@ module Api
 
       def create
         begin
-          company = Company.new(company_params.except(:id))
+          company = Company.new(company_params.except(:id, :estatuto_file))
           company.transaction do
             company.save!
             Role.create(
-              user_id: current_user.id,
+              user_id: @current_user.id,
               company_id: company.id,
               role: Role::ROL_DELEGADO
             )
+            if company_params[:estatuto_file].present?
+              company.estatuto_file = company_params[:estatuto_file]
+              company.update!
+            end
           end
           render json: {message: 'La empresa fué creada exitosamente' }, status: :ok
         rescue => e
