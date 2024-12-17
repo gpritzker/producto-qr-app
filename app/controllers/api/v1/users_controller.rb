@@ -17,7 +17,8 @@ module Api
             data: user, 
             token: jwt[:auth_token],
             refresh_token: jwt[:refresh_token],
-            exp: jwt[:exp]
+            exp: jwt[:exp],
+            signature_qr: user.generate_signature_qr(jwt[:auth_token])
           }, status: :ok
         else
           render json: {errors: ['Email o contraseña inválidos']}, status: :unauthorized
@@ -84,6 +85,7 @@ module Api
 
       def refresh_token
         begin
+          debugger
           decoded_token = JWT.decode(
             refresh_token_params[:refresh_token], 
             Rails.application.secret_key_base, 
@@ -96,7 +98,8 @@ module Api
             render json: {
               token: jwt[:auth_token],
               refresh_token: jwt[:refresh_token],
-              exp: jwt[:exp]
+              exp: jwt[:exp],
+              signature_qr: @current_user.generate_signature_qr(jwt[:auth_token])
             }, status: :ok and return
           end
           render json: { errors: ['Invalid refresh token'] }, status: :unauthorized

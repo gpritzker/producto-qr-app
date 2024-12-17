@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
-      resources :users, only: [:index, :show, :create, :update]
       namespace :users do
         post :sign_in
         delete :sign_out
@@ -13,6 +12,7 @@ Rails.application.routes.draw do
         put :reset_password
         get :delegations
       end
+      resources :users, only: [:index, :show, :create, :update]
       
       resources :companies, only: [:index, :show, :destroy, :create, :update] do
         member do
