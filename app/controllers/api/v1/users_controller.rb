@@ -27,7 +27,7 @@ module Api
       end
 
       def sign_out
-        render json: {message: 'Logged out successfully'}, status: :ok and return
+        render json: {message: 'Sesion cerrada exitosamente'}, status: :ok and return
       end
 
       def sign_up
@@ -49,6 +49,7 @@ module Api
           ConfirmationMailer.with(user: user).confirmation_instructions.deliver_now
           render json: { message: "Por favor, revisa tu correo para confirmar tu cuenta."}, status: :ok
         rescue => e
+          puts "[users:sign_up] #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
@@ -67,6 +68,7 @@ module Api
             render json: { errors: ['Token de confirmación inválido.'] }, status: :unprocessable_entity
           end
         rescue => e
+          puts "[users:confirm_mail] #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity 
         end
       end
@@ -80,6 +82,7 @@ module Api
           end
           render json: { message: "Por favor, revisa tu correo para confirmar tu cuenta."}, status: :ok
         rescue => e
+          puts "[users:resend_confirmation] #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
@@ -159,52 +162,67 @@ module Api
           ConfirmationMailer.with(user: user).confirmation_instructions.deliver_now
           render json: {message: "Usuario creado exitosamente"}
         rescue => e
+          puts "[users:create] #{e.message}"
           render json: {errors: ["Error al crear el usuario."]}, status: :unprocessable_entity
         end
       end
 
       def update
-        if @current_user.admin?
-          @user = User.find(params[:id])
-        else
-          @user = @current_user
-        end
-        
-        if user_params[:current_password].present? # Cambio de contraseña
-          if @user.valid_password?(user_params[:current_password])
-            if user_params[:password] == user_params[:password_confirmation]
-              if @user.update(password: user_params[:password])
-                render json: {message: "Contraseña actualizada exitosamente."}, status: :ok and return
-              end
-              render json: {errors: ["Hubo un problema al actualizar la contraseña."]}, status: :unprocessable_entity and return
-            end
-            render json: {errors: ["La nueva contraseña y su confirmación no coinciden."]}, status: :unprocessable_entity and return
-          end
-          render json: {errors: ["La contraseña actual no es correcta."]}, status: :unprocessable_entity and return
-        else # Actualización general del usuario (sin contraseña)
-          filtered_params = user_params.except(:password, :password_confirmation, :current_password, :signature_file)
-          if user_params[:signature_file].present?
-            # Extraer la parte Base64
-            encoded_image = user_params[:signature_file].split(',')[1]
-            decoded_image = Base64.decode64(encoded_image)
-      
-            # Crear un archivo temporal para adjuntar
-            temp_file = Tempfile.new(['signature', '.png'])
-            temp_file.binmode
-            temp_file.write(decoded_image)
-            temp_file.rewind
-      
-            # Adjuntar la firma al usuario
-            @user.signature_file.attach(io: temp_file, filename: 'signature.png', content_type: 'image/png')
-      
-            temp_file.close
-            temp_file.unlink
-          end
-          if @user.update(filtered_params)
-            render json: {message: "Usuario actualizado exitosamente."}, status: :ok
+        begin
+          if @current_user.admin?
+            @user = User.find(params[:id])
           else
-            render json: {errors: ["Hubo un problema al actualizar el usuario."]}, status: :unprocessable_entity
+            @user = @current_user
           end
+          
+          if user_params[:current_password].present? # Cambio de contraseña
+            if @user.valid_password?(user_params[:current_password])
+              if user_params[:password] == user_params[:password_confirmation]
+                if @user.update(password: user_params[:password])
+                  render json: {message: "Contraseña actualizada exitosamente."}, status: :ok and return
+                end
+                render json: {errors: ["Hubo un problema al actualizar la contraseña."]}, status: :unprocessable_entity and return
+              end
+              render json: {errors: ["La nueva contraseña y su confirmación no coinciden."]}, status: :unprocessable_entity and return
+            end
+            render json: {errors: ["La contraseña actual no es correcta."]}, status: :unprocessable_entity and return
+          else # Actualización general del usuario (sin contraseña)
+            filtered_params = user_params.except(
+              :password, :password_confirmation, :current_password, :signature_file, :email
+            )
+            if user_params[:signature_file].present?
+              # Extraer la parte Base64
+              encoded_image = user_params[:signature_file].split(',')[1]
+              decoded_image = Base64.decode64(encoded_image)
+        
+              # Crear un archivo temporal para adjuntar
+              temp_file = Tempfile.new(['signature', '.png'])
+              temp_file.binmode
+              temp_file.write(decoded_image)
+              temp_file.rewind
+        
+              # Adjuntar la firma al usuario
+              @user.signature_file.attach(io: temp_file, filename: 'signature.png', content_type: 'image/png')
+        
+              temp_file.close
+              temp_file.unlink
+            end
+            if @user.update(filtered_params)
+              render json: {message: "Usuario actualizado exitosamente."}, status: :ok
+            else
+              unless @user.errors.empty?
+                errors = []
+                @user.errors.each do |error|
+                  errors.push({"attribute" => error.attribute.to_s, "message" => error.options.dig(:message)})
+                end              
+                render json: { errors: errors }, status: :unprocessable_entity and return
+              end
+              render json: {errors: ["Hubo un problema al actualizar el usuario."]}, status: :unprocessable_entity
+            end
+          end
+        rescue => e
+          puts "[users:update] #{e.message}"
+          render json: {errors: ["Hubo un problema al actualizar el usuario."]}, status: :unprocessable_entity
         end
       end
 
