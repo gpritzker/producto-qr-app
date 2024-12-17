@@ -12,6 +12,7 @@ module Api
         if user&.valid_password?(sign_in_params[:password])
           jwt = user.generate_jwt
           
+          Rails.logger.info "[users:sign_in] token: #{jwt[:auth_token]}"
           render json: {
             message: 'Ingreso exitoso', 
             data: user, 
@@ -85,26 +86,28 @@ module Api
 
       def refresh_token
         begin
-          debugger
           decoded_token = JWT.decode(
             refresh_token_params[:refresh_token], 
             Rails.application.secret_key_base, 
             true, 
             { algorithm: 'HS256' }
           )
-          if decoded_token[0] == @auth_token
-            jwt = @current_user.generate_jwt
-          
-            render json: {
-              token: jwt[:auth_token],
-              refresh_token: jwt[:refresh_token],
-              exp: jwt[:exp],
-              signature_qr: @current_user.generate_signature_qr(jwt[:auth_token])
-            }, status: :ok and return
+          unless decoded_token[0] == @auth_token
+            raise 'Invalid refresh token'
           end
-          render json: { errors: ['Invalid refresh token'] }, status: :unauthorized
+          
+          jwt = @current_user.generate_jwt
+        
+          render json: {
+            token: jwt[:auth_token],
+            refresh_token: jwt[:refresh_token],
+            exp: jwt[:exp],
+            signature_qr: @current_user.generate_signature_qr(jwt[:auth_token])
+          }, status: :ok
         rescue => e
-          render json: { errors: ['Invalid refresh token'] }, status: :unauthorized
+          Rails.logger.warn "[users:refresh_token] #{decoded_token[0]} != #{@auth_token}"
+          Rails.logger.warn "[users:refresh_token] #{e.message}"
+          render json: { errors: [e.message] }, status: :unauthorized
         end
       end
 
