@@ -12,7 +12,7 @@ module Api
         if user&.valid_password?(sign_in_params[:password])
           jwt = user.generate_jwt
           
-          Rails.logger.info "[users:sign_in] token: #{jwt[:auth_token]}"
+          puts "[users:sign_in] token: #{jwt[:auth_token]}"
           render json: {
             message: 'Ingreso exitoso', 
             data: user, 
@@ -105,8 +105,8 @@ module Api
             signature_qr: @current_user.generate_signature_qr(jwt[:auth_token])
           }, status: :ok
         rescue => e
-          Rails.logger.warn "[users:refresh_token] #{decoded_token[0]} != #{@auth_token}"
-          Rails.logger.warn "[users:refresh_token] #{e.message}"
+          puts "[users:refresh_token] #{decoded_token[0]} != #{@auth_token}"
+          puts "[users:refresh_token] #{e.message}"
           render json: { errors: [e.message] }, status: :unauthorized
         end
       end
