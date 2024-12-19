@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Rails.application.routes.url_helpers
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
@@ -96,6 +97,15 @@ class User < ApplicationRecord
   def confirm
     self.confirmed_at = Time.current
     save
+  end
+
+  def as_json(options = {})
+  file_content = if signature_file.attached? 
+    Base64.strict_encode64(signature_file.download)
+  else
+    nil
+  end
+  super(options).merge(signature_base64: file_content)      
   end
 
   private
