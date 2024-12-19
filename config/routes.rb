@@ -12,7 +12,11 @@ Rails.application.routes.draw do
         put :reset_password
         get :delegations
       end
-      resources :users, only: [:index, :show, :create, :update]
+      resources :users, only: [:index, :show, :create, :update] do
+        member do
+          get :signature
+        end
+      end
       
       resources :companies, only: [:index, :show, :destroy, :create, :update] do
         member do

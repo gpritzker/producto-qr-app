@@ -2,32 +2,41 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :authenticate_user_from_token!, only: [
-        :sign_out, :refresh_token, :index, :show, :create, :update, :delegations
+        :sign_out, :refresh_token, :index, :show, :create, :update, :delegations, :signature
       ]
       before_action :admin_only!, only: [:create]
 
       def sign_in
-        user = User.find_for_database_authentication(email: sign_in_params[:email])
-        
-        if user&.valid_password?(sign_in_params[:password])
-          jwt = user.generate_jwt
+        begin
+          user = User.find_for_database_authentication(email: sign_in_params[:email])
           
-          puts "[users:sign_in] token: #{jwt[:auth_token]}"
-          render json: {
-            message: 'Ingreso exitoso', 
-            data: user, 
-            token: jwt[:auth_token],
-            refresh_token: jwt[:refresh_token],
-            exp: jwt[:exp],
-            signature_qr: user.generate_signature_qr(jwt[:auth_token])
-          }, status: :ok
-        else
-          render json: {errors: ['Email o contraseña inválidos']}, status: :unauthorized
+          if user&.valid_password?(sign_in_params[:password])
+            jwt = user.generate_jwt
+            
+            puts "[users:sign_in] token: #{jwt[:auth_token]}"
+            render json: {
+              message: 'Ingreso exitoso', 
+              data: user, 
+              token: jwt[:auth_token],
+              refresh_token: jwt[:refresh_token],
+              exp: jwt[:exp]
+            }, status: :ok
+          else
+            render json: {errors: ['Email o contraseña inválidos']}, status: :unauthorized
+          end
+        rescue => e
+          puts "[users:sign_in] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
 
       def sign_out
-        render json: {message: 'Sesion cerrada exitosamente'}, status: :ok and return
+        begin
+          render json: {message: 'Sesion cerrada exitosamente'}, status: :ok
+        rescue => e
+          puts "[users:sign_out] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
+        end
       end
 
       def sign_up
@@ -49,7 +58,7 @@ module Api
           ConfirmationMailer.with(user: user).confirmation_instructions.deliver_now
           render json: { message: "Por favor, revisa tu correo para confirmar tu cuenta."}, status: :ok
         rescue => e
-          puts "[users:sign_up] #{e.message}"
+          puts "[users:sign_up] Class: #{e.class} - Error: #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
@@ -68,7 +77,7 @@ module Api
             render json: { errors: ['Token de confirmación inválido.'] }, status: :unprocessable_entity
           end
         rescue => e
-          puts "[users:confirm_mail] #{e.message}"
+          puts "[users:confirm_mail] Class: #{e.class} - Error: #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity 
         end
       end
@@ -82,7 +91,7 @@ module Api
           end
           render json: { message: "Por favor, revisa tu correo para confirmar tu cuenta."}, status: :ok
         rescue => e
-          puts "[users:resend_confirmation] #{e.message}"
+          puts "[users:resend_confirmation] Class: #{e.class} - Error: #{e.message}"
           render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
@@ -109,24 +118,34 @@ module Api
           }, status: :ok
         rescue => e
           puts "[users:refresh_token] #{decoded_token[0]} != #{@auth_token}"
-          puts "[users:refresh_token] #{e.message}"
+          puts "[users:refresh_token] Class: #{e.class} - Error: #{e.message}"
           render json: { errors: [e.message] }, status: :unauthorized
         end
       end
 
       def index
-        if @current_user.admin?
-          render json: {data: User.all}, status: :ok
-        else
-          render json: {data: @current_user}, status: :ok
+        begin
+          if @current_user.admin?
+            render json: {data: User.all}, status: :ok
+          else
+            render json: {data: @current_user}, status: :ok
+          end
+        rescue => e
+          puts "[users:index] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
 
       def show
-        if @current_user.admin?
-          render json: {data: User.find(params[:id])}, status: :ok
-        else
-          render json: {data: @current_user}, status: :ok
+        begin
+          if @current_user.admin?
+            render json: {data: User.find(params[:id])}, status: :ok
+          else
+            render json: {data: @current_user}, status: :ok
+          end
+        rescue => e
+          puts "[users:show] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity  
         end
       end
 
@@ -162,7 +181,7 @@ module Api
           ConfirmationMailer.with(user: user).confirmation_instructions.deliver_now
           render json: {message: "Usuario creado exitosamente"}
         rescue => e
-          puts "[users:create] #{e.message}"
+          puts "[users:create] Class: #{e.class} - Error: #{e.message}"
           render json: {errors: ["Error al crear el usuario."]}, status: :unprocessable_entity
         end
       end
@@ -221,13 +240,43 @@ module Api
             end
           end
         rescue => e
-          puts "[users:update] #{e.message}"
+          puts "[users:update] Class: #{e.class} - Error: #{e.message}"
           render json: {errors: ["Hubo un problema al actualizar el usuario."]}, status: :unprocessable_entity
         end
       end
 
       def delegations
-        render json: {data: Delegation.with_email(@current_user.email)}, status: :ok
+        begin
+          render json: {data: Delegation.with_email(@current_user.email)}, status: :ok
+        rescue => e
+          puts "[users:delegations] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity 
+        end
+      end
+
+      def signature
+        begin
+          if @current_user.admin? || @current_user.id == params[:id].to_i
+            user = @current_user.id == params[:id] ? @current_user : User.find(params[:id].to_i)
+            file_content = if user.signature_file.attached? 
+              "data:image/png;base64," + Base64.strict_encode64(user.signature_file.download)
+            else
+              nil
+            end
+            render json: {data: {
+              "signature_base64": file_content,
+              "signature_qr": user.generate_signature_qr(@auth_token)
+            }}, status: :ok
+          else
+            render json: {errors: ['Acceso denegado']}, status: :unauthorized
+          end
+        rescue ActiveRecord::RecordNotFound => e
+          puts "[users:signature] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["El usuario no existe"]}, status: :not_found
+        rescue => e
+          puts "[users:signature] Class: #{e.class} - Error: #{e.message}"
+          render json: {errors: ["Ha ocurrido un error"]}, status: :unprocessable_entity 
+        end
       end
 
       private
